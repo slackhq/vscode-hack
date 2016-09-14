@@ -1,29 +1,61 @@
 {
     "name": "vscode-hack",
-    "displayName": "vscode-hack",
+    "displayName": "Hack",
     "description": "Hack language/HHVM support for Visual Studio Code.",
     "version": "0.0.1",
-    "publisher": "Pranay",
+    "publisher": "Pranay Agarwal",
+    "galleryBanner": {
+		"color": "#0000FF",
+		"theme": "dark"
+	},
+    "author": {
+        "name": "Pranay Agarwal",
+        "email": "pranay.agarwal@gmail.com"
+    },
+    "license": "SEE LICENSE IN LICENSE.md",
     "engines": {
         "vscode": "^1.4.0"
     },
     "categories": [
+        "Languages",
+        "Linters",
+        "Snippets",
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onLanguage:hack",
+        "workspaceContains:.hhconfig"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [{
             "command": "extension.sayHello",
             "title": "Hello World"
+        }],
+        "languages": [{
+            "id": "hack",
+            "aliases": ["Hack", "hacklang"],
+            "extensions": [".php", ".hh"],
+            "firstLine": "^<\\?hh\\b.*",
+            "configuration": "./hack.configuration.json"
+        }],
+        "grammars": [{
+            "language": "hack",
+            "scopeName": "text.html.hack",
+            "path": "./syntaxes/hack.json"
+        }],
+        "snippets": [{
+            "language": "hack",
+            "path": "./snippets/hack.json"
         }]
     },
     "scripts": {
         "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
         "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "dependencies": {
+        "vscode-languageserver": "^2.5.0"
     },
     "devDependencies": {
         "typescript": "^1.8.5",
