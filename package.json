@@ -26,18 +26,14 @@
         "onLanguage:hack",
         "workspaceContains:.hhconfig"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/src/main",
     "contributes": {
-        "commands": [{
-            "command": "extension.sayHello",
-            "title": "Hello World"
-        }],
         "languages": [{
             "id": "hack",
             "aliases": ["Hack", "hacklang"],
+            "configuration": "./hack.configuration.json",
             "extensions": [".php", ".hh"],
-            "firstLine": "^<\\?hh\\b.*",
-            "configuration": "./hack.configuration.json"
+            "firstLine": "^<\\?hh\\b.*"
         }],
         "grammars": [{
             "language": "hack",

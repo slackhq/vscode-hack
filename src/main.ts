@@ -1,15 +1,13 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
-import { HackHoverProvider } from './providers/hackHoverProvider';
 
-export const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
+import * as vscode from 'vscode';
+import { HackHoverProvider } from './providers';
 
 // this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     
+    let HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
+
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "vscode-hack" is now active!');
