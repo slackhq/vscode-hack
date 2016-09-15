@@ -11,19 +11,18 @@ export class HackHoverProvider implements HoverProvider {
             let arg = document.fileName + ":" + (startPosition.line + 1) + ":" + (startPosition.character + 1);
                                                
             // Spawn `hh_client` process
-            let p = cp.execFile('hh_client', ['--type-at-pos', arg, "/home/pranay/Documents/Projects/HackFirst"], {}, (err, stdout, stderr) => {
+            let p = cp.execFile('hh_client', ['--type-at-pos', arg, "/Users/pranay/Documents/Projects/HackFirst"], {}, (err, stdout, stderr) => {
                 try {
                     if (err) {
                         console.log(err);
                         return resolve(null)
                     };
-                    let result = stdout.toString();
-                    result = result.replace("\n", "");
-                    console.log(result);
-                    if (result == "(unknown)"){
+                    let result: string = stdout.toString().replace("\n", "");
+                    if (result == "(unknown)" || result == "<static>" || result == "_"){
                         return resolve(null);
                     }
-                    return resolve(new Hover(result));
+                    let formattedMessage: MarkedString = { language: 'hack', value: result };
+                    return resolve(new Hover(formattedMessage));
                 } catch (e) {
                     reject(e);
                 }
@@ -31,4 +30,3 @@ export class HackHoverProvider implements HoverProvider {
         });
     }
 }
-
