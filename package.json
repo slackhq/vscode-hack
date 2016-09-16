@@ -1,57 +1,70 @@
 {
-    "name": "vscode-hack",
-    "displayName": "Hack",
-    "description": "Hack language/HHVM support for Visual Studio Code.",
-    "version": "0.0.1",
-    "publisher": "Pranay Agarwal",
-    "galleryBanner": {
-		"color": "#0000FF",
-		"theme": "dark"
-	},
-    "author": {
-        "name": "Pranay Agarwal",
-        "email": "pranay.agarwal@gmail.com"
-    },
-    "license": "SEE LICENSE IN LICENSE.md",
-    "engines": {
-        "vscode": "^1.4.0"
-    },
-    "categories": [
-        "Languages",
-        "Linters",
-        "Snippets",
-        "Other"
+  "name": "vscode-hack",
+  "displayName": "Hack",
+  "description": "Hack language/HHVM support for Visual Studio Code.",
+  "version": "0.0.1",
+  "publisher": "Pranay Agarwal",
+  "galleryBanner": {
+    "color": "#0000FF",
+    "theme": "dark"
+  },
+  "author": {
+    "name": "Pranay Agarwal",
+    "email": "pranay.agarwal@gmail.com"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "engines": {
+    "vscode": "^1.4.0"
+  },
+  "categories": [
+    "Languages",
+    "Linters",
+    "Snippets",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:hack",
+    "workspaceContains:.hhconfig"
+  ],
+  "main": "./out/src/main",
+  "contributes": {
+    "languages": [
+      {
+        "id": "hack",
+        "aliases": [
+          "Hack",
+          "hacklang"
+        ],
+        "configuration": "./hack.configuration.json",
+        "extensions": [
+          ".php",
+          ".hh"
+        ],
+        "firstLine": "^<\\?hh\\b.*$"
+      }
     ],
-    "activationEvents": [
-        "onLanguage:hack",
-        "workspaceContains:.hhconfig"
+    "grammars": [
+      {
+        "language": "hack",
+        "scopeName": "text.html.hack",
+        "path": "./syntaxes/hack.json"
+      }
     ],
-    "main": "./out/src/main",
-    "contributes": {
-        "languages": [{
-            "id": "hack",
-            "aliases": ["Hack", "hacklang"],
-            "configuration": "./hack.configuration.json",
-            "extensions": [".php", ".hh"],
-            "firstLine": "^<\\?hh\\b.*"
-        }],
-        "grammars": [{
-            "language": "hack",
-            "scopeName": "text.html.hack",
-            "path": "./syntaxes/hack.json"
-        }],
-        "snippets": [{
-            "language": "hack",
-            "path": "./snippets/hack.json"
-        }]
-    },
-    "scripts": {
-        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "typescript": "^1.8.5",
-        "vscode": "^0.11.0"
-    }
+    "snippets": [
+      {
+        "language": "hack",
+        "path": "./snippets/hack.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "tslint-microsoft-contrib": "^2.0.10",
+    "typescript": "^1.8.5",
+    "vscode": "^0.11.0"
+  }
 }
