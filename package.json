@@ -23,7 +23,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:hack",
     "workspaceContains:.hhconfig"
   ],
   "main": "./out/src/main",
