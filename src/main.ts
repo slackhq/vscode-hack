@@ -4,6 +4,7 @@
 
 'use strict';
 
+import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
 import { HackTypeChecker } from './typechecker';
 import * as vscode from 'vscode';
@@ -12,6 +13,9 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
+
+    // start local hhvm server if it isn't running already
+    // hh_client.start();
 
     // register language functionality providers
     context.subscriptions.push(vscode.languages.registerHoverProvider(HACK_MODE, new providers.HackHoverProvider()));
@@ -23,14 +27,27 @@ export function activate(context: vscode.ExtensionContext) {
     // context.subscriptions.push(vscode.languages.registerSignatureHelpProvider(HACK_MODE, new providers.HackSignatureHelpProvider(), '('));
 
     // create typechecker and run on file save
-    const hhvmDiag = vscode.languages.createDiagnosticCollection('hhvm');
-    context.subscriptions.push(hhvmDiag);
-    const typechecker = new HackTypeChecker(hhvmDiag);
+    const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
+    const typechecker = new HackTypeChecker(hhvmTypeDiag);
     vscode.workspace.onDidSaveTextDocument(document => {
         typechecker.run();
     });
+    context.subscriptions.push(hhvmTypeDiag);
 
-    // also run the typechecker when the workspace is loaded for the first time
+    // create coverage checker and run on file open & save
+    const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
+    const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
+    vscode.workspace.onDidSaveTextDocument(document => {
+        coveragechecker.run(document);
+    });
+    vscode.workspace.onDidOpenTextDocument(document => {
+        coveragechecker.run(document);
+    });
+    context.subscriptions.push(hhvmCoverDiag);
+    context.subscriptions.push(coverageStatus);
+
+    // also run the type & coverage checkers when the workspace is loaded for the first time
     typechecker.run();
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)

@@ -8,11 +8,11 @@ import * as hh_client from './proxy';
 import * as vscode from 'vscode';
 
 export class HackTypeChecker {
-    constructor(private diagnosticCollection: vscode.DiagnosticCollection) { }
+    constructor(private hhvmTypeDiag: vscode.DiagnosticCollection) { }
 
     public run(): Thenable<void> {
         return hh_client.check().then(value => {
-            this.diagnosticCollection.clear();
+            this.hhvmTypeDiag.clear();
             if (!value || value.passed) {
                 return;
             }
@@ -38,7 +38,7 @@ export class HackTypeChecker {
                 }
             });
             diagnosticMap.forEach((diags, file) => {
-                this.diagnosticCollection.set(vscode.Uri.file(file), diags);
+                this.hhvmTypeDiag.set(vscode.Uri.file(file), diags);
             });
         });
     }

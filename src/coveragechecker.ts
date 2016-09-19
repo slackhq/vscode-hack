@@ -1,0 +1,118 @@
+/**
+ * @file Extension providers.
+ */
+
+'use strict';
+
+import * as hh_client from './proxy';
+import * as vscode from 'vscode';
+
+type UnfilteredTypeCoverageRegion = {
+        // regionType: 'unchecked' | 'partial' | 'default' | 'checked',
+        regionType: string,
+        line: number,
+        start: number,
+        end: number
+    };
+
+export class HackCoverageChecker {
+    constructor(private coverageStatus: vscode.StatusBarItem, private hhvmCoverDiag: vscode.DiagnosticCollection) {}
+
+    public run(document: vscode.TextDocument): Thenable<void> {
+        return hh_client.color(document.fileName).then(value => {
+            if (!value) {
+                this.coverageStatus.hide();
+                this.hhvmCoverDiag.clear();
+                return;
+            }
+            return HackCoverageChecker.convertTypedRegionsToCoverageResult(value).then(result => {
+                this.coverageStatus.text = '$(paintcan)  ' +  result.percentage.toFixed(0) + '%';
+                this.coverageStatus.tooltip = 'This file is ' + result.percentage.toFixed(0) +
+                    '% covered by Hack.';
+                //\nClick to toggle highlighting of uncovered areas.
+                this.coverageStatus.show();
+
+                const diagnostics: vscode.Diagnostic[] = [];
+                result.uncoveredRegions.forEach(region => {
+                    const diagnostic = new vscode.Diagnostic(
+                        new vscode.Range(
+                            new vscode.Position(region.line - 1, region.start - 1),
+                            new vscode.Position(region.line - 1, region.end)),
+                        'Un-type checked code. Consider adding type annotations.',
+                        vscode.DiagnosticSeverity.Warning);
+                    diagnostic.source = 'Type Coverage';
+                    diagnostics.push(diagnostic);
+                });
+                this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), diagnostics);
+            });
+        });
+    }
+
+    /**
+     *
+     * Copied from https://github.com/facebook/nuclide/blob/master/pkg/nuclide-hack/lib/TypedRegions.js
+     * until hhvm returns a better response for coverage runs.
+     *
+     */
+    private static convertTypedRegionsToCoverageResult(regions: {color: string, text: string}[])
+        : Thenable<{ percentage: number, uncoveredRegions: UnfilteredTypeCoverageRegion[]}> {
+        return new Promise<{ percentage: number, uncoveredRegions: UnfilteredTypeCoverageRegion[]}>((resolve, reject) => {
+            if (regions == null) {
+                return resolve(null);
+            }
+
+            const startColumn = 1;
+            let line = 1;
+            let column = startColumn;
+            const unfilteredResults: UnfilteredTypeCoverageRegion[] = [];
+            regions.forEach(region => {
+                const regionType = region.color;
+                function addMessage(width: number) {
+                    if (width > 0) {
+                        const last = unfilteredResults[unfilteredResults.length - 1];
+                        const endColumn = column + width - 1;
+                        // Often we'll get contiguous blocks of errors on the same line.
+                        if (last != null && last.regionType === regionType && last.line === line && last.end === column - 1) {
+                            // So we just merge them into 1 block.
+                            last.end = endColumn;
+                        } else {
+                            unfilteredResults.push({
+                                regionType,
+                                line,
+                                start: column,
+                                end: endColumn
+                            });
+                        }
+                    }
+                }
+
+                const strings = region.text.split('\n');
+                if (strings.length <= 0) {
+                    return reject();
+                }
+
+                // Add message for each line ending in a new line.
+                const lines = strings.slice(0, -1);
+                lines.forEach(text => {
+                addMessage(text.length);
+                line += 1;
+                column = startColumn;
+                });
+
+                // Add message for the last string which does not end in a new line.
+                const last = strings[strings.length - 1];
+                addMessage(last.length);
+                column += last.length;
+            });
+
+            const totalInterestingRegionCount = unfilteredResults.reduce((count, region) => (region.regionType !== 'default' ? count + 1 : count), 0);
+            const checkedRegionCount = unfilteredResults.reduce((count, region) => (region.regionType === 'checked' ? count + 1 : count), 0);
+            const partialRegionCount = unfilteredResults.reduce((count, region) => (region.regionType === 'partial' ? count + 1 : count), 0);
+
+            return resolve({
+                percentage: (totalInterestingRegionCount === 0) ? 100 : (checkedRegionCount + partialRegionCount / 2) / totalInterestingRegionCount * 100,
+                uncoveredRegions: unfilteredResults.filter(region => region.regionType === 'unchecked' || region.regionType === 'partial')
+            });
+        });
+    }
+}

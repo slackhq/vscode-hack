@@ -7,11 +7,24 @@
 import * as child_process from 'child_process';
 import * as vscode from 'vscode';
 
-export function check(): Thenable<{ passed: boolean, errors: { message: { descr: string, path: string, line: number, start: number, end: number, code: number }[] }[] }> { // tslint:disable-line
+// TODO: Fix
+export function start()
+    : Thenable<void> {
+    return run(['start']);
+}
+
+export function check()
+    : Thenable<{ passed: boolean, errors: { message: { descr: string, path: string, line: number, start: number, end: number, code: number }[] }[] }> { // tslint:disable-line
     return run(['check'], null, true);
 }
 
-export function typeAtPos(fileName: string, line: number, character: number): Thenable<string> {
+export function color(fileName: string)
+    : Thenable<{ color: string, text: string }[]> {
+    return run(['--color', fileName]);
+}
+
+export function typeAtPos(fileName: string, line: number, character: number)
+    : Thenable<string> {
     const arg: string = fileName + ':' + line + ':' + character;
     const args: string[] = ['--type-at-pos', arg];
     return run(args).then((value: { type: string }) => { // tslint:disable-line
@@ -32,7 +45,8 @@ export function ideHighlightRefs(text: string, line: number, character: number)
     return run(['--ide-highlight-refs', line + ':' + character], text);
 }
 
-export function autoComplete(text: string, position: number): Thenable<{ name: string, type: string }[]> { // tslint:disable-line
+export function autoComplete(text: string, position: number)
+    : Thenable<{ name: string, type: string }[]> { // tslint:disable-line
     // Insert hh_client autocomplete token at cursor position.
     const autoTok: string = 'AUTO332';
     const input = [text.slice(0, position), autoTok, text.slice(position)].join('');
@@ -44,7 +58,8 @@ export function format(text: string, startPos: number, endPos: number)
     return run(['--format', '' + startPos, '' + endPos], text);
 }
 
-function run(args: string[], stdin: string = null, readStderr: boolean = false): Thenable<any> {
+function run(args: string[], stdin: string = null, readStderr: boolean = false)
+    : Thenable<any> {
     return new Promise<string>((resolve, reject) => {
 
         // Spawn `hh_client` process
