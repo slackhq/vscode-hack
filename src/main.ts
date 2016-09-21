@@ -25,6 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider(HACK_MODE, new providers.HackDocumentFormattingEditProvider()));
     // context.subscriptions.push(vscode.languages.registerDocumentRangeFormattingEditProvider(HACK_MODE, new providers.HackDocumentRangeFormattingEditProvider()));
     // context.subscriptions.push(vscode.languages.registerSignatureHelpProvider(HACK_MODE, new providers.HackSignatureHelpProvider(), '('));
+    context.subscriptions.push(vscode.languages.registerReferenceProvider(HACK_MODE, new providers.HackReferenceProvider()));
 
     // create typechecker and run on file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
