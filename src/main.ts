@@ -29,26 +29,20 @@ export function activate(context: vscode.ExtensionContext) {
     // create typechecker and run on file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
     const typechecker = new HackTypeChecker(hhvmTypeDiag);
-    vscode.workspace.onDidSaveTextDocument(document => {
-        typechecker.run();
-    });
     context.subscriptions.push(hhvmTypeDiag);
 
     // create coverage checker and run on file open & save
-    const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
     const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
     const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
-    vscode.workspace.onDidSaveTextDocument(document => {
-        coveragechecker.run(document);
-    });
-    vscode.workspace.onDidOpenTextDocument(document => {
-        coveragechecker.run(document);
-    });
     context.subscriptions.push(hhvmCoverDiag);
     context.subscriptions.push(coverageStatus);
 
     // also run the type & coverage checkers when the workspace is loaded for the first time
     typechecker.run();
+    vscode.workspace.textDocuments.forEach(document => {
+        coveragechecker.run(document, true);
+    });
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated

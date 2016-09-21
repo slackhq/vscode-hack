@@ -16,9 +16,31 @@ type UnfilteredTypeCoverageRegion = {
     };
 
 export class HackCoverageChecker {
-    constructor(private coverageStatus: vscode.StatusBarItem, private hhvmCoverDiag: vscode.DiagnosticCollection) {}
+    private cache: Map<string, vscode.Diagnostic[]> = new Map<string, vscode.Diagnostic[]>();
 
-    public run(document: vscode.TextDocument): Thenable<void> {
+    constructor(private coverageStatus: vscode.StatusBarItem, private hhvmCoverDiag: vscode.DiagnosticCollection) {
+        vscode.workspace.onDidSaveTextDocument(document => {
+            this.run(document, false);
+        });
+        vscode.workspace.onDidCloseTextDocument(document => {
+            hhvmCoverDiag.delete(vscode.Uri.file(document.fileName));
+        });
+        vscode.window.onDidChangeActiveTextEditor(e => {
+            coverageStatus.hide();
+            this.run(vscode.window.activeTextEditor.document, true);
+        });
+    }
+
+    public run(document: vscode.TextDocument, useCached: boolean): Thenable<void> {
+        if (document.languageId !== 'hack') {
+            return;
+        }
+        if (!useCached && this.cache.has(document.fileName)) {
+            this.cache.delete(document.fileName);
+        } else if (useCached && this.cache.has(document.fileName)) {
+            this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), this.cache.get(document.fileName));
+            return;
+        }
         return hh_client.color(document.fileName).then(value => {
             if (!value) {
                 this.coverageStatus.hide();
@@ -44,6 +66,7 @@ export class HackCoverageChecker {
                     diagnostics.push(diagnostic);
                 });
                 this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), diagnostics);
+                this.cache.set(document.fileName, diagnostics);
             });
         });
     }
@@ -105,13 +128,19 @@ export class HackCoverageChecker {
                 column += last.length;
             });
 
-            const totalInterestingRegionCount = unfilteredResults.reduce((count, region) => (region.regionType !== 'default' ? count + 1 : count), 0);
-            const checkedRegionCount = unfilteredResults.reduce((count, region) => (region.regionType === 'checked' ? count + 1 : count), 0);
-            const partialRegionCount = unfilteredResults.reduce((count, region) => (region.regionType === 'partial' ? count + 1 : count), 0);
+            const totalInterestingRegionCount = unfilteredResults.reduce(
+                (count, region) => (region.regionType !== 'default' ? count + 1 : count), 0);
+            const checkedRegionCount = unfilteredResults.reduce(
+                (count, region) => (region.regionType === 'checked' ? count + 1 : count), 0);
+            const partialRegionCount = unfilteredResults.reduce(
+                (count, region) => (region.regionType === 'partial' ? count + 1 : count), 0);
 
             return resolve({
-                percentage: (totalInterestingRegionCount === 0) ? 100 : (checkedRegionCount + partialRegionCount / 2) / totalInterestingRegionCount * 100,
-                uncoveredRegions: unfilteredResults.filter(region => region.regionType === 'unchecked' || region.regionType === 'partial')
+                percentage: (totalInterestingRegionCount === 0)
+                    ? 100
+                    : (checkedRegionCount + partialRegionCount / 2) / totalInterestingRegionCount * 100,
+                uncoveredRegions: unfilteredResults.filter(
+                    region => region.regionType === 'unchecked' || region.regionType === 'partial')
             });
         });
     }
