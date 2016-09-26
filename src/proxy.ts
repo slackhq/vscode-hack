@@ -55,6 +55,16 @@ export function outline(text: string)
     return run(['--outline'], text);
 }
 
+export function findLvarRefs(text: string, line: number, character: number)
+    : Thenable<{ positions: { filename: string, line: number, char_start: number, char_end: number }[], internal_error: boolean }> {
+    return run(['--find-lvar-refs', line + ':' + character], text);
+}
+
+export function ideFindRefs(text: string, line: number, character: number)
+    : Thenable<{ name: string, filename: string, line: number, char_start: number, char_end: number }[]> {
+    return run(['--ide-find-refs', line + ':' + character], text);
+}
+
 export function ideHighlightRefs(text: string, line: number, character: number)
     : Thenable<{ line: number, char_start: number, char_end: number }[]> {
     return run(['--ide-highlight-refs', line + ':' + character], text);
@@ -69,7 +79,7 @@ export function autoComplete(text: string, position: number)
 }
 
 export function format(text: string, startPos: number, endPos: number)
-    : Thenable<{result: string, error_message: string, internal_error: boolean}> {
+    : Thenable<{ result: string, error_message: string, internal_error: boolean }> {
     return run(['--format', '' + startPos, '' + endPos], text);
 }
 

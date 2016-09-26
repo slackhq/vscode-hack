@@ -8,7 +8,11 @@ import * as hh_client from './proxy';
 import * as vscode from 'vscode';
 
 export class HackTypeChecker {
-    constructor(private hhvmTypeDiag: vscode.DiagnosticCollection) { }
+    constructor(private hhvmTypeDiag: vscode.DiagnosticCollection) {
+        vscode.workspace.onDidSaveTextDocument(document => {
+            this.run();
+        });
+    }
 
     public run(): Thenable<void> {
         return hh_client.check().then(value => {

@@ -151,3 +151,44 @@ export class HackDocumentFormattingEditProvider implements vscode.DocumentFormat
         });
     };
 }*/
+
+export class HackReferenceProvider implements vscode.ReferenceProvider {
+    public provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext,
+                             token: vscode.CancellationToken)
+    : Thenable<vscode.Location[]> {
+        const text = document.getText();
+        return hh_client.findLvarRefs(text, position.line + 1, position.character + 1).then(lvarRefs => {
+            return hh_client.ideFindRefs(text, position.line + 1, position.character + 1).then(findRefs => {
+                return hh_client.ideHighlightRefs(text, position.line + 1, position.character + 1).then(highlightRefs => {
+                    const locations: vscode.Location[] = [];
+                    lvarRefs.positions.forEach(match => {
+                        const location = new vscode.Location(
+                            vscode.Uri.file(document.fileName),
+                            new vscode.Range(
+                                new vscode.Position(match.line - 1, match.char_start - 1),
+                                new vscode.Position(match.line - 1, match.char_end)));
+                        locations.push(location);
+                    });
+                    findRefs.forEach(ref => {
+                        const location = new vscode.Location(
+                            vscode.Uri.file(ref.filename),
+                            new vscode.Range(
+                                new vscode.Position(ref.line - 1, ref.char_start - 1),
+                                new vscode.Position(ref.line - 1, ref.char_end)));
+                        locations.push(location);
+                    });
+                    highlightRefs.forEach(ref => {
+                        const location = new vscode.Location(
+                            vscode.Uri.file(document.fileName),
+                            new vscode.Range(
+                                new vscode.Position(ref.line - 1, ref.char_start - 1),
+                                new vscode.Position(ref.line - 1, ref.char_end)));
+                        locations.push(location);
+                    });
+
+                    return locations;
+                });
+            });
+        });
+    }
+}
