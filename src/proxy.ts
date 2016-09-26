@@ -6,11 +6,26 @@
 
 import * as child_process from 'child_process';
 import * as vscode from 'vscode';
+const domain = require('domain');
 
-// TODO: Fix
 export function start()
-    : Thenable<void> {
-    return run(['start']);
+    : boolean {
+
+    const d = domain.create();
+    d.on('error', (er) => {
+        return false;
+    });
+    
+    d.run(() => {
+        const p = child_process.spawn('hh_client', ['start'], {});
+        if (p.pid) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    return true;
 }
 
 export function check()
@@ -60,11 +75,17 @@ export function format(text: string, startPos: number, endPos: number)
 
 function run(args: string[], stdin: string = null, readStderr: boolean = false)
     : Thenable<any> {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
 
         // Spawn `hh_client` process
         args = args.concat(['--json', vscode.workspace.rootPath]);
-        const p = child_process.spawn('hh_client', args, {});
+        let p: child_process.ChildProcess;
+        try {
+            p = child_process.spawn('hh_client', args, {});
+        } catch(err) {
+            return reject(err);
+        }
+        
         if (p.pid) {
             if (stdin) {
                 p.stdin.write(stdin);
