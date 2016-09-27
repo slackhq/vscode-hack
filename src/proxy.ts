@@ -5,8 +5,8 @@
 'use strict';
 
 import * as child_process from 'child_process';
+import * as domain from 'domain';
 import * as vscode from 'vscode';
-const domain = require('domain');
 
 export function start()
     : boolean {
@@ -15,7 +15,7 @@ export function start()
     d.on('error', (er) => {
         return false;
     });
-    
+
     d.run(() => {
         const p = child_process.spawn('hh_client', ['start'], {});
         if (p.pid) {
@@ -92,10 +92,10 @@ function run(args: string[], stdin: string = null, readStderr: boolean = false)
         let p: child_process.ChildProcess;
         try {
             p = child_process.spawn('hh_client', args, {});
-        } catch(err) {
+        } catch (err) {
             return reject(err);
         }
-        
+
         if (p.pid) {
             if (stdin) {
                 p.stdin.write(stdin);

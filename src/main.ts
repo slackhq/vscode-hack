@@ -16,8 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
 
     // start local hhvm server if it isn't running already, or show an error message and deactivate the extension
-    if (!hh_client.start()){
-        vscode.window.showErrorMessage("Couldn't find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reopen your workspace.")
+    if (!hh_client.start()) {
+        vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reopen your workspace.');
         return;
     }
 
