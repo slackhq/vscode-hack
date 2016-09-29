@@ -11,21 +11,13 @@ import * as vscode from 'vscode';
 export function start()
     : boolean {
 
-    const d = domain.create();
-    d.on('error', (er) => {
+    try {
+        const p = child_process.execSync('hh_client', ['start', vscode.workspace.rootPath])
+        return true;
+    } catch (err) {
+        console.error(err.message);
         return false;
-    });
-
-    d.run(() => {
-        const p = child_process.spawn('hh_client', ['start'], {});
-        if (p.pid) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    return true;
+    }
 }
 
 export function check()
