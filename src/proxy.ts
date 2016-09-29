@@ -12,9 +12,12 @@ export function start()
     : boolean {
 
     try {
-        const p = child_process.execSync('hh_client', ['start', vscode.workspace.rootPath])
+        child_process.execSync('hh_client start ' + vscode.workspace.rootPath);
         return true;
     } catch (err) {
+        if (err.message.indexOf('Server already exists') >= 0) {
+            return true;
+        }
         console.error(err.message);
         return false;
     }
