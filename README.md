@@ -1,5 +1,7 @@
 # vscode-hack README
 
+[![Build Status](https://travis-ci.org/PranayAgarwal/vscode-hack.svg?branch=master)](https://travis-ci.org/PranayAgarwal/vscode-hack)
+
 This is the README for your extension "vscode-hack". After writing up a brief description, we recommend including the following sections.
 
 ## Features
