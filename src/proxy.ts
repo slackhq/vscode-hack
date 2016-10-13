@@ -5,7 +5,6 @@
 'use strict';
 
 import * as child_process from 'child_process';
-import * as domain from 'domain';
 import * as vscode from 'vscode';
 
 export function start()
@@ -63,6 +62,11 @@ export function ideFindRefs(text: string, line: number, character: number)
 export function ideHighlightRefs(text: string, line: number, character: number)
     : Thenable<{ line: number, char_start: number, char_end: number }[]> {
     return run(['--ide-highlight-refs', line + ':' + character], text);
+}
+
+export function ideGetDefinition(text: string, line: number, character: number)
+    : Thenable<{ name: string, result_type: string, pos: { filename: string, line: number, char_start: number, char_end: number }, definition_pos: { filename: string, line: number, char_start: number, char_end: number }, definition_span: { filename: string, line_start: number, char_start: number, line_end: number, char_end: number }, definition_id: number }[]> {
+    return run(['--ide-get-definition', line + ':' + character], text);
 }
 
 export function autoComplete(text: string, position: number)

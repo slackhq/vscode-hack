@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
 
-    // start local hhvm server if it isn't running already, or show an error message and deactivate the extension
+    // start local hhvm server if it isn't running already, or show an error message and deactivate the extension if unable to do so 
     if (!hh_client.start()) {
         vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
         return;
@@ -30,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
     // context.subscriptions.push(vscode.languages.registerDocumentRangeFormattingEditProvider(HACK_MODE, new providers.HackDocumentRangeFormattingEditProvider()));
     // context.subscriptions.push(vscode.languages.registerSignatureHelpProvider(HACK_MODE, new providers.HackSignatureHelpProvider(), '('));
     context.subscriptions.push(vscode.languages.registerReferenceProvider(HACK_MODE, new providers.HackReferenceProvider()));
+    context.subscriptions.push(vscode.languages.registerDefinitionProvider(HACK_MODE, new providers.HackDefinitionProvider()));
 
     // create typechecker and run on file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');

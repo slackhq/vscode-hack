@@ -192,3 +192,24 @@ export class HackReferenceProvider implements vscode.ReferenceProvider {
         });
     }
 }
+
+export class HackDefinitionProvider implements vscode.DefinitionProvider {
+    public provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
+    : Thenable<vscode.Definition> {
+        const text = document.getText();
+        return hh_client.ideGetDefinition(text, position.line + 1, position.character + 1).then(value => {
+            const definition: vscode.Location[] = [];
+            value.forEach(element => {
+                if (element.definition_pos != null) {
+                    const location : vscode.Location = new vscode.Location(
+                        vscode.Uri.file(element.definition_pos.filename || document.fileName),
+                        new vscode.Range(
+                            new vscode.Position(element.definition_span.line_start - 1, element.definition_span.char_start - 1),
+                            new vscode.Position(element.definition_span.line_end - 1, element.definition_span.char_end)));
+                    definition.push(location);
+                }
+            });
+            return definition;
+        });
+    }
+}
