@@ -59,9 +59,11 @@
   "scripts": {
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
     "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "tslint": "^3.15.1",
     "tslint-microsoft-contrib": "^2.0.10",
     "typescript": "^1.8.5",
     "vscode": "^0.11.0"
