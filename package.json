@@ -3,7 +3,7 @@
   "displayName": "Hack",
   "description": "Hack/HHVM support for Visual Studio Code.",
   "version": "0.0.1",
-  "publisher": "Pranay Agarwal",
+  "publisher": "pranayagarwal",
   "galleryBanner": {
     "color": "#0000FF",
     "theme": "dark"
