@@ -65,7 +65,29 @@ export function ideHighlightRefs(text: string, line: number, character: number)
 }
 
 export function ideGetDefinition(text: string, line: number, character: number)
-    : Thenable<{ name: string, result_type: string, pos: { filename: string, line: number, char_start: number, char_end: number }, definition_pos: { filename: string, line: number, char_start: number, char_end: number }, definition_span: { filename: string, line_start: number, char_start: number, line_end: number, char_end: number }, definition_id: number }[]> {
+    : Thenable<{
+        name: string,
+        result_type: string,
+        pos: {
+            filename: string,
+            line: number,
+            char_start: number,
+            char_end: number },
+            definition_pos: {
+                filename: string,
+                line: number,
+                char_start: number,
+                char_end: number
+            },
+            definition_span: {
+                filename: string,
+                line_start: number,
+                char_start: number,
+                line_end: number,
+                char_end: number
+            },
+            definition_id: number
+    }[]> {
     return run(['--ide-get-definition', line + ':' + character], text);
 }
 

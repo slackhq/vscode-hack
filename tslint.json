@@ -30,7 +30,7 @@
     "label-undefined": true,
     "mocha-avoid-only": true,
     "mocha-no-side-effect-code": true,
-    "no-any": true,
+    "no-any": false, // revisit
     "no-arg": true,
     "no-backbone-get-set-outside-model": true,
     "no-bitwise": true,
@@ -100,7 +100,7 @@
     ],
     "max-line-length": [
       true,
-      140
+      180 // revisit
     ],
     "member-access": true,
     "member-ordering": true,
