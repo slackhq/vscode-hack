@@ -32,4 +32,4 @@ Please see our [list of recent releases and features added](https://github.com/P
 
 ## License
 
-The source code to this extension is available on [https://github.com/PranayAgarwal/vscode-hack]() and is licenced under the [MIT license](LICENSE.md).
+The source code to this extension is available at [https://github.com/PranayAgarwal/vscode-hack](https://github.com/PranayAgarwal/vscode-hack) and is licenced under the [MIT license](LICENSE.md).
