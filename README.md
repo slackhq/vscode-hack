@@ -22,10 +22,14 @@ This extension is currently only supported on Linux. The latest version of HHVM 
 
 Lots of them.
 
-# Contributing
+## Contributing
 
-Contributions will start being accepted once the first alpha is launched in the Visual Studio Code extension gallery. 
+Contributions will start being accepted once the first alpha version is launched in the Visual Studio Code extension gallery.
 
-# License
+## Changelog
 
-The source code to this extension is available on [https://github.com/PranayAgarwal/vscode-hack]() and licenced under the [MIT license](LICENSE.md).
+Please see our [list of recent releases and features added](https://github.com/PranayAgarwal/vscode-hack/releases). 
+
+## License
+
+The source code to this extension is available on [https://github.com/PranayAgarwal/vscode-hack]() and is licenced under the [MIT license](LICENSE.md).

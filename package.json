@@ -9,10 +9,16 @@
     "theme": "dark"
   },
   "author": {
-    "name": "Pranay Agarwal",
-    "email": "pranay.agarwal@gmail.com"
+    "name": "Pranay Agarwal"
   },
-  "license": "SEE LICENSE IN LICENSE.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PranayAgarwal/vscode-hack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
+  },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.5.0"
   },
