@@ -1,13 +1,30 @@
 {
   "name": "vscode-hack",
-  "displayName": "Hack",
-  "description": "Hack/HHVM support for Visual Studio Code.",
   "version": "0.0.1",
   "publisher": "pranayagarwal",
+  "engines": {
+    "vscode": "^1.5.0"
+  },
+  "license": "MIT",
+  "displayName": "Hack",
+  "description": "Hack/HHVM support for Visual Studio Code.",
+  "icon": "images/logo.svg",
+  "categories": [
+    "Languages",
+    "Linters",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "hack",
+    "hacklang",
+    "hhvm"
+  ],
   "galleryBanner": {
     "color": "#0000FF",
     "theme": "dark"
   },
+  "preview": true,
   "author": {
     "name": "Pranay Agarwal"
   },
@@ -18,19 +35,6 @@
   "bugs": {
     "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
   },
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.5.0"
-  },
-  "categories": [
-    "Languages",
-    "Linters",
-    "Snippets",
-    "Other"
-  ],
-  "activationEvents": [
-    "workspaceContains:.hhconfig"
-  ],
   "main": "./out/src/main",
   "contributes": {
     "languages": [
@@ -62,6 +66,9 @@
       }
     ]
   },
+  "activationEvents": [
+    "workspaceContains:.hhconfig"
+  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -watch -p ./",
