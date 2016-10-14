@@ -32,5 +32,4 @@ deploy:
   file: "*.vsix"
   skip_cleanup: true
   on:
-    repo: PranayAgarwal/vscode-hack
     tags: true
