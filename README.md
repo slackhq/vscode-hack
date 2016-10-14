@@ -4,7 +4,7 @@
 
 This extension adds rich Hack language & HHVM support to Visual Studio Code. Visit [http://hacklang.org](http://hacklang.org) to get started with Hack.
 
-It is published in the Visual Studio Code Extension Marketplace [here](https://marketplace.visualstudio.com/items?itemName=pranayagarwal.vscode-hack).
+It is published in the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=pranayagarwal.vscode-hack). To install, search for "Hack" in the VS Code extensions tab or run the following command (⌘+P): ```ext install vscode-hack```.
 
 **NOTE: This is a *very* early preview release.**
 
