@@ -131,27 +131,6 @@ export class HackDocumentFormattingEditProvider implements vscode.DocumentFormat
     };
 }
 
-// TODO: Fix
-/*export class HackDocumentRangeFormattingEditProvider implements vscode.DocumentRangeFormattingEditProvider {
-    public provideDocumentRangeFormattingEdits(
-        document: vscode.TextDocument,
-        range: vscode.Range,
-        options: vscode.FormattingOptions,
-        token: vscode.CancellationToken): Thenable<vscode.TextEdit[]> {
-        const start: number = document.offsetAt(range.start) + 1;
-        const end: number = document.offsetAt(range.end) - 1;
-        console.log(document.getText(range));
-        return hh_client.format(document.getText(), start, end).then(value => {
-            if (value.internal_error || value.error_message) {
-                return null;
-            }
-            console.log(value.result);
-            const textEdit = vscode.TextEdit.replace(range, value.result);
-            return [textEdit];
-        });
-    };
-}*/
-
 export class HackReferenceProvider implements vscode.ReferenceProvider {
     public provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext,
                              token: vscode.CancellationToken)
