@@ -90,14 +90,15 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
         return hh_client.autoComplete(document.getText(), document.offsetAt(position)).then(value => {
             const completionItems: vscode.CompletionItem[] = [];
             value.forEach(element => {
-                let label: string = element.name;
+                let label: string = element.name.split('\\').pop();
                 let labelType: string = element.type;
                 let kind = vscode.CompletionItemKind.Class;
                 if (label.startsWith('$')) {
                     label = label.slice(1);
                     kind = vscode.CompletionItemKind.Variable;
                 } else if (labelType.startsWith('(function')) {
-                    labelType = labelType.slice(1, labelType.length - 1);
+                    const typeSplit = labelType.slice(1, labelType.length - 1).split(':');
+                    labelType = typeSplit[0] + ': ' + typeSplit[1].split('\\').pop();
                     kind = vscode.CompletionItemKind.Method;
                 } else if (labelType === 'class') {
                     kind = vscode.CompletionItemKind.Class;
