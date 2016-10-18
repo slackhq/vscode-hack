@@ -96,6 +96,7 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
                 if (label.startsWith('$')) {
                     label = label.slice(1);
                     kind = vscode.CompletionItemKind.Variable;
+                    labelType = labelType.split('\\').pop();
                 } else if (labelType.startsWith('(function')) {
                     const typeSplit = labelType.slice(1, labelType.length - 1).split(':');
                     labelType = typeSplit[0] + ': ' + typeSplit[1].split('\\').pop();
