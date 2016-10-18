@@ -37,7 +37,6 @@ export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider
 
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         return hh_client.outline(document.getText()).then(value => {
-            console.log(value);
             const symbols: vscode.SymbolInformation[] = [];
             value.forEach(element => {
                 let name = element.name.split('\\').pop();
@@ -89,7 +88,6 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken):
         Thenable<vscode.CompletionItem[]> {
         return hh_client.autoComplete(document.getText(), document.offsetAt(position)).then(value => {
-            console.log(value);
             const completionItems: vscode.CompletionItem[] = [];
             value.forEach(element => {
                 let label: string = element.name;
