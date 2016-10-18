@@ -37,26 +37,24 @@ export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider
 
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         return hh_client.outline(document.getText()).then(value => {
+            console.log(value);
             const symbols: vscode.SymbolInformation[] = [];
             value.forEach(element => {
-                const fullName: string = element.name;
-                const nameSplit = fullName.split('\\');
-                let name: string = nameSplit[nameSplit.length - 1];
+                let name = element.name.split('\\').pop();
                 const symbolKind = HackDocumentSymbolProvider.symbolMap.has(element.type)
                     ? HackDocumentSymbolProvider.symbolMap.get(element.type)
                     : vscode.SymbolKind.Null;
                 let container: string = null;
+
                 switch (symbolKind) {
-                    case vscode.SymbolKind.Class:
-                        if (fullName.includes('\\')) {
-                            container = fullName.slice(0, fullName.lastIndexOf('\\'));
-                        }
-                        break;
                     case vscode.SymbolKind.Method:
-                        container = name.slice(0, name.indexOf('::'));
-                        name = name.slice(name.indexOf('::') + 2, name.length);
+                        container = element.name.slice(0, element.name.indexOf('::'));
+                        name = element.name.slice(element.name.indexOf('::') + 2, element.name.length);
                         break;
                     default:
+                        if (element.name.includes('\\')) {
+                            container = element.name.slice(0, element.name.lastIndexOf('\\'));
+                        }
                         break;
                 }
                 const range = new vscode.Range(
@@ -91,6 +89,7 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
     public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken):
         Thenable<vscode.CompletionItem[]> {
         return hh_client.autoComplete(document.getText(), document.offsetAt(position)).then(value => {
+            console.log(value);
             const completionItems: vscode.CompletionItem[] = [];
             value.forEach(element => {
                 let label: string = element.name;
