@@ -45,6 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
     const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
     context.subscriptions.push(hhvmCoverDiag);
     context.subscriptions.push(coverageStatus);
+    context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle() }));
 
     // also run the type & coverage checkers when the workspace is loaded for the first time
     typechecker.run();

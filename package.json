@@ -75,7 +75,11 @@
                     "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
                 }
             }
-        }
+        },
+        "commands": [{
+            "command": "hack.toggleCoverageHighlight",
+            "title": "Hack: Toggle Coverage Highlight"
+        }]
     },
     "activationEvents": [
         "workspaceContains:.hhconfig"

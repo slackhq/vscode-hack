@@ -17,6 +17,7 @@ type UnfilteredTypeCoverageRegion = {
 
 export class HackCoverageChecker {
     private cache: Map<string, vscode.Diagnostic[]> = new Map<string, vscode.Diagnostic[]>();
+    private visible: boolean = false;
 
     constructor(private coverageStatus: vscode.StatusBarItem, private hhvmCoverDiag: vscode.DiagnosticCollection) {
         vscode.workspace.onDidSaveTextDocument(document => {
@@ -37,7 +38,7 @@ export class HackCoverageChecker {
         }
         if (!useCached && this.cache.has(document.fileName)) {
             this.cache.delete(document.fileName);
-        } else if (useCached && this.cache.has(document.fileName)) {
+        } else if (useCached && this.cache.has(document.fileName) && this.visible) {
             this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), this.cache.get(document.fileName));
             return;
         }
@@ -50,8 +51,8 @@ export class HackCoverageChecker {
             return HackCoverageChecker.convertTypedRegionsToCoverageResult(value).then(result => {
                 this.coverageStatus.text = '$(paintcan)  ' +  result.percentage.toFixed(0) + '%';
                 this.coverageStatus.tooltip = 'This file is ' + result.percentage.toFixed(0) +
-                    '% covered by Hack.';
-                //\nClick to toggle highlighting of uncovered areas.
+                    '% covered by Hack.\nClick to toggle highlighting of uncovered areas.';
+                this.coverageStatus.command = "hack.toggleCoverageHighlight";
                 this.coverageStatus.show();
 
                 const diagnostics: vscode.Diagnostic[] = [];
@@ -65,10 +66,22 @@ export class HackCoverageChecker {
                     diagnostic.source = 'Type Coverage';
                     diagnostics.push(diagnostic);
                 });
-                this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), diagnostics);
                 this.cache.set(document.fileName, diagnostics);
+                if (this.visible) {
+                    this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), diagnostics);
+                }
             });
         });
+    }
+
+    public toggle() {
+        if (this.visible) {
+            this.hhvmCoverDiag.clear();
+            this.visible = false;
+        } else {
+            this.run(vscode.window.activeTextEditor.document, true);
+            this.visible = true;
+        }
     }
 
     /**
