@@ -11,7 +11,8 @@ export function start()
     : boolean {
 
     try {
-        child_process.execSync('hh_client start ' + vscode.workspace.rootPath);
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable
+        child_process.execSync(hhClient + ' start ' + vscode.workspace.rootPath);
         return true;
     } catch (err) {
         if (err.message.indexOf('Server already exists') >= 0) {
@@ -112,7 +113,8 @@ function run(args: string[], stdin: string = null, readStderr: boolean = false)
         args = args.concat(['--json', vscode.workspace.rootPath]);
         let p: child_process.ChildProcess;
         try {
-            p = child_process.spawn('hh_client', args, {});
+            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable
+            p = child_process.spawn('' + hhClient, args, {});
         } catch (err) {
             return reject(err);
         }

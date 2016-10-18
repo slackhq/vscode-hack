@@ -23,15 +23,21 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Requirements
 
-This extension is currently only supported on Linux. The latest version of HHVM is required on the machine, and `hh_client` should be added to the $PATH. The workspace should have a `.hhconfig` file at its root.    
+This extension is supported on Linux and Mac OS X 10.10 onwards ([see HHVM compatibility](https://docs.hhvm.com/hhvm/installation/introduction)). The latest versions of Hack typechecking tools (`hh_client` and `hh_server`) are required on the local machine. The workspace should have a `.hhconfig` file at its root.    
+
+## Configuration
+
+This extension adds the following Visual Studio Code settings. These can be set in user preferences (⌘+,) or workspace settings (`.vscode/settings.json`).
+
+* `hack.clientPath`: Absolute path to the `hh_client` executable. This can be left empty if `hh_client` is already in your environment $PATH. 
 
 ## Issues
 
-Please file all bugs, issues, feature requests etc. at the [GitHub project issues page](https://github.com/PranayAgarwal/vscode-hack/issues).
+Please file all bugs, issues, feature requests etc. at the [GitHub issues page](https://github.com/PranayAgarwal/vscode-hack/issues).
 
 *Current known issues:*
 
-- The editor may not select the Hack language mode for `.php` files even if they start with ```<?hh```. To get around this, either manually select "Hack" as the file language from the selector on the bottom right of the screen, or configure your project workspace to open all `.php` files in Hack mode by adding the following to your workspace settings:
+- ([#1](https://github.com/PranayAgarwal/vscode-hack/issues/1), [Microsoft/vscode#10915](https://github.com/Microsoft/vscode/issues/10915)) The editor may not select the Hack language mode for `.php` files even if they start with ```<?hh```. To get around this, either manually select "Hack" as the file language from the selector on the bottom right of the screen, or configure your project workspace to open all `.php` files in Hack mode by adding the following to your workspace settings:
 
 ```json
     "files.associations": {
@@ -40,11 +46,11 @@ Please file all bugs, issues, feature requests etc. at the [GitHub project issue
 ```
 ## Contributing
 
-The project will be open to contributions once the inital release is feature complete and a beta version is launched in the Visual Studio Code extension gallery. 
+There are lots of ways to help! You can file new bugs and feature requests, or fix a pending one. To contribute to the source code, fork the repository on GitHub and create a pull request.
 
 ## Changelog
 
-Please see our [list of recent releases and features added](https://github.com/PranayAgarwal/vscode-hack/releases). 
+Please see the [list of recent releases and features added](https://github.com/PranayAgarwal/vscode-hack/releases). 
 
 ## License
 

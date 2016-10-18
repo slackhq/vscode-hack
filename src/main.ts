@@ -16,7 +16,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     // start local hhvm server if it isn't running already, or show an error message and deactivate the extension if unable to do so 
     if (!hh_client.start()) {
-        vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable
+        if (hhClient) { 
+            vscode.window.showErrorMessage('Invalid `hh_client` executable: ' + hhClient + '. Please configure correct path and reload your workspace.');
+        } else {
+            vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
+        }
         return;
     }
 

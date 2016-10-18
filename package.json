@@ -64,7 +64,18 @@
                 "language": "hack",
                 "path": "./snippets/hack.json"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Hack configuration",
+            "properties": {
+                "hack.clientPath": {
+                    "type": [ "string", "null" ],
+                    "default": null,
+                    "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
+                }
+            }
+        }
     },
     "activationEvents": [
         "workspaceContains:.hhconfig"
