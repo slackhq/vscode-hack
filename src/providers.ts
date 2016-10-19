@@ -22,27 +22,40 @@ export class HackHoverProvider implements vscode.HoverProvider {
     }
 }
 
-export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
-
+class HackSymbolProvider {
     private static symbolArray = [
         { key: 'function', value: vscode.SymbolKind.Function },
         { key: 'method', value: vscode.SymbolKind.Method },
         { key: 'class', value: vscode.SymbolKind.Class },
-        { key: 'static method', value: vscode.SymbolKind.Method }
+        { key: 'abstract class', value: vscode.SymbolKind.Class },
+        { key: 'static method', value: vscode.SymbolKind.Method },
+        { key: 'constant', value: vscode.SymbolKind.Constant }
     ];
 
-    private static symbolMap = new Map(
-        HackDocumentSymbolProvider.symbolArray.map<[string, vscode.SymbolKind]>(x => [x.key, x.value])
+    protected static symbolMap = new Map(
+        HackSymbolProvider.symbolArray.map<[string, vscode.SymbolKind]>(x => [x.key, x.value])
     );
 
+    protected static getRange(line: number, char_start: number, char_end: number): vscode.Range {
+        return new vscode.Range(
+            new vscode.Position(line - 1, char_start - 1),
+            new vscode.Position(line - 1, char_end - 1));
+    }
+
+    protected static getSymbolKind(type: string): vscode.SymbolKind {
+        return HackSymbolProvider.symbolMap.has(type)
+            ? HackSymbolProvider.symbolMap.get(type)
+            : vscode.SymbolKind.Null;
+    }
+}
+
+export class HackDocumentSymbolProvider extends HackSymbolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         return hh_client.outline(document.getText()).then(value => {
             const symbols: vscode.SymbolInformation[] = [];
             value.forEach(element => {
                 let name = element.name.split('\\').pop();
-                const symbolKind = HackDocumentSymbolProvider.symbolMap.has(element.type)
-                    ? HackDocumentSymbolProvider.symbolMap.get(element.type)
-                    : vscode.SymbolKind.Null;
+                const symbolKind = HackSymbolProvider.getSymbolKind(element.type);
                 let container: string = null;
 
                 switch (symbolKind) {
@@ -56,10 +69,29 @@ export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider
                         }
                         break;
                 }
-                const range = new vscode.Range(
-                    new vscode.Position(element.line - 1, element.char_start - 1),
-                    new vscode.Position(element.line - 1, element.char_end - 1));
+                const range = HackSymbolProvider.getRange(element.line, element.char_start, element.char_end);
                 symbols.push(new vscode.SymbolInformation(name, symbolKind, range, null, container));
+            });
+            return symbols;
+        });
+    }
+}
+
+export class HackWorkspaceSymbolProvider extends HackSymbolProvider implements vscode.WorkspaceSymbolProvider {
+    public provideWorkspaceSymbols(query: string, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
+        return hh_client.search(query).then(value => {
+            const symbols: vscode.SymbolInformation[] = [];
+            value.forEach(element => {
+                const name = element.name.split('\\').pop();
+                let desc = element.desc;
+                if (desc.includes(' in ')) {
+                    desc = desc.slice(0, element.desc.indexOf(' in '));
+                }
+                const kind = HackSymbolProvider.getSymbolKind(desc);
+                const uri: vscode.Uri = vscode.Uri.file(element.filename); 
+                const container = element.scope || (element.name.includes('\\') ? element.name.slice(0, element.name.lastIndexOf('\\')) : null);
+                const range = HackSymbolProvider.getRange(element.line, element.char_start, element.char_end);
+                symbols.push(new vscode.SymbolInformation(name, kind, range, uri, container));
             });
             return symbols;
         });

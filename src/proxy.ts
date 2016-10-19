@@ -50,6 +50,11 @@ export function outline(text: string)
     return run(['--outline'], text);
 }
 
+export function search(query: string)
+    : Thenable<{ name: string, filename: string, desc: string, line: number, char_start: number, char_end: number, scope: string }[]> {
+    return run(['--search', query]);
+}
+
 export function findLvarRefs(text: string, line: number, character: number)
     : Thenable<{ positions: { filename: string, line: number, char_start: number, char_end: number }[], internal_error: boolean }> {
     return run(['--find-lvar-refs', line + ':' + character], text);

@@ -14,6 +14,7 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 * Autocomplete
 * Hover Hints
 * Document Symbol Outline
+* Workspace Symbol Search
 * Document Formatting
 * Go To/Peek Definition
 * Find All References
