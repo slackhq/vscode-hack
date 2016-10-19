@@ -15,6 +15,9 @@ export class HackHoverProvider implements vscode.HoverProvider {
 
         return hh_client.typeAtPos(document.fileName, line, character).then(value => {
             if (value) {
+                if (value.startsWith('(function')) {
+                    value = value.slice(1, value.length - 1);
+                }
                 const formattedMessage: vscode.MarkedString = { language: 'hack', value: value };
                 return new vscode.Hover(formattedMessage);
             }
@@ -28,7 +31,8 @@ const symbolArray = [
     { key: 'class', value: vscode.SymbolKind.Class },
     { key: 'abstract class', value: vscode.SymbolKind.Class },
     { key: 'static method', value: vscode.SymbolKind.Method },
-    { key: 'constant', value: vscode.SymbolKind.Constant }
+    { key: 'constant', value: vscode.SymbolKind.Constant },
+    { key: 'interface', value: vscode.SymbolKind.Interface }
 ];
 
 const symbolMap = new Map(
