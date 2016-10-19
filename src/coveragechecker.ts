@@ -52,7 +52,7 @@ export class HackCoverageChecker {
                 this.coverageStatus.text = '$(paintcan)  ' +  result.percentage.toFixed(0) + '%';
                 this.coverageStatus.tooltip = 'This file is ' + result.percentage.toFixed(0) +
                     '% covered by Hack.\nClick to toggle highlighting of uncovered areas.';
-                this.coverageStatus.command = "hack.toggleCoverageHighlight";
+                this.coverageStatus.command = 'hack.toggleCoverageHighlight';
                 this.coverageStatus.show();
 
                 const diagnostics: vscode.Diagnostic[] = [];
