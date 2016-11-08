@@ -25,7 +25,7 @@ export class HackTypeChecker {
             value.errors.forEach(error => {
                 let fullMessage = '';
                 error.message.forEach(messageUnit => {
-                    fullMessage = fullMessage + messageUnit.descr + '\n';
+                    fullMessage = fullMessage + messageUnit.descr + ' [' + messageUnit.code + ']' + '\n';
                 });
                 const diagnostic = new vscode.Diagnostic(
                     new vscode.Range(
