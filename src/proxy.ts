@@ -78,27 +78,46 @@ export function ideGetDefinition(text: string, line: number, character: number)
             filename: string,
             line: number,
             char_start: number,
-            char_end: number },
-            definition_pos: {
-                filename: string,
-                line: number,
-                char_start: number,
-                char_end: number
-            },
-            definition_span: {
-                filename: string,
-                line_start: number,
-                char_start: number,
-                line_end: number,
-                char_end: number
-            },
-            definition_id: number
+            char_end: number
+        },
+        definition_pos: {
+            filename: string,
+            line: number,
+            char_start: number,
+            char_end: number
+        },
+        definition_span: {
+            filename: string,
+            line_start: number,
+            char_start: number,
+            line_end: number,
+            char_end: number
+        },
+        definition_id: number
     }[]> {
     return run(['--ide-get-definition', line + ':' + character], text);
 }
 
 export function autoComplete(text: string, position: number)
-    : Thenable<{ name: string, type: string }[]> { // tslint:disable-line
+    : Thenable<{
+        name: string,
+        type: string, // tslint:disable-line
+        pos: {
+            fileName: string,
+            line: number,
+            char_start: number,
+            char_end: number
+        },
+        func_details: {
+            min_arity: number,
+            return_type: string,
+            params: {
+                name: string,
+                type: string, // tslint:disable-line
+                variadic: boolean
+            }[]
+        }
+    }[]> {
     // Insert hh_client autocomplete token at cursor position.
     const autoTok: string = 'AUTO332';
     const input = [text.slice(0, position), autoTok, text.slice(position)].join('');

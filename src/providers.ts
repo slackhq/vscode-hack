@@ -130,9 +130,14 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
                     kind = vscode.CompletionItemKind.Variable;
                     labelType = labelType.split('\\').pop();
                 } else if (labelType.startsWith('(function')) {
+                    // If the name and return type matches then it is a constructor
+                    if (element.name === element.func_details.return_type) {
+                        kind = vscode.CompletionItemKind.Constructor;
+                    } else {
+                        kind = vscode.CompletionItemKind.Method;
+                    }
                     const typeSplit = labelType.slice(1, labelType.length - 1).split(':');
                     labelType = typeSplit[0] + ': ' + typeSplit[1].split('\\').pop();
-                    kind = vscode.CompletionItemKind.Method;
                 } else if (labelType === 'class') {
                     kind = vscode.CompletionItemKind.Class;
                 }
@@ -163,9 +168,8 @@ export class HackDocumentFormattingEditProvider implements vscode.DocumentFormat
 }
 
 export class HackReferenceProvider implements vscode.ReferenceProvider {
-    public provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext,
-                             token: vscode.CancellationToken)
-    : Thenable<vscode.Location[]> {
+    public provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken)
+        : Thenable<vscode.Location[]> {
         const text = document.getText();
         return hh_client.findLvarRefs(text, position.line + 1, position.character + 1).then(lvarRefs => {
             return hh_client.ideFindRefs(text, position.line + 1, position.character + 1).then(findRefs => {
@@ -205,13 +209,13 @@ export class HackReferenceProvider implements vscode.ReferenceProvider {
 
 export class HackDefinitionProvider implements vscode.DefinitionProvider {
     public provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
-    : Thenable<vscode.Definition> {
+        : Thenable<vscode.Definition> {
         const text = document.getText();
         return hh_client.ideGetDefinition(text, position.line + 1, position.character + 1).then(value => {
             const definition: vscode.Location[] = [];
             value.forEach(element => {
                 if (element.definition_pos != null) {
-                    const location : vscode.Location = new vscode.Location(
+                    const location: vscode.Location = new vscode.Location(
                         vscode.Uri.file(element.definition_pos.filename || document.fileName),
                         new vscode.Range(
                             new vscode.Position(element.definition_span.line_start - 1, element.definition_span.char_start - 1),
