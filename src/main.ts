@@ -1,23 +1,23 @@
 /**
- * @file Manages the configuration settings for the widget. 
+ * @file Entry point for VS Code Hack extension.
  */
 
 'use strict';
 
+import * as vscode from 'vscode';
 import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
 import * as hh_client from './proxy';
 import { HackTypeChecker } from './typechecker';
-import * as vscode from 'vscode';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
 
-    // start local hhvm server if it isn't running already, or show an error message and deactivate the extension if unable to do so 
-    if (!hh_client.start()) {
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable
-        if (hhClient) { 
+    // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
+    if (!(await hh_client.start())) {
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
+        if (hhClient) {
             vscode.window.showErrorMessage('Invalid `hh_client` executable: ' + hhClient + '. Please configure correct path and reload your workspace.');
         } else {
             vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
@@ -38,26 +38,32 @@ export function activate(context: vscode.ExtensionContext) {
     // create typechecker and run on file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
     const typechecker = new HackTypeChecker(hhvmTypeDiag);
+    context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { typechecker.run(); }));
     context.subscriptions.push(hhvmTypeDiag);
 
     // create coverage checker and run on file open & save
     const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
     const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
+    context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { coveragechecker.run(document, false); }));
+    context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { hhvmCoverDiag.delete(vscode.Uri.file(document.fileName)); }));
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
+        coverageStatus.hide();
+        if (vscode.window.activeTextEditor) {
+            coveragechecker.run(vscode.window.activeTextEditor.document, true);
+        }
+    }));
     context.subscriptions.push(hhvmCoverDiag);
     context.subscriptions.push(coverageStatus);
-    context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle() }));
+    context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle(); }));
 
     // also run the type & coverage checkers when the workspace is loaded for the first time
-    typechecker.run();
-    vscode.workspace.textDocuments.forEach(document => {
-        coveragechecker.run(document, true);
-    });
-
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    // console.log('Congratulations, your extension \"vscode-hack\" is now active!');
+    await typechecker.run();
+    for (const document of vscode.workspace.textDocuments) {
+        await coveragechecker.run(document, true);
+    }
 }
 
 export function deactivate() {
+    // nothing to clean up
 }

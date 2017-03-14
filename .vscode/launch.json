@@ -11,6 +11,7 @@
                 "--extensionDevelopmentPath=${workspaceRoot}"
             ],
             "stopOnEntry": false,
+            "smartStep": true,
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}/out/src/**/*.js"
@@ -27,6 +28,7 @@
                 "--extensionTestsPath=${workspaceRoot}/out/test"
             ],
             "stopOnEntry": false,
+            "smartStep": true,
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}/out/test/**/*.js"

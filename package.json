@@ -90,8 +90,8 @@
     "workspaceContains:.hhconfig"
   ],
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "vscode:prepublish": "./node_modules/typescript/bin/tsc -p ./",
+    "compile": "./node_modules/typescript/bin/tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test",
     "lint": "node ./node_modules/tslint/bin/tslint -r ./node_modules/tslint-microsoft-contrib ./src/*.ts ./test/*.ts"

@@ -1,144 +1,86 @@
 /**
- * @file hh_client proxy 
+ * @file hh_client proxy
  */
 
 'use strict';
 
-import * as child_process from 'child_process';
+import * as ps from 'child_process';
 import * as vscode from 'vscode';
 
-export function start()
-    : boolean {
-
-    try {
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable
-        child_process.execSync(hhClient + ' start ' + vscode.workspace.rootPath);
-        return true;
-    } catch (err) {
-        if (err.message.indexOf('Server already exists') >= 0) {
-            return true;
+export async function start()
+    : Promise<boolean> {
+    return new Promise<boolean>(async (resolve, reject) => {
+        try {
+            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+            await ps.exec(hhClient + ' start ' + vscode.workspace.rootPath);
+            return resolve(true);
+        } catch (err) {
+            if (err.message.indexOf('Server already exists') >= 0) {
+                return resolve(true);
+            }
+            return resolve(false);
         }
-        console.error(err.message);
-        return false;
-    }
-}
-
-export function check()
-    : Thenable<{ passed: boolean, errors: { message: { descr: string, path: string, line: number, start: number, end: number, code: number }[] }[] }> { // tslint:disable-line
-    return run(['check'], null, true);
-}
-
-export function color(fileName: string)
-    : Thenable<{ color: string, text: string }[]> {
-    return run(['--color', fileName]);
-}
-
-export function typeAtPos(fileName: string, line: number, character: number)
-    : Thenable<string> {
-    const arg: string = fileName + ':' + line + ':' + character;
-    const args: string[] = ['--type-at-pos', arg];
-    return run(args).then((value: { type: string }) => { // tslint:disable-line
-        if (!value.type || value.type === '(unknown)' || value.type === '_') {
-            return;
-        }
-        return value.type;
     });
 }
 
-export function outline(text: string)
-    : Thenable<{ name: string, type: string, line: number, char_start: number, char_end: number }[]> { // tslint:disable-line
+export async function check(): Promise<CheckResponse> {
+    return run(['check'], null, true);
+}
+
+export async function color(fileName: string): Promise<ColorResponse> {
+    return run(['--color', fileName]);
+}
+
+export async function typeAtPos(fileName: string, line: number, character: number): Promise<string> {
+    const arg: string = fileName + ':' + line + ':' + character;
+    const args: string[] = ['--type-at-pos', arg];
+    const typeAtPos: TypeAtPosResponse = await run(args);
+
+    if (!typeAtPos || !typeAtPos.type || typeAtPos.type === '(unknown)' || typeAtPos.type === '_' || typeAtPos.type === 'noreturn') {
+        return;
+    }
+    return typeAtPos.type;
+}
+
+export async function outline(text: string): Promise<OutlineResponse[]> { // tslint:disable-line
     return run(['--outline'], text);
 }
 
-export function search(query: string)
-    : Thenable<{ name: string, filename: string, desc: string, line: number, char_start: number, char_end: number, scope: string }[]> {
+export async function search(query: string): Promise<SearchResponse> {
     return run(['--search', query]);
 }
 
-export function findLvarRefs(text: string, line: number, character: number)
-    : Thenable<{ positions: { filename: string, line: number, char_start: number, char_end: number }[], internal_error: boolean }> {
-    return run(['--find-lvar-refs', line + ':' + character], text);
-}
-
-export function ideFindRefs(text: string, line: number, character: number)
-    : Thenable<{ name: string, filename: string, line: number, char_start: number, char_end: number }[]> {
+export async function ideFindRefs(text: string, line: number, character: number): Promise<IdeFindRefsResponse> {
     return run(['--ide-find-refs', line + ':' + character], text);
 }
 
-export function ideHighlightRefs(text: string, line: number, character: number)
-    : Thenable<{ line: number, char_start: number, char_end: number }[]> {
+export async function ideHighlightRefs(text: string, line: number, character: number): Promise<IdeHighlightRefsResponse> {
     return run(['--ide-highlight-refs', line + ':' + character], text);
 }
 
-export function ideGetDefinition(text: string, line: number, character: number)
-    : Thenable<{
-        name: string,
-        result_type: string,
-        pos: {
-            filename: string,
-            line: number,
-            char_start: number,
-            char_end: number
-        },
-        definition_pos: {
-            filename: string,
-            line: number,
-            char_start: number,
-            char_end: number
-        },
-        definition_span: {
-            filename: string,
-            line_start: number,
-            char_start: number,
-            line_end: number,
-            char_end: number
-        },
-        definition_id: number
-    }[]> {
+export async function ideGetDefinition(text: string, line: number, character: number): Promise<IdeGetDefinitionResponse> {
     return run(['--ide-get-definition', line + ':' + character], text);
 }
 
-export function autoComplete(text: string, position: number)
-    : Thenable<{
-        name: string,
-        type: string, // tslint:disable-line
-        pos: {
-            fileName: string,
-            line: number,
-            char_start: number,
-            char_end: number
-        },
-        func_details: {
-            min_arity: number,
-            return_type: string,
-            params: {
-                name: string,
-                type: string, // tslint:disable-line
-                variadic: boolean
-            }[]
-        }
-    }[]> {
+export async function autoComplete(text: string, position: number): Promise<AutoCompleteResponse> {
     // Insert hh_client autocomplete token at cursor position.
     const autoTok: string = 'AUTO332';
     const input = [text.slice(0, position), autoTok, text.slice(position)].join('');
     return run(['--auto-complete'], input);
 }
 
-export function format(text: string, startPos: number, endPos: number)
-    : Thenable<{ result: string, error_message: string, internal_error: boolean }> {
+export async function format(text: string, startPos: number, endPos: number): Promise<FormatResponse> {
     return run(['--format', '' + startPos, '' + endPos], text);
 }
 
-function run(args: string[], stdin: string = null, readStderr: boolean = false)
-    : Thenable<any> {
+async function run(args: string[], stdin: string = null, readStderr: boolean = false): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-
         // Spawn `hh_client` process
         args = args.concat(['--json', vscode.workspace.rootPath]);
-        let p: child_process.ChildProcess;
+        let p: ps.ChildProcess;
         try {
-            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable
-            p = child_process.spawn('' + hhClient, args, {});
+            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+            p = ps.spawn('' + hhClient, args, {});
         } catch (err) {
             return reject(err);
         }
@@ -167,3 +109,109 @@ function run(args: string[], stdin: string = null, readStderr: boolean = false)
         }
     });
 }
+
+/**
+ * Types for hh_client responses
+ */
+
+type Position = {
+    filename: string,
+    line: number,
+    char_start: number,
+    char_end: number
+};
+
+type Span = {
+    filename: string,
+    line_start: number,
+    char_start: number,
+    line_end: number,
+    char_end: number
+};
+
+type CheckResponse = {
+    passed: boolean;
+    errors: {
+        message:
+        {
+            descr: string,
+            path: string,
+            line: number,
+            start: number,
+            end: number,
+            code: number
+        }[]
+    }[]
+};
+
+type ColorResponse = {
+    color: string,
+    text: string
+}[];
+
+export type OutlineResponse = {
+    name: string,
+    kind: string,
+    id: string,
+    position: Position,
+    span: Span,
+    children: OutlineResponse[]
+};
+
+type SearchResponse = {
+    name: string,
+    filename: string,
+    desc: string,
+    line: number,
+    char_start: number,
+    char_end: number,
+    scope: string
+}[];
+
+type IdeFindRefsResponse = {
+    name: string,
+    filename: string,
+    line: number,
+    char_start: number,
+    char_end: number
+}[];
+
+type IdeHighlightRefsResponse = {
+    line: number,
+    char_start: number,
+    char_end: number
+}[];
+
+type IdeGetDefinitionResponse = {
+    name: string,
+    result_type: string,
+    pos: Position,
+    definition_pos: Position,
+    definition_span: Span,
+    definition_id: number
+}[];
+
+type AutoCompleteResponse = {
+    name: string,
+    type: string, // tslint:disable-line
+    pos: Position,
+    func_details: {
+        min_arity: number,
+        return_type: string,
+        params: {
+            name: string,
+            type: string, // tslint:disable-line
+            variadic: boolean
+        }[]
+    }
+}[];
+
+type FormatResponse = {
+    result: string,
+    error_message: string,
+    internal_error: boolean
+};
+
+type TypeAtPosResponse = {
+    type: string // tslint:disable-line
+};
