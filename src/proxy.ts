@@ -10,16 +10,14 @@ import * as vscode from 'vscode';
 export async function start()
     : Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
-        try {
-            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
-            await ps.exec(hhClient + ' start ' + vscode.workspace.rootPath);
-            return resolve(true);
-        } catch (err) {
-            if (err.message.indexOf('Server already exists') >= 0) {
-                return resolve(true);
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+        ps.exec(hhClient + ' --version', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                return resolve(false);
             }
-            return resolve(false);
-        }
+            return resolve(true);
+        });
     });
 }
 
@@ -73,8 +71,8 @@ export async function format(text: string, startPos: number, endPos: number): Pr
     return run(['--format', '' + startPos, '' + endPos], text);
 }
 
-async function run(args: string[], stdin: string = null, readStderr: boolean = false): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
+async function run(args: string[], stdin: string = null, readStderr: boolean = false): Promise<any> { // tslint:disable-line
+    return new Promise<any>((resolve, reject) => { // tslint:disable-line
         // Spawn `hh_client` process
         args = args.concat(['--json', vscode.workspace.rootPath]);
         let p: ps.ChildProcess;

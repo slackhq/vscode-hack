@@ -33,7 +33,6 @@ const symbolArray = [
     { key: 'function', value: vscode.SymbolKind.Function },
     { key: 'method', value: vscode.SymbolKind.Method },
     { key: 'class', value: vscode.SymbolKind.Class },
-    { key: 'constant', value: vscode.SymbolKind.Constant },
     { key: 'const', value: vscode.SymbolKind.Constant },
     { key: 'interface', value: vscode.SymbolKind.Interface },
     { key: 'enum', value: vscode.SymbolKind.Enum },
@@ -67,6 +66,7 @@ const pushSymbols = (outline: hh_client.OutlineResponse[], symbols: vscode.Symbo
 
         switch (symbolKind) {
             case vscode.SymbolKind.Method:
+            case vscode.SymbolKind.Function:
                 if (element.name === '__construct') {
                     symbolKind = vscode.SymbolKind.Constructor;
                 }

@@ -8,7 +8,6 @@ import * as vscode from 'vscode';
 import * as hh_client from './proxy';
 
 type UnfilteredTypeCoverageRegion = {
-    // regionType: 'unchecked' | 'partial' | 'default' | 'checked',
     regionType: string,
     line: number,
     start: number,
