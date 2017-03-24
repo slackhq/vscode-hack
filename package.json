@@ -76,6 +76,11 @@
           ],
           "default": null,
           "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
+        },
+        "hack.enableCoverageCheck": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
         }
       }
     },

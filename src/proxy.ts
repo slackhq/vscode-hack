@@ -74,7 +74,7 @@ async function run(args: string[], stdin: string = null): Promise<any> { // tsli
     return new Promise<any>((resolve, reject) => { // tslint:disable-line
         args = args.concat(['--json', vscode.workspace.rootPath]);
         const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
-        const p = ps.execFile(String(hhClient), args, (err: any, stdout, stderr) => { // tslint:disable-line
+        const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => { // tslint:disable-line
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
                 console.error('Hack: hh_client execution error: ' + err);

@@ -36,32 +36,34 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerReferenceProvider(HACK_MODE, new providers.HackReferenceProvider()));
     context.subscriptions.push(vscode.languages.registerDefinitionProvider(HACK_MODE, new providers.HackDefinitionProvider()));
 
-    // create typechecker and run on file save
+    // create typechecker and run when workspace is first loaded and on every file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
     const typechecker = new HackTypeChecker(hhvmTypeDiag);
     context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { typechecker.run(); }));
     context.subscriptions.push(hhvmTypeDiag);
-
-    // create coverage checker and run on file open & save
-    const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
-    const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
-    context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { coveragechecker.run(document, false); }));
-    context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { hhvmCoverDiag.delete(vscode.Uri.file(document.fileName)); }));
-    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
-        coverageStatus.hide();
-        if (vscode.window.activeTextEditor) {
-            coveragechecker.run(vscode.window.activeTextEditor.document, true);
-        }
-    }));
-    context.subscriptions.push(hhvmCoverDiag);
-    context.subscriptions.push(coverageStatus);
-    context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle(); }));
-
-    // also run the type & coverage checkers when the workspace is loaded for the first time
     await typechecker.run();
-    for (const document of vscode.workspace.textDocuments) {
-        await coveragechecker.run(document, true);
+
+    // create coverage checker and run on file open & save, if enabled in settings
+    const enableCoverageCheck = vscode.workspace.getConfiguration('hack').get('enableCoverageCheck') || false; // tslint:disable-line
+    if (enableCoverageCheck) {
+        const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
+        const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
+        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { coveragechecker.run(document, false); }));
+        context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { hhvmCoverDiag.delete(vscode.Uri.file(document.fileName)); }));
+        context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
+            coverageStatus.hide();
+            if (vscode.window.activeTextEditor) {
+                coveragechecker.run(vscode.window.activeTextEditor.document, true);
+            }
+        }));
+        context.subscriptions.push(hhvmCoverDiag);
+        context.subscriptions.push(coverageStatus);
+        context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle(); }));
+
+        for (const document of vscode.workspace.textDocuments) {
+            await coveragechecker.run(document, true);
+        }
     }
 }
 
