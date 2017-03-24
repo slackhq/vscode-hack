@@ -15,12 +15,13 @@ export async function activate(context: vscode.ExtensionContext) {
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
 
     // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
-    if (!(await hh_client.start())) {
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
+    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
+    const startCode = hh_client.start(String(hhClient));
+    if (!startCode) {
         if (hhClient) {
-            vscode.window.showErrorMessage('Invalid `hh_client` executable: ' + hhClient + '. Please configure correct path and reload your workspace.');
+            vscode.window.showErrorMessage('Invalid hh_client executable: \'' + hhClient + '\'. Please configure a valid path and reload your workspace.');
         } else {
-            vscode.window.showErrorMessage('Couldn\'t find `hh_client` executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
+            vscode.window.showErrorMessage('Couldn\'t find hh_client executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
         }
         return;
     }

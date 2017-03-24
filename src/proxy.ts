@@ -7,22 +7,21 @@
 import * as ps from 'child_process';
 import * as vscode from 'vscode';
 
-export async function start()
-    : Promise<boolean> {
-    return new Promise<boolean>(async (resolve, reject) => {
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
-        ps.exec(hhClient + ' --version', (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                return resolve(false);
-            }
-            return resolve(true);
-        });
-    });
+export function start(hhClient: string): boolean {
+    try {
+        ps.execFileSync(String(hhClient), ['start', vscode.workspace.rootPath + '/examples']);
+        return true;
+    } catch (err) {
+        if (err.status === 77) {
+            // server was already running
+            return true;
+        }
+        return false;
+    }
 }
 
 export async function check(): Promise<CheckResponse> {
-    return run(['check'], null, true);
+    return run(['check']);
 }
 
 export async function color(fileName: string): Promise<ColorResponse> {
@@ -71,39 +70,31 @@ export async function format(text: string, startPos: number, endPos: number): Pr
     return run(['--format', '' + startPos, '' + endPos], text);
 }
 
-async function run(args: string[], stdin: string = null, readStderr: boolean = false): Promise<any> { // tslint:disable-line
+async function run(args: string[], stdin: string = null): Promise<any> { // tslint:disable-line
     return new Promise<any>((resolve, reject) => { // tslint:disable-line
-        // Spawn `hh_client` process
         args = args.concat(['--json', vscode.workspace.rootPath]);
-        let p: ps.ChildProcess;
-        try {
-            const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
-            p = ps.spawn('' + hhClient, args, {});
-        } catch (err) {
-            return reject(err);
-        }
-
-        if (p.pid) {
-            if (stdin) {
-                p.stdin.write(stdin);
-                p.stdin.end();
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+        const p = ps.execFile(String(hhClient), args, (err: any, stdout, stderr) => { // tslint:disable-line
+            if (err !== null && err.code !== 0 && err.code !== 2) {
+                // any hh_client failure other than typecheck errors
+                console.error('Hack: hh_client execution error: ' + err);
+                resolve(null);
             }
-            let stdout: string = '';
-            p.stdout.on('data', (data: Buffer) => {
-                stdout += data;
-            });
-            let stderr: string = '';
-            p.stderr.on('data', (data: Buffer) => {
-                stderr += data;
-            });
-            p.on('exit', code => {
-                try {
-                    resolve(JSON.parse((code !== 0 || readStderr) ? stderr : stdout));
-                } catch (err) {
-                    console.error(stderr);
-                    resolve(null);
-                }
-            });
+            if (!stdout) {
+                // all hh_client --check output goes to stderr by default
+                stdout = stderr;
+            }
+            try {
+                const output = JSON.parse(stdout);
+                resolve(output);
+            } catch (parseErr) {
+                console.error('Hack: hh_client output error: ' + parseErr);
+                resolve(null);
+            }
+        });
+        if (stdin) {
+            p.stdin.write(stdin);
+            p.stdin.end();
         }
     });
 }
