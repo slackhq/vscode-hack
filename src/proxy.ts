@@ -9,7 +9,7 @@ import * as vscode from 'vscode';
 
 export function start(hhClient: string): boolean {
     try {
-        ps.execFileSync(String(hhClient), ['start', vscode.workspace.rootPath + '/examples']);
+        ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);
         return true;
     } catch (err) {
         if (err.status === 77) {

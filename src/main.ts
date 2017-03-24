@@ -16,7 +16,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
     const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
-    const startCode = hh_client.start(String(hhClient));
+    const startCode = hh_client.start((hhClient === null) ? 'hh_client' : String(hhClient));
     if (!startCode) {
         if (hhClient) {
             vscode.window.showErrorMessage('Invalid hh_client executable: \'' + hhClient + '\'. Please configure a valid path and reload your workspace.');
