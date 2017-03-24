@@ -36,6 +36,14 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerReferenceProvider(HACK_MODE, new providers.HackReferenceProvider()));
     context.subscriptions.push(vscode.languages.registerDefinitionProvider(HACK_MODE, new providers.HackDefinitionProvider()));
 
+    // add command to ask for HHVM user name at debug session launch
+    context.subscriptions.push(vscode.commands.registerCommand('hack.getUserName', config => {
+        return vscode.window.showInputBox({
+            prompt: 'Enter user name to connect as',
+            value: 'name'
+        });
+    }));
+
     // create typechecker and run when workspace is first loaded and on every file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
     const typechecker = new HackTypeChecker(hhvmTypeDiag);

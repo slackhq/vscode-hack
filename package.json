@@ -1,18 +1,20 @@
 {
   "name": "vscode-hack",
+  "displayName": "Hack",
   "version": "0.4.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.5.0"
   },
   "license": "MIT",
-  "displayName": "Hack",
-  "description": "Hack/HHVM support for Visual Studio Code.",
+  "description": "Hack language & HHVM debugger support for Visual Studio Code.",
   "icon": "images/logo.svg",
   "categories": [
+    "Debuggers",
     "Languages",
     "Linters",
     "Snippets",
+    "Formatters",
     "Other"
   ],
   "keywords": [
@@ -24,6 +26,8 @@
     "color": "#5d5d5d",
     "theme": "dark"
   },
+  "preview": false,
+  "private": true,
   "author": {
     "name": "Pranay Agarwal"
   },
@@ -35,7 +39,93 @@
     "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
   },
   "main": "./out/src/main",
+  "activationEvents": [
+    "workspaceContains:.hhconfig",
+    "onLanguage:hack"
+  ],
   "contributes": {
+    "breakpoints": [
+      {
+        "language": "hack"
+      },
+      {
+        "language": "php"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "hhvm",
+        "label": "HHVM",
+        "program": "./out/src/debugger.js",
+        "runtime": "node",
+        "variables": {
+          "getUserName": "hack.getUserName"
+        },
+        "configurationSnippets": [
+          {
+            "label": "HHVM: Attach to sandbox",
+            "description": "Attach to a remote HHVM server sandbox",
+            "body": {
+              "name": "${1:Attach to server}",
+              "type": "hhvm",
+              "request": "attach",
+              "host": "localhost",
+              "port": 8089,
+              "user": "${2:username}",
+              "sandbox": "default"
+            }
+          }
+        ],
+        "configurationAttributes": {
+          "attach": {
+            "required": [
+              "host",
+              "port",
+              "user",
+              "sandbox"
+            ],
+            "properties": {
+              "host": {
+                "type": "string",
+                "description": "Host name/IP address of HHVM server.",
+                "default": "localhost"
+              },
+              "port": {
+                "type": "number",
+                "description": "Debug port to attach to (default 8089).",
+                "default": 8089
+              },
+              "user": {
+                "type": "string",
+                "description": "Name of connecting user.",
+                "default": "${workspaceRoot}/${command:getUserName}"
+              },
+              "sandbox": {
+                "type": "string",
+                "description": "User sandbox to attach to.",
+                "default": "default"
+              },
+              "stopOnRequest": {
+                "type": "boolean",
+                "description": "Automatically break at the beginning of every web request to the connected sandbox.",
+                "default": false
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "name": "Attach to server",
+            "type": "hhvm",
+            "request": "attach",
+            "host": "localhost",
+            "port": 8089,
+            "sandbox": "default",
+            "stopOnRequest": false
+          }
+        ]
+      }
+    ],
     "languages": [
       {
         "id": "hack",
@@ -90,15 +180,16 @@
       }
     ]
   },
-  "activationEvents": [
-    "workspaceContains:.hhconfig"
-  ],
   "scripts": {
     "vscode:prepublish": "./node_modules/typescript/bin/tsc -p ./",
     "compile": "./node_modules/typescript/bin/tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test",
     "lint": "node ./node_modules/tslint/bin/tslint -r ./node_modules/tslint-microsoft-contrib ./src/*.ts ./test/*.ts"
+  },
+  "dependencies": {
+    "vscode-debugadapter": "^1.18.0-pre.1",
+    "vscode-debugprotocol": "^1.17.0"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.40",
@@ -108,6 +199,7 @@
     "tslint": "^4.5.1",
     "tslint-microsoft-contrib": "^4.0.0",
     "typescript": "^2.2.1",
-    "vscode": "^1.1.0"
+    "vscode": "^1.1.0",
+    "vscode-debugadapter-testsupport": "^1.17.0"
   }
 }
