@@ -1,8 +1,8 @@
 /**
  * Thin extension of Node.js Buffer class, with a few helper methods.
  */
-export class DebuggerBufferReader {
 
+export class DebuggerBufferReader {
     private buffer: Buffer;
     private pos: number = 0;
 
@@ -64,14 +64,42 @@ export class DebuggerBufferReader {
         }
         return values;
     }
+
+    public readArrayPtr<T extends IDebuggerBufferReadable>(c: { new (): T; }): T[] {
+        const len = this.readInt16();
+        const values: T[] = [];
+        for (let i = 0; i < len; i += 1) {
+            const value = this.readObj(c);
+            values.push(value);
+        }
+        return values;
+    }
 }
 
 export class DebuggerBufferWriter {
     private buffer: Buffer = new Buffer('');
 
+    public writeInt8(value: number) {
+        const newbuf = new Buffer(1);
+        newbuf.writeInt8(value, 0);
+        this.buffer = Buffer.concat([this.buffer, newbuf]);
+    }
+
+    public writeInt16(value: number) {
+        const newbuf = new Buffer(2);
+        newbuf.writeInt16BE(value, 0);
+        this.buffer = Buffer.concat([this.buffer, newbuf]);
+    }
+
     public writeInt32(value: number) {
         const newbuf = new Buffer(4);
         newbuf.writeUInt32BE(value, 0);
+        this.buffer = Buffer.concat([this.buffer, newbuf]);
+    }
+
+    public writeInt64(value: number) {
+        const newbuf = new Buffer(8);
+        newbuf.writeUIntBE(value, 0, 8);
         this.buffer = Buffer.concat([this.buffer, newbuf]);
     }
 
@@ -96,6 +124,15 @@ export class DebuggerBufferWriter {
         this.writeInt32(len);
         values.forEach(value => {
             this.writeBoolean(true);
+            value.send(this);
+        });
+        return values;
+    }
+
+    public writeArrayPtr<T extends IDebuggerBufferReadable>(values: T[]) {
+        const len = values.length;
+        this.writeInt16(len);
+        values.forEach(value => {
             value.send(this);
         });
         return values;
