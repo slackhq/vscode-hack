@@ -2,11 +2,11 @@
  *
  */
 
+import { CmdFlowControl } from './CmdFlowControl';
 import { CommandType } from './DebuggerBase';
-import { DebuggerCommand } from './DebuggerCommand';
 
-export class CmdContinue extends DebuggerCommand {
-    public constructor(body: string = '') {
-        super(CommandType.KindOfContinue, body);
+export class CmdContinue extends CmdFlowControl {
+    public constructor(body: string = '', count: number = 0, smallStep: boolean = false) {
+        super(CommandType.KindOfContinue, body, count, smallStep);
     }
 }

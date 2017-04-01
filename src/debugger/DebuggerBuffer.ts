@@ -46,30 +46,30 @@ export class DebuggerBufferReader {
         return val;
     }
 
-    public readObj<T extends IDebuggerBufferReadable>(c: { new (): T; }): T {
+    public readObj<T extends IDebuggerBufferReadable>(c: { new (): T; }, version?: number): T {
         const value = new c();
-        value.receive(this);
+        value.receive(this, version);
         return value;
     }
 
-    public readArray<T extends IDebuggerBufferReadable>(c: { new (): T; }): T[] {
+    public readArray<T extends IDebuggerBufferReadable>(c: { new (): T; }, version?: number): T[] {
         const len = this.readInt32();
         const values: T[] = [];
         for (let i = 0; i < len; i += 1) {
             const idx = this.readBoolean();
             if (idx) {
-                const value = this.readObj(c);
+                const value = this.readObj(c, version);
                 values.push(value);
             }
         }
         return values;
     }
 
-    public readArrayPtr<T extends IDebuggerBufferReadable>(c: { new (): T; }): T[] {
+    public readArrayPtr<T extends IDebuggerBufferReadable>(c: { new (): T; }, version?: number): T[] {
         const len = this.readInt16();
         const values: T[] = [];
         for (let i = 0; i < len; i += 1) {
-            const value = this.readObj(c);
+            const value = this.readObj(c, version);
             values.push(value);
         }
         return values;
@@ -119,21 +119,21 @@ export class DebuggerBufferWriter {
         this.buffer = Buffer.concat([this.buffer, newbuf]);
     }
 
-    public writeArray<T extends IDebuggerBufferReadable>(values: T[]) {
+    public writeArray<T extends IDebuggerBufferReadable>(values: T[], version?: number) {
         const len = values.length;
         this.writeInt32(len);
         values.forEach(value => {
             this.writeBoolean(true);
-            value.send(this);
+            value.send(this, version);
         });
         return values;
     }
 
-    public writeArrayPtr<T extends IDebuggerBufferReadable>(values: T[]) {
+    public writeArrayPtr<T extends IDebuggerBufferReadable>(values: T[], version?: number) {
         const len = values.length;
         this.writeInt16(len);
         values.forEach(value => {
-            value.send(this);
+            value.send(this, version);
         });
         return values;
     }
@@ -144,6 +144,6 @@ export class DebuggerBufferWriter {
 }
 
 export interface IDebuggerBufferReadable {
-    receive(buffer: DebuggerBufferReader);
-    send(buffer: DebuggerBufferWriter);
+    receive(buffer: DebuggerBufferReader, version?: number);
+    send(buffer: DebuggerBufferWriter, version?: number);
 }

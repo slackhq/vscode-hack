@@ -17,11 +17,11 @@ export class CmdBreak extends DebuggerCommand {
 
     public receive(buffer: DebuggerBufferReader) {
         super.receive(buffer);
-        this.breakpoints = buffer.readArrayPtr(BreakPointInfo);
+        this.breakpoints = buffer.readArrayPtr(BreakPointInfo, this.version);
     }
 
     public send(buffer: DebuggerBufferWriter) {
         super.send(buffer);
-        buffer.writeArrayPtr(this.breakpoints);
+        buffer.writeArrayPtr(this.breakpoints, this.version);
     }
 }

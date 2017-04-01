@@ -131,9 +131,11 @@ export class BreakPointInfo implements IDebuggerBufferReadable {
         private exceptionObject: string = '') {
     }
 
-    public receive(buffer: DebuggerBufferReader) {
+    public receive(buffer: DebuggerBufferReader, version: number) {
         this.state = buffer.readInt8();
-        this.bindState = buffer.readInt8(); // TODO fix
+        if (version >= 1) {
+            this.bindState = buffer.readInt8();
+        }
         this.interruptType = buffer.readInt8();
         this.file = buffer.readString();
         this.line1 = buffer.readInt32();
@@ -150,13 +152,16 @@ export class BreakPointInfo implements IDebuggerBufferReadable {
         this.exceptionObject = buffer.readString();
     }
 
-    public send(buffer: DebuggerBufferWriter) {
+    public send(buffer: DebuggerBufferWriter, version: number) {
         buffer.writeInt8(this.state);
-        buffer.writeInt8(this.bindState); // TODO fix
+        if (version >= 1) {
+            buffer.writeInt8(this.bindState);
+        }
         buffer.writeInt8(this.interruptType);
         buffer.writeString(this.file);
         buffer.writeInt32(this.line1);
         buffer.writeInt32(this.line2);
+        buffer.writeString(this.namespaceName);
         buffer.writeString(this.className);
         buffer.writeArray(this.funcs);
         buffer.writeString(this.url);

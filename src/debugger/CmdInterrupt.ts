@@ -29,7 +29,7 @@ export class CmdInterrupt extends DebuggerCommand {
         if (site) {
             this.breakPointInfo = BreakPointInfo.receiveSpecial(buffer);
         }
-        this.matched = buffer.readArrayPtr(BreakPointInfo);
+        this.matched = buffer.readArrayPtr(BreakPointInfo, this.version);
     }
 
     public send(buffer: DebuggerBufferWriter) {
