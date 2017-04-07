@@ -86,7 +86,7 @@
     "chai-vague-errors": true,
     "class-name": true,
     "comment-format": true,
-    "export-name": true,
+    "export-name": false,
     "function-name": true,
     "import-name": true,
     "interface-name": true,

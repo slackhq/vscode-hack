@@ -8,6 +8,7 @@ import * as vscode from 'vscode';
 import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
 import * as hh_client from './proxy';
+import * as suppressions from './suppressions';
 import { HackTypeChecker } from './typechecker';
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -35,6 +36,10 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider(HACK_MODE, new providers.HackDocumentFormattingEditProvider()));
     context.subscriptions.push(vscode.languages.registerReferenceProvider(HACK_MODE, new providers.HackReferenceProvider()));
     context.subscriptions.push(vscode.languages.registerDefinitionProvider(HACK_MODE, new providers.HackDefinitionProvider()));
+    context.subscriptions.push(vscode.languages.registerCodeActionsProvider(HACK_MODE, new providers.HackCodeActionProvider()));
+
+    // add command to add an error suppression comment
+    context.subscriptions.push(vscode.commands.registerCommand('hack.suppressError', suppressions.suppressError));
 
     // create typechecker and run when workspace is first loaded and on every file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');

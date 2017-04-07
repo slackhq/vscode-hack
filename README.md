@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Releases
 
+### v0.5.0
+- Added Code Actions to automatically suppress typechecker errors via HH_FIXME comments.
+
 ### v0.4.0
 - Fixed document symbol outline (⇧⌘O) break in newer hh_client versions.
 - Added a new setting to enable type coverage checking (now off by default).

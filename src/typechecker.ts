@@ -22,7 +22,11 @@ export class HackTypeChecker {
         const diagnosticMap: Map<string, vscode.Diagnostic[]> = new Map();
         typecheckResult.errors.forEach(error => {
             let fullMessage = '';
+            let code: number = 0;
             error.message.forEach(messageUnit => {
+                if (code === 0) {
+                    code = messageUnit.code;
+                }
                 fullMessage = fullMessage + messageUnit.descr + ' [' + messageUnit.code + ']' + '\n';
             });
             const diagnostic = new vscode.Diagnostic(
@@ -31,6 +35,7 @@ export class HackTypeChecker {
                     new vscode.Position(error.message[0].line - 1, error.message[0].end)),
                 fullMessage,
                 vscode.DiagnosticSeverity.Error);
+            diagnostic.code = code;
             diagnostic.source = 'Hack';
             const file = error.message[0].path;
             if (diagnosticMap.has(file)) {

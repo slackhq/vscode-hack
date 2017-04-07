@@ -228,3 +228,30 @@ export class HackDefinitionProvider implements vscode.DefinitionProvider {
         return definition;
     }
 }
+
+export class HackCodeActionProvider implements vscode.CodeActionProvider {
+    public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range, context: vscode.CodeActionContext, token: vscode.CancellationToken):
+        Promise<vscode.Command[]> {
+        const filteredErrors = context.diagnostics.filter(d => d.source === 'Hack' && d.code !== 0);
+        if (filteredErrors.length === 0) {
+            return;
+        }
+        const commands = [];
+        for (const error of filteredErrors) {
+            commands.push({
+                title: 'Suppress: ' + error.code,
+                command: 'hack.suppressError',
+                arguments: [document, error.range.start.line, [ error.code ]]
+            });
+        }
+        if (commands.length > 1) {
+            const allCodes = filteredErrors.map(f => f.code);
+            commands.push({
+                title: 'Suppress All',
+                command: 'hack.suppressError',
+                arguments: [document, filteredErrors[0].range.start.line, allCodes]
+            });
+        }
+        return commands;
+    }
+}
