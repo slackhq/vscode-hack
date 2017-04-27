@@ -19,6 +19,14 @@
             "preLaunchTask": "npm"
         },
         {
+            "name": "Launch Debug Server",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/src/debugger/debugger.ts",
+            "sourceMaps": true,
+			"outFiles": [ "${workspaceRoot}/out/**/*.js" ]
+        },
+        {
             "name": "Launch Tests",
             "type": "extensionHost",
             "request": "launch",
@@ -35,5 +43,11 @@
             ],
             "preLaunchTask": "npm"
         }
-    ]
+    ],
+    "compounds": [
+		{
+			"name": "Extension + Debug Server",
+			"configurations": [ "Launch Extension", "Launch Debug Server" ]
+		}
+	]
 }

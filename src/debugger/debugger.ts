@@ -12,41 +12,18 @@ import {
 import { DebugProtocol } from 'vscode-debugprotocol';
 
 /**
- * This interface should always match the schema found in the mock-debug extension manifest.
+ * This interface should always match the debugger config schema found in the vscode-hack extension manifest.
  */
 // tslint:disable-next-line:interface-name
-export interface LaunchRequestArguments extends DebugProtocol.LaunchRequestArguments {
-    // An absolute path to the program to debug.
-    program: string;
-    // Automatically stop target after launch. If not specified, target does not stop.
-    stopOnEntry?: boolean;
+export interface AttachRequestArguments extends DebugProtocol.LaunchRequestArguments {
+    host: string;
+    port?: number;
+    user: string;
+    sandbox: string;
+    stopOnRequest: boolean;
 }
 
-class MockDebugSession extends DebugSession {
-
-    // we don't support multiple threads, so we can use a hardcoded ID for the default thread
-    private static THREAD_ID = 1;
-
-    // since we want to send breakpoint events, we will assign an id to every event
-    // so that the frontend can match events with breakpoints.
-    private breakpointId = 1000;
-
-    // This is the next line that will be 'executed'
-    private currentLine = 0;
-    private get _currentLine(): number {
-        return this.currentLine;
-    }
-    private set _currentLine(line: number) {
-        this.currentLine = line;
-        this.log('line', line);
-    }
-
-    // the initial (and one and only) file we are 'debugging'
-    private sourceFile: string;
-
-    // the contents (= lines) of the one and only file
-    private sourceLines: string[] = [];
-
+class HhvmDebugSession extends DebugSession {
     // maps from sourceFile to array of Breakpoints
     private breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
@@ -56,13 +33,13 @@ class MockDebugSession extends DebugSession {
 	 * Creates a new debug adapter that is used for one debug session.
 	 * We configure the default implementation of a debug adapter here.
 	 */
-    public constructor() {
+    /*public constructor() {
         super();
 
-        // this debugger uses zero-based lines and columns
-        this.setDebuggerLinesStartAt1(false);
-        this.setDebuggerColumnsStartAt1(false);
-    }
+        // this debugger uses one-based lines and columns
+        // this.setDebuggerLinesStartAt1(true);
+        // this.setDebuggerColumnsStartAt1(true);
+    }*/
 
 	/**
 	 * The 'initialize' request is the first request called by the frontend
@@ -82,16 +59,17 @@ class MockDebugSession extends DebugSession {
         response.body.supportsEvaluateForHovers = true;
 
         // make VS Code to show a 'step back' button
-        response.body.supportsStepBack = true;
+        response.body.supportsStepBack = false;
 
         this.sendResponse(response);
     }
 
-    protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
+    protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
 
-        this.sourceFile = args.program;
-        this.sourceLines = readFileSync(this.sourceFile).toString().split('\n');
+    }
 
+    /*protected launchRequest(response: DebugProtocol.LaunchResponse, args: AttachRequestArguments): void {
+        // start a socket connection
         if (args.stopOnEntry) {
             this._currentLine = 0;
             this.sendResponse(response);
@@ -102,7 +80,7 @@ class MockDebugSession extends DebugSession {
             // we just start to run until we hit a breakpoint or an exception
             this.continueRequest(<DebugProtocol.ContinueResponse>response, { threadId: MockDebugSession.THREAD_ID });
         }
-    }
+    }*/
 
     protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
 
@@ -359,4 +337,4 @@ class MockDebugSession extends DebugSession {
     }
 }
 
-DebugSession.run(MockDebugSession);
+DebugSession.run(HhvmDebugSession);

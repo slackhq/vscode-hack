@@ -56,20 +56,17 @@
       {
         "type": "hhvm",
         "label": "HHVM",
-        "program": "./out/src/debugger.js",
+        "program": "./out/src/debugger/debugger.js",
         "runtime": "node",
-        "variables": {
-          "getUserName": "hack.getUserName"
-        },
         "configurationSnippets": [
           {
-            "label": "HHVM: Attach to sandbox",
-            "description": "Attach to a remote HHVM server sandbox",
+            "label": "HHVM: Attach to Server",
+            "description": "Attach to a HHVM server sandbox",
             "body": {
-              "name": "${1:Attach to server}",
+              "name": "Attach to Server",
               "type": "hhvm",
               "request": "attach",
-              "host": "localhost",
+              "host": "${1:localhost}",
               "port": 8089,
               "user": "${2:username}",
               "sandbox": "default"
@@ -98,7 +95,7 @@
               "user": {
                 "type": "string",
                 "description": "Name of connecting user.",
-                "default": "${workspaceRoot}/${command:getUserName}"
+                "default": "${workspaceRoot}/${command:hack.getUserName}"
               },
               "sandbox": {
                 "type": "string",
@@ -115,11 +112,12 @@
         },
         "initialConfigurations": [
           {
-            "name": "Attach to server",
+            "name": "Attach to Server",
             "type": "hhvm",
             "request": "attach",
             "host": "localhost",
             "port": 8089,
+            "user": "${workspaceRoot}/${command:hack.getUserName}",
             "sandbox": "default",
             "stopOnRequest": false
           }
