@@ -94,7 +94,7 @@
         "hack.dockerContainerName": {
           "type": "string",
           "default": null,
-          "description": "Source code path inside docker container"
+          "description": "Name of docker container where hh_client is installed"
         }
       }
     },

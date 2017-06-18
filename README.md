@@ -44,9 +44,11 @@ This extension adds the following Visual Studio Code settings. These can be set 
 
 * `hack.clientPath`: Absolute path to the `hh_client` executable. This can be left empty if `hh_client` is already in your environment $PATH. 
 * `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `false`).
+* `hack.useDocker`: Bypass local hhClient by using a Docker container for hh_client support (default: `false`).
+* `hack.dockerSourcePath`: Source code path inside docker container (default: `null`).
+* `hack.dockerContainerName`: Name of docker container where hh_client is installed (default: `null`).
 
 ## Issues
-
 Please file all bugs, issues, feature requests etc. at the [GitHub issues page](https://github.com/PranayAgarwal/vscode-hack/issues).
 
 *Current known issues:*
