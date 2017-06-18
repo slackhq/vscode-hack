@@ -9,7 +9,14 @@ import * as vscode from 'vscode';
 
 export function start(hhClient: string): boolean {
     try {
-        ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);
+        const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker')
+        if (useDocker) {
+            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'))
+            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
+            ps.execFileSync('docker', ['exec', '-i', dockerContainerName, 'hh_client', 'start', dockerSourcePath]);
+        } else {
+            ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);
+        }
         return true;
     } catch (err) {
         if (err.status === 77) {
@@ -25,11 +32,14 @@ export async function check(): Promise<CheckResponse> {
 }
 
 export async function color(fileName: string): Promise<ColorResponse> {
-    return run(['--color', fileName]);
+    return run(['--color', getDockerSourcePath(fileName)]);
 }
-
+function getDockerSourcePath(fileName: string): string {
+    const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
+    return fileName.replace(vscode.workspace.rootPath, dockerSourcePath)
+}
 export async function typeAtPos(fileName: string, line: number, character: number): Promise<string> {
-    const arg: string = fileName + ':' + line + ':' + character;
+    const arg: string = getDockerSourcePath(fileName) + ':' + line + ':' + character;
     const args: string[] = ['--type-at-pos', arg];
     const typeAtPos: TypeAtPosResponse = await run(args);
 
@@ -72,8 +82,25 @@ export async function format(text: string, startPos: number, endPos: number): Pr
 
 async function run(args: string[], stdin: string = null): Promise<any> { // tslint:disable-line
     return new Promise<any>((resolve, reject) => { // tslint:disable-line
-        args = args.concat(['--json', vscode.workspace.rootPath]);
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+        let hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
+        const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
+        if (useDocker) {
+            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'))
+            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
+
+            const dockerargs = ['exec', '-i', dockerContainerName, 'hh_client']
+            hhClient = 'docker';
+
+            if (dockerSourcePath) {
+                args = args.concat(['--json', dockerSourcePath]);
+                args = dockerargs.concat(args)
+                console.log("docker", args.join(" "))
+            } else {
+                console.error('Hack: hh_client execution invalid docker source path ');
+            }
+        } else {
+            args = args.concat(['--json', vscode.workspace.rootPath]);
+        }
         const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => { // tslint:disable-line
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
