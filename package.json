@@ -80,6 +80,21 @@
           "type": "boolean",
           "default": false,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
+        },
+        "hack.useDocker": {
+          "type": "boolean",
+          "default": false,
+          "description": "Bypass local hhClient by using Docker container for hh_client support"
+        },
+        "hack.dockerSourcePath": {
+          "type": "string",
+          "default": null,
+          "description": "Source code path inside docker container"
+        },
+        "hack.dockerContainerName": {
+          "type": "string",
+          "default": null,
+          "description": "Source code path inside docker container"
         }
       }
     },
