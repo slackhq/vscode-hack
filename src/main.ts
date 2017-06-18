@@ -14,9 +14,12 @@ import { HackTypeChecker } from './typechecker';
 export async function activate(context: vscode.ExtensionContext) {
 
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
-
+    const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
+    let hhClient = vscode.workspace.getConfiguration('hack').get('clientPath');
+    if (useDocker) {
+        hhClient = 'docker';
+    }
     // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
-    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
     const startCode = hh_client.start((hhClient === null) ? 'hh_client' : String(hhClient));
     if (!startCode) {
         if (hhClient) {
