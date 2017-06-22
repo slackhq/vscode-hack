@@ -179,7 +179,7 @@ export class HackDocumentFormattingEditProvider implements vscode.DocumentFormat
         const textEdit = vscode.TextEdit.replace(
             new vscode.Range(document.positionAt(0), document.positionAt(text.length)), formatResult.result);
         return [textEdit];
-    };
+    }
 }
 
 export class HackReferenceProvider implements vscode.ReferenceProvider {
@@ -241,7 +241,7 @@ export class HackCodeActionProvider implements vscode.CodeActionProvider {
             commands.push({
                 title: 'Suppress: ' + error.code,
                 command: 'hack.suppressError',
-                arguments: [document, error.range.start.line, [ error.code ]]
+                arguments: [document, error.range.start.line, [error.code]]
             });
         }
         if (commands.length > 1) {

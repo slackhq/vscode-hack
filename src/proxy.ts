@@ -9,10 +9,10 @@ import * as vscode from 'vscode';
 
 export function start(hhClient: string): boolean {
     try {
-        const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker')
+        const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
         if (useDocker) {
-            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'))
-            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
+            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'));
+            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'));
             ps.execFileSync('docker', ['exec', '-i', dockerContainerName, 'hh_client', 'start', dockerSourcePath]);
         } else {
             ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);
@@ -35,8 +35,8 @@ export async function color(fileName: string): Promise<ColorResponse> {
     return run(['--color', getDockerSourcePath(fileName)]);
 }
 function getDockerSourcePath(fileName: string): string {
-    const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
-    return fileName.replace(vscode.workspace.rootPath, dockerSourcePath)
+    const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'));
+    return fileName.replace(vscode.workspace.rootPath, dockerSourcePath);
 }
 export async function typeAtPos(fileName: string, line: number, character: number): Promise<string> {
     const arg: string = getDockerSourcePath(fileName) + ':' + line + ':' + character;
@@ -85,16 +85,16 @@ async function run(args: string[], stdin: string = null): Promise<any> { // tsli
         let hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
         const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
         if (useDocker) {
-            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'))
-            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'))
+            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'));
+            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'));
 
-            const dockerargs = ['exec', '-i', dockerContainerName, 'hh_client']
+            const dockerargs = ['exec', '-i', dockerContainerName, 'hh_client'];
             hhClient = 'docker';
 
             if (dockerSourcePath) {
                 args = args.concat(['--json', dockerSourcePath]);
-                args = dockerargs.concat(args)
-                console.log("docker", args.join(" "))
+                args = dockerargs.concat(args);
+                //console.log('docker', args.join(' '));
             } else {
                 console.error('Hack: hh_client execution invalid docker source path ');
             }
