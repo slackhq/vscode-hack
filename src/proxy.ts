@@ -9,10 +9,11 @@ import * as vscode from 'vscode';
 
 export function start(hhClient: string): boolean {
     try {
-        const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
+        const hackConfig = vscode.workspace.getConfiguration('hack');
+        const useDocker = hackConfig.useDocker;
         if (useDocker) {
-            const dockerContainerName = String(vscode.workspace.getConfiguration('hack').get('dockerContainerName'));
-            const dockerSourcePath = String(vscode.workspace.getConfiguration('hack').get('dockerSourcePath'));
+            const dockerContainerName = hackConfig.dockerContainerName;
+            const dockerSourcePath = String(hackConfig.dockerSourcePath);
             ps.execFileSync('docker', ['exec', '-i', dockerContainerName, 'hh_client', 'start', dockerSourcePath]);
         } else {
             ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);

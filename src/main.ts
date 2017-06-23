@@ -14,8 +14,9 @@ import { HackTypeChecker } from './typechecker';
 export async function activate(context: vscode.ExtensionContext) {
 
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
-    const useDocker = vscode.workspace.getConfiguration('hack').get('useDocker');
-    let hhClient = vscode.workspace.getConfiguration('hack').get('clientPath');
+    const hackConfig = vscode.workspace.getConfiguration('hack');
+    const useDocker = hackConfig.useDocker;
+    let hhClient = hackConfig.clientPath;
     if (useDocker) {
         hhClient = 'docker';
     }
