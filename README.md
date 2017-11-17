@@ -6,7 +6,7 @@ This extension adds rich Hack language & HHVM support to Visual Studio Code. Vis
 
 It is published in the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=pranayagarwal.vscode-hack). To install, search for "Hack" in the VS Code extensions tab or run the following command (⌘+P): ```ext install vscode-hack```.
 
-## Releases
+## Latest releases
 
 ### v0.5.0
 - Added Code Actions to automatically suppress typechecker errors via HH_FIXME comments.
@@ -18,7 +18,7 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 - Lots of performance improvements, mainly by refactoring the codebase to use async/await.
 - Works best with HHVM 3.18 or later.
 
-Please see the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases). 
+See the full list of releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases) as well as the project [changelog](https://github.com/PranayAgarwal/vscode-hack/blob/master/CHANGELOG.md).
 
 ## Features
 

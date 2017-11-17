@@ -94,20 +94,20 @@
     "workspaceContains:.hhconfig"
   ],
   "scripts": {
-    "vscode:prepublish": "./node_modules/typescript/bin/tsc -p ./",
-    "compile": "./node_modules/typescript/bin/tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
-    "lint": "node ./node_modules/tslint/bin/tslint -r ./node_modules/tslint-microsoft-contrib ./src/*.ts ./test/*.ts"
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "lint": "tslint --force -p ."
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.40",
-    "@types/node": "^6.0.40",
-    "cson": "^4.0.0",
-    "mocha": "^3.2.0",
-    "tslint": "^4.5.1",
-    "tslint-microsoft-contrib": "^4.0.0",
-    "typescript": "^2.2.1",
-    "vscode": "^1.1.0"
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.53",
+    "cson": "^4.1.0",
+    "tslint": "^5.8.0",
+    "tslint-microsoft-contrib": "^5.0.1",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.7"
   }
 }

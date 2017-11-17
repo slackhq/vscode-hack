@@ -2,14 +2,15 @@
  * @file VS Code diagnostics integration with Hack typechecker.
  */
 
-'use strict';
-
 import * as vscode from 'vscode';
 import * as hh_client from './proxy';
 
-// tslint:disable-next-line:export-name
 export class HackTypeChecker {
-    constructor(private hhvmTypeDiag: vscode.DiagnosticCollection) {}
+    private hhvmTypeDiag: vscode.DiagnosticCollection;
+
+    constructor(hhvmTypeDiag: vscode.DiagnosticCollection) {
+        this.hhvmTypeDiag = hhvmTypeDiag;
+    }
 
     public async run() {
         const typecheckResult = await hh_client.check();
@@ -27,7 +28,7 @@ export class HackTypeChecker {
                 if (code === 0) {
                     code = messageUnit.code;
                 }
-                fullMessage = fullMessage + messageUnit.descr + ' [' + messageUnit.code + ']' + '\n';
+                fullMessage = `${fullMessage} ${messageUnit.descr} [${messageUnit.code}]\n`;
             });
             const diagnostic = new vscode.Diagnostic(
                 new vscode.Range(
@@ -38,8 +39,9 @@ export class HackTypeChecker {
             diagnostic.code = code;
             diagnostic.source = 'Hack';
             const file = error.message[0].path;
-            if (diagnosticMap.has(file)) {
-                diagnosticMap.get(file).push(diagnostic);
+            const cachedFileDiagnostics = diagnosticMap.get(file);
+            if (cachedFileDiagnostics) {
+                cachedFileDiagnostics.push(diagnostic);
             } else {
                 diagnosticMap.set(file, [diagnostic]);
             }

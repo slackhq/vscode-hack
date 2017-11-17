@@ -2,8 +2,6 @@
  * @file Entry point for VS Code Hack extension.
  */
 
-'use strict';
-
 import * as vscode from 'vscode';
 import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
@@ -16,11 +14,11 @@ export async function activate(context: vscode.ExtensionContext) {
     const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
 
     // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
-    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath'); // tslint:disable-line
+    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath');
     const startCode = hh_client.start((hhClient === null) ? 'hh_client' : String(hhClient));
     if (!startCode) {
         if (hhClient) {
-            vscode.window.showErrorMessage('Invalid hh_client executable: \'' + hhClient + '\'. Please configure a valid path and reload your workspace.');
+            vscode.window.showErrorMessage(`Invalid hh_client executable: '${hhClient}'. Please configure a valid path and reload your workspace.`);
         } else {
             vscode.window.showErrorMessage('Couldn\'t find hh_client executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
         }
@@ -44,12 +42,12 @@ export async function activate(context: vscode.ExtensionContext) {
     // create typechecker and run when workspace is first loaded and on every file save
     const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_typecheck');
     const typechecker = new HackTypeChecker(hhvmTypeDiag);
-    context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { typechecker.run(); }));
+    context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(() => { typechecker.run(); }));
     context.subscriptions.push(hhvmTypeDiag);
     await typechecker.run();
 
     // create coverage checker and run on file open & save, if enabled in settings
-    const enableCoverageCheck = vscode.workspace.getConfiguration('hack').get('enableCoverageCheck') || false; // tslint:disable-line
+    const enableCoverageCheck = vscode.workspace.getConfiguration('hack').get('enableCoverageCheck') || false;
     if (enableCoverageCheck) {
         const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
@@ -58,8 +56,8 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { hhvmCoverDiag.delete(vscode.Uri.file(document.fileName)); }));
         context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
             coverageStatus.hide();
-            if (vscode.window.activeTextEditor) {
-                coveragechecker.run(vscode.window.activeTextEditor.document, true);
+            if (e) {
+                coveragechecker.run(e.document, true);
             }
         }));
         context.subscriptions.push(hhvmCoverDiag);

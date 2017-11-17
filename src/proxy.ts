@@ -2,10 +2,9 @@
  * @file hh_client proxy
  */
 
-'use strict';
-
 import * as ps from 'child_process';
 import * as vscode from 'vscode';
+import * as hack from './types/hack';
 
 export function start(hhClient: string): boolean {
     try {
@@ -20,65 +19,65 @@ export function start(hhClient: string): boolean {
     }
 }
 
-export async function check(): Promise<CheckResponse> {
+export async function check(): Promise<hack.CheckResponse> {
     return run(['check']);
 }
 
-export async function color(fileName: string): Promise<ColorResponse> {
+export async function color(fileName: string): Promise<hack.ColorResponse> {
     return run(['--color', fileName]);
 }
 
-export async function typeAtPos(fileName: string, line: number, character: number): Promise<string> {
-    const arg: string = fileName + ':' + line + ':' + character;
+export async function typeAtPos(fileName: string, line: number, character: number): Promise<string | undefined> {
+    const arg: string = `${fileName}:${line}:${character}`;
     const args: string[] = ['--type-at-pos', arg];
-    const typeAtPos: TypeAtPosResponse = await run(args);
+    const typeAtPosResponse: hack.TypeAtPosResponse = await run(args);
 
-    if (!typeAtPos || !typeAtPos.type || typeAtPos.type === '(unknown)' || typeAtPos.type === '_' || typeAtPos.type === 'noreturn') {
-        return;
+    if (!typeAtPosResponse || !typeAtPosResponse.type || typeAtPosResponse.type === '(unknown)' || typeAtPosResponse.type === '_' || typeAtPosResponse.type === 'noreturn') {
+        return undefined;
     }
-    return typeAtPos.type;
+    return typeAtPosResponse.type;
 }
 
-export async function outline(text: string): Promise<OutlineResponse[]> { // tslint:disable-line
+export async function outline(text: string): Promise<hack.OutlineResponse[]> {
     return run(['--outline'], text);
 }
 
-export async function search(query: string): Promise<SearchResponse> {
+export async function search(query: string): Promise<hack.SearchResponse> {
     return run(['--search', query]);
 }
 
-export async function ideFindRefs(text: string, line: number, character: number): Promise<IdeFindRefsResponse> {
-    return run(['--ide-find-refs', line + ':' + character], text);
+export async function ideFindRefs(text: string, line: number, character: number): Promise<hack.IdeFindRefsResponse> {
+    return run(['--ide-find-refs', `${line}:${character}`], text);
 }
 
-export async function ideHighlightRefs(text: string, line: number, character: number): Promise<IdeHighlightRefsResponse> {
-    return run(['--ide-highlight-refs', line + ':' + character], text);
+export async function ideHighlightRefs(text: string, line: number, character: number): Promise<hack.IdeHighlightRefsResponse> {
+    return run(['--ide-highlight-refs', `${line}:${character}`], text);
 }
 
-export async function ideGetDefinition(text: string, line: number, character: number): Promise<IdeGetDefinitionResponse> {
-    return run(['--ide-get-definition', line + ':' + character], text);
+export async function ideGetDefinition(text: string, line: number, character: number): Promise<hack.IdeGetDefinitionResponse> {
+    return run(['--ide-get-definition', `${line}:${character}`], text);
 }
 
-export async function autoComplete(text: string, position: number): Promise<AutoCompleteResponse> {
+export async function autoComplete(text: string, position: number): Promise<hack.AutoCompleteResponse> {
     // Insert hh_client autocomplete token at cursor position.
     const autoTok: string = 'AUTO332';
     const input = [text.slice(0, position), autoTok, text.slice(position)].join('');
     return run(['--auto-complete'], input);
 }
 
-export async function format(text: string, startPos: number, endPos: number): Promise<FormatResponse> {
-    return run(['--format', '' + startPos, '' + endPos], text);
+export async function format(text: string, startPos: number, endPos: number): Promise<hack.FormatResponse> {
+    return run(['--format', startPos.toString(), endPos.toString()], text);
 }
 
-async function run(args: string[], stdin: string = null): Promise<any> { // tslint:disable-line
-    return new Promise<any>((resolve, reject) => { // tslint:disable-line
+async function run(args: string[], stdin?: string): Promise<any> {
+    return new Promise<any>((resolve, _) => {
         args = args.concat(['--json', vscode.workspace.rootPath]);
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client'; // tslint:disable-line
-        const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => { // tslint:disable-line
+        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client';
+        const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
-                console.error('Hack: hh_client execution error: ' + err);
-                resolve(null);
+                console.error(`Hack: hh_client execution error: ${err}`);
+                resolve();
             }
             if (!stdout) {
                 // all hh_client --check output goes to stderr by default
@@ -88,8 +87,8 @@ async function run(args: string[], stdin: string = null): Promise<any> { // tsli
                 const output = JSON.parse(stdout);
                 resolve(output);
             } catch (parseErr) {
-                console.error('Hack: hh_client output error: ' + parseErr);
-                resolve(null);
+                console.error(`Hack: hh_client output error: ${parseErr}`);
+                resolve();
             }
         });
         if (stdin) {
@@ -98,109 +97,3 @@ async function run(args: string[], stdin: string = null): Promise<any> { // tsli
         }
     });
 }
-
-/**
- * Types for hh_client responses
- */
-
-type Position = {
-    filename: string,
-    line: number,
-    char_start: number,
-    char_end: number
-};
-
-type Span = {
-    filename: string,
-    line_start: number,
-    char_start: number,
-    line_end: number,
-    char_end: number
-};
-
-type CheckResponse = {
-    passed: boolean;
-    errors: {
-        message:
-        {
-            descr: string,
-            path: string,
-            line: number,
-            start: number,
-            end: number,
-            code: number
-        }[]
-    }[]
-};
-
-type ColorResponse = {
-    color: string,
-    text: string
-}[];
-
-export type OutlineResponse = {
-    name: string,
-    kind: string,
-    id: string,
-    position: Position,
-    span: Span,
-    children: OutlineResponse[]
-};
-
-type SearchResponse = {
-    name: string,
-    filename: string,
-    desc: string,
-    line: number,
-    char_start: number,
-    char_end: number,
-    scope: string
-}[];
-
-type IdeFindRefsResponse = {
-    name: string,
-    filename: string,
-    line: number,
-    char_start: number,
-    char_end: number
-}[];
-
-type IdeHighlightRefsResponse = {
-    line: number,
-    char_start: number,
-    char_end: number
-}[];
-
-type IdeGetDefinitionResponse = {
-    name: string,
-    result_type: string,
-    pos: Position,
-    definition_pos: Position,
-    definition_span: Span,
-    definition_id: number
-}[];
-
-type AutoCompleteResponse = {
-    name: string,
-    type: string, // tslint:disable-line
-    pos: Position,
-    func_details: {
-        min_arity: number,
-        return_type: string,
-        params: {
-            name: string,
-            type: string, // tslint:disable-line
-            variadic: boolean
-        }[]
-    }
-}[];
-
-type FormatResponse = {
-    result: string,
-    error_message: string,
-    internal_error: boolean
-};
-
-type TypeAtPosResponse = {
-    type: string // tslint:disable-line
-};

@@ -2,30 +2,28 @@
  * @file Extension providers for intellisense features (hover, autocomplete, goto symbol etc.)
  */
 
-'use strict';
-
 import * as vscode from 'vscode';
 import * as hh_client from './proxy';
+import { OutlineResponse } from './types/hack';
 
 export class HackHoverProvider implements vscode.HoverProvider {
-    public async provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Hover> {
+    public async provideHover(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover> {
         const wordPosition = document.getWordRangeAtPosition(position);
-        if (!wordPosition) {
-            return null;
-        }
-        const startPosition = wordPosition.start;
-        const line: number = startPosition.line + 1;
-        const character: number = startPosition.character + 1;
+        if (wordPosition) {
+            const startPosition = wordPosition.start;
+            const line: number = startPosition.line + 1;
+            const character: number = startPosition.character + 1;
 
-        let hoverType = await hh_client.typeAtPos(document.fileName, line, character);
-        if (hoverType) {
-            if (hoverType.startsWith('(function')) {
-                hoverType = hoverType.slice(1, hoverType.length - 1);
+            let hoverType = await hh_client.typeAtPos(document.fileName, line, character);
+            if (hoverType) {
+                if (hoverType.startsWith('(function')) {
+                    hoverType = hoverType.slice(1, hoverType.length - 1);
+                }
+                const formattedMessage: vscode.MarkedString = { language: 'hack', value: hoverType };
+                return new vscode.Hover(formattedMessage);
             }
-            const formattedMessage: vscode.MarkedString = { language: 'hack', value: hoverType };
-            return new vscode.Hover(formattedMessage);
         }
-        return null;
+        return undefined;
     }
 }
 
@@ -51,10 +49,10 @@ const getRange = (lineStart: number, lineEnd: number, charStart: number, charEnd
 };
 
 const getSymbolKind = (symbolType: string): vscode.SymbolKind => {
-    return symbolMap.has(symbolType) ? symbolMap.get(symbolType) : vscode.SymbolKind.Null;
+    return symbolMap.get(symbolType) || vscode.SymbolKind.Null;
 };
 
-const pushSymbols = (outline: hh_client.OutlineResponse[], symbols: vscode.SymbolInformation[], container: string, indent: string) => {
+const pushSymbols = (outline: OutlineResponse[], symbols: vscode.SymbolInformation[], container: string, indent: string) => {
     outline.forEach(element => {
         let name = element.name;
         const nameIndex = name.lastIndexOf('\\');
@@ -77,18 +75,18 @@ const pushSymbols = (outline: hh_client.OutlineResponse[], symbols: vscode.Symbo
         }
         name = indent + name;
         const range = getRange(element.span.line_start, element.span.line_end, element.span.char_start, element.span.char_end);
-        symbols.push(new vscode.SymbolInformation(name, symbolKind, range, null, container));
+        symbols.push(new vscode.SymbolInformation(name, symbolKind, range, undefined, container));
 
         // Check if element has any children, and recursively fetch them as well.
         // NOTE: Do DFS traversal here because we want the groups to be listed together.
         if (element.children && element.children.length > 0) {
-            pushSymbols(element.children, symbols, name, indent + '  ');
+            pushSymbols(element.children, symbols, name, `${indent}  `);
         }
     });
 };
 
 export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
-    public async provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+    public async provideDocumentSymbols(document: vscode.TextDocument): Promise<vscode.SymbolInformation[]> {
         const outline = await hh_client.outline(document.getText());
         const symbols: vscode.SymbolInformation[] = [];
         pushSymbols(outline, symbols, '', '');
@@ -97,7 +95,7 @@ export class HackDocumentSymbolProvider implements vscode.DocumentSymbolProvider
 }
 
 export class HackWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvider {
-    public async provideWorkspaceSymbols(query: string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+    public async provideWorkspaceSymbols(query: string): Promise<vscode.SymbolInformation[]> {
         const searchResult = await hh_client.search(query);
         const symbols: vscode.SymbolInformation[] = [];
         searchResult.forEach(element => {
@@ -108,7 +106,7 @@ export class HackWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvid
             }
             const kind = getSymbolKind(desc);
             const uri: vscode.Uri = vscode.Uri.file(element.filename);
-            const container = element.scope || (element.name.includes('\\') ? element.name.slice(0, element.name.lastIndexOf('\\')) : null);
+            const container = element.scope || (element.name.includes('\\') ? element.name.slice(0, element.name.lastIndexOf('\\')) : undefined);
             const range = getRange(element.line, element.line, element.char_start, element.char_end);
             symbols.push(new vscode.SymbolInformation(name, kind, range, uri, container));
         });
@@ -117,8 +115,7 @@ export class HackWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvid
 }
 
 export class HackDocumentHighlightProvider implements vscode.DocumentHighlightProvider {
-    public async provideDocumentHighlights(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken):
-        Promise<vscode.DocumentHighlight[]> {
+    public async provideDocumentHighlights(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.DocumentHighlight[]> {
         const highlightResult = await hh_client.ideHighlightRefs(document.getText(), position.line + 1, position.character + 1);
         const highlights: vscode.DocumentHighlight[] = [];
         highlightResult.forEach(element => {
@@ -134,8 +131,7 @@ export class HackDocumentHighlightProvider implements vscode.DocumentHighlightPr
 }
 
 export class HackCompletionItemProvider implements vscode.CompletionItemProvider {
-    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken):
-        Promise<vscode.CompletionItem[]> {
+    public async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.CompletionItem[]> {
         const completionResult = await hh_client.autoComplete(document.getText(), document.offsetAt(position));
         const completionItems: vscode.CompletionItem[] = [];
         completionResult.forEach(element => {
@@ -154,7 +150,7 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
                     kind = vscode.CompletionItemKind.Method;
                 }
                 const typeSplit = labelType.slice(1, labelType.length - 1).split(':');
-                labelType = typeSplit[0] + ': ' + typeSplit[1].split('\\').pop();
+                labelType = `${typeSplit[0]}: ${typeSplit[1].split('\\').pop()}`;
             } else if (labelType === 'class') {
                 kind = vscode.CompletionItemKind.Class;
             }
@@ -167,24 +163,20 @@ export class HackCompletionItemProvider implements vscode.CompletionItemProvider
 }
 
 export class HackDocumentFormattingEditProvider implements vscode.DocumentFormattingEditProvider {
-    public async provideDocumentFormattingEdits(
-        document: vscode.TextDocument,
-        options: vscode.FormattingOptions,
-        token: vscode.CancellationToken): Promise<vscode.TextEdit[]> {
+    public async provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
         const text: string = document.getText();
         const formatResult = await hh_client.format(text, 0, text.length);
         if (formatResult.internal_error || formatResult.error_message) {
-            return null;
+            return undefined;
         }
         const textEdit = vscode.TextEdit.replace(
             new vscode.Range(document.positionAt(0), document.positionAt(text.length)), formatResult.result);
         return [textEdit];
-    };
+    }
 }
 
 export class HackReferenceProvider implements vscode.ReferenceProvider {
-    public async provideReferences(document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken)
-        : Promise<vscode.Location[]> {
+    public async provideReferences(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Location[]> {
         const text = document.getText();
         const foundRefs = await hh_client.ideFindRefs(text, position.line + 1, position.character + 1);
         const highlightRefs = await hh_client.ideHighlightRefs(text, position.line + 1, position.character + 1);
@@ -210,13 +202,12 @@ export class HackReferenceProvider implements vscode.ReferenceProvider {
 }
 
 export class HackDefinitionProvider implements vscode.DefinitionProvider {
-    public async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
-        : Promise<vscode.Definition> {
+    public async provideDefinition(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Definition> {
         const text = document.getText();
         const foundDefinition = await hh_client.ideGetDefinition(text, position.line + 1, position.character + 1);
         const definition: vscode.Location[] = [];
         foundDefinition.forEach(element => {
-            if (element.definition_pos != null) {
+            if (element.definition_pos) {
                 const location: vscode.Location = new vscode.Location(
                     vscode.Uri.file(element.definition_pos.filename || document.fileName),
                     new vscode.Range(
@@ -230,28 +221,27 @@ export class HackDefinitionProvider implements vscode.DefinitionProvider {
 }
 
 export class HackCodeActionProvider implements vscode.CodeActionProvider {
-    public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range, context: vscode.CodeActionContext, token: vscode.CancellationToken):
-        Promise<vscode.Command[]> {
+    public async provideCodeActions(document: vscode.TextDocument, _: vscode.Range, context: vscode.CodeActionContext): Promise<vscode.Command[]> {
         const filteredErrors = context.diagnostics.filter(d => d.source === 'Hack' && d.code !== 0);
-        if (filteredErrors.length === 0) {
-            return;
+        if (filteredErrors.length > 0) {
+            const commands: vscode.Command[] = [];
+            for (const error of filteredErrors) {
+                commands.push({
+                    title: `Suppress: ${error.code}`,
+                    command: 'hack.suppressError',
+                    arguments: [document, error.range.start.line, [ error.code ]]
+                });
+            }
+            if (commands.length > 1) {
+                const allCodes = filteredErrors.map(f => f.code);
+                commands.push({
+                    title: 'Suppress All',
+                    command: 'hack.suppressError',
+                    arguments: [document, filteredErrors[0].range.start.line, allCodes]
+                });
+            }
+            return commands;
         }
-        const commands = [];
-        for (const error of filteredErrors) {
-            commands.push({
-                title: 'Suppress: ' + error.code,
-                command: 'hack.suppressError',
-                arguments: [document, error.range.start.line, [ error.code ]]
-            });
-        }
-        if (commands.length > 1) {
-            const allCodes = filteredErrors.map(f => f.code);
-            commands.push({
-                title: 'Suppress All',
-                command: 'hack.suppressError',
-                arguments: [document, filteredErrors[0].range.start.line, allCodes]
-            });
-        }
-        return commands;
+        return undefined;
     }
 }
