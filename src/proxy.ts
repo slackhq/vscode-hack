@@ -8,7 +8,7 @@ import * as hack from './types/hack';
 
 export function start(hhClient: string): boolean {
     try {
-        ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath]);
+        ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath || '']);
         return true;
     } catch (err) {
         if (err.status === 77) {
@@ -71,7 +71,7 @@ export async function format(text: string, startPos: number, endPos: number): Pr
 
 async function run(args: string[], stdin?: string): Promise<any> {
     return new Promise<any>((resolve, _) => {
-        args = args.concat(['--json', vscode.workspace.rootPath]);
+        args = args.concat(['--json', vscode.workspace.rootPath || '']);
         const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client';
         const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {

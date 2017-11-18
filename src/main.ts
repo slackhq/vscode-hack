@@ -49,24 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // create coverage checker and run on file open & save, if enabled in settings
     const enableCoverageCheck = vscode.workspace.getConfiguration('hack').get('enableCoverageCheck') || false;
     if (enableCoverageCheck) {
-        const coverageStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        const hhvmCoverDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection('hack_coverage');
-        const coveragechecker = new HackCoverageChecker(coverageStatus, hhvmCoverDiag);
-        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { coveragechecker.run(document, false); }));
-        context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { hhvmCoverDiag.delete(vscode.Uri.file(document.fileName)); }));
-        context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
-            coverageStatus.hide();
-            if (e) {
-                coveragechecker.run(e.document, true);
-            }
-        }));
-        context.subscriptions.push(hhvmCoverDiag);
-        context.subscriptions.push(coverageStatus);
-        context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { coveragechecker.toggle(); }));
-
-        for (const document of vscode.workspace.textDocuments) {
-            await coveragechecker.run(document, true);
-        }
+        await new HackCoverageChecker().start(context);
     }
 }
 
