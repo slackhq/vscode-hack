@@ -4,12 +4,19 @@
  */
 
 import { readFileSync } from 'fs';
-import { basename } from 'path';
-import {
-    Breakpoint, BreakpointEvent, DebugSession, Handles, InitializedEvent, OutputEvent,
-    Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread
-} from 'vscode-debugadapter';
+import * as net from 'net';
+import { Breakpoint, DebugSession, Handles, InitializedEvent, OutputEvent, Scope, StoppedEvent, TerminatedEvent } from 'vscode-debugadapter';
 import { DebugProtocol } from 'vscode-debugprotocol';
+import { CmdBreak } from './CmdBreak';
+import { CmdContinue } from './CmdContinue';
+import { CmdInterrupt } from './CmdInterrupt';
+import { CmdMachine } from './CmdMachine';
+import { CmdSignal, Signal } from './CmdSignal';
+import { CmdStep } from './CmdStep';
+import * as CommandFactory from './CommandFactory';
+import { BindState, BreakPointInfo, BreakPointState, CommandType, InterruptType, SandboxInfo } from './DebuggerBase';
+import { DebuggerBufferReader, DebuggerBufferWriter } from './DebuggerBuffer';
+import { DebuggerCommand } from './DebuggerCommand';
 
 /**
  * This interface should always match the debugger config schema found in the vscode-hack extension manifest.
@@ -24,6 +31,9 @@ export interface AttachRequestArguments extends DebugProtocol.LaunchRequestArgum
 }
 
 class HhvmDebugSession extends DebugSession {
+
+    private client: net.Socket;
+
     // maps from sourceFile to array of Breakpoints
     private breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
@@ -33,13 +43,13 @@ class HhvmDebugSession extends DebugSession {
 	 * Creates a new debug adapter that is used for one debug session.
 	 * We configure the default implementation of a debug adapter here.
 	 */
-    /*public constructor() {
+    public constructor() {
         super();
 
         // this debugger uses one-based lines and columns
-        // this.setDebuggerLinesStartAt1(true);
-        // this.setDebuggerColumnsStartAt1(true);
-    }*/
+        this.setDebuggerLinesStartAt1(true);
+        this.setDebuggerColumnsStartAt1(true);
+    }
 
 	/**
 	 * The 'initialize' request is the first request called by the frontend
@@ -64,28 +74,130 @@ class HhvmDebugSession extends DebugSession {
         this.sendResponse(response);
     }
 
+    // tslint:disable-next-line:max-func-body-length
     protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
+        // open a socket connection to hhvm server
+        this.client = net.connect({ port: args.port, host: args.host }, () => {
+            console.log('Connected...');
+        });
+
+        let attached = false;
+        let interrupted = false;
+        let needInterrupt = false;
+
+        this.client.on('data', data => {
+            console.log('Received: ' + data.toString('hex'));
+            const debuggerData = new DebuggerBufferReader(data);
+            const cmd: DebuggerCommand = CommandFactory.create(debuggerData);
+            switch (cmd.cmdType) {
+                case CommandType.KindOfInterrupt:
+                    interrupted = true;
+                    const interruptCmd = <CmdInterrupt>cmd;
+                    switch (interruptCmd.interrupt) {
+                        case InterruptType.SessionStarted:
+                            if (!attached) {
+                                // this is the initial interrupt when we successfuly connect to the target machine
+                                // now attach to sandbox of choice and send over saved breakpoints
+                                const user: string = args.user;
+                                const sandbox: string = args.sandbox;
+                                const sendCmd = new CmdMachine('attach', [new SandboxInfo(user, sandbox)], false);
+                                const sendBuffer = new DebuggerBufferWriter();
+                                sendCmd.send(sendBuffer);
+                                console.log('Sent: ' + sendBuffer.getBuffer().toString('hex'));
+                                this.client.write(sendBuffer.getBuffer(), () => {
+                                    interrupted = false;
+                                });
+                            }
+                            break;
+                        case InterruptType.SessionEnded:
+                            // handle disconnection
+                            break;
+                        case InterruptType.RequestStarted:
+                            // new web request received
+                            console.log('Yay!');
+                            const stepCmd = new CmdStep('', 1, false);
+                            const sendBuffer = new DebuggerBufferWriter();
+                            stepCmd.send(sendBuffer);
+                            console.log('Sent: ' + sendBuffer.getBuffer().toString('hex'));
+                            this.client.write(sendBuffer.getBuffer());
+                            break;
+                        case InterruptType.BreakPointReached:
+                            console.log('Yay!');
+                            const stepCmd2 = new CmdStep('', 1, false);
+                            const sendBuffer2 = new DebuggerBufferWriter();
+                            stepCmd2.send(sendBuffer2);
+                            console.log('Sent: ' + sendBuffer2.getBuffer().toString('hex'));
+                            this.client.write(sendBuffer2.getBuffer());
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case CommandType.KindOfMachine:
+                    const machineCmd = <CmdMachine>cmd;
+                    if (machineCmd.succeed) {
+                        attached = true;
+                        // if on request breakpoint is enabled, send over breakpoint, as well as all others currently selected
+                        const breakCmd = new CmdBreak('update', [new BreakPointInfo(BreakPointState.Always, BindState.KnownToBeValid, InterruptType.RequestStarted)]);
+                        let sendBuffer = new DebuggerBufferWriter();
+                        breakCmd.send(sendBuffer);
+                        console.log('Sent: ' + sendBuffer.getBuffer().toString('hex'));
+                        this.client.write(sendBuffer.getBuffer());
+                        interrupted = false;
+                    }
+                    break;
+                case CommandType.KindOfBreak:
+                    const breakCmd = <CmdBreak>cmd;
+                    // add breakpoint to internal list and continue execution
+                    const continueCmd = new CmdContinue('', 1, false);
+                    let sendBuffer = new DebuggerBufferWriter();
+                    sendBuffer = new DebuggerBufferWriter();
+                    continueCmd.send(sendBuffer);
+                    console.log('Sent: ' + sendBuffer.getBuffer().toString('hex'));
+                    this.client.write(sendBuffer.getBuffer());
+                    break;
+                case CommandType.KindOfSignal:
+                    const signalCmd = <CmdSignal>cmd;
+                    if (signalCmd.signal === Signal.SignalNone) {
+                        if (needInterrupt) {
+                            signalCmd.signal = Signal.SignalBreak;
+                            needInterrupt = false;
+                        }
+                        const sendBuffer = new DebuggerBufferWriter();
+                        signalCmd.send(sendBuffer);
+                        console.log('Sent: ' + sendBuffer.getBuffer().toString('hex'));
+                        this.client.write(sendBuffer.getBuffer());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        this.client.on('close', () => {
+            console.log('Connection closed');
+        });
+
+        this.client.on('timeout', () => {
+            console.log('Timeout');
+            this.client.destroy();
+        });
+
+        this.client.on('error', error => {
+            console.log('error: ' + error);
+        });
 
     }
 
-    /*protected launchRequest(response: DebugProtocol.LaunchResponse, args: AttachRequestArguments): void {
-        // start a socket connection
-        if (args.stopOnEntry) {
-            this._currentLine = 0;
-            this.sendResponse(response);
-
-            // we stop on the first line
-            this.sendEvent(new StoppedEvent('entry', MockDebugSession.THREAD_ID));
-        } else {
-            // we just start to run until we hit a breakpoint or an exception
-            this.continueRequest(<DebugProtocol.ContinueResponse>response, { threadId: MockDebugSession.THREAD_ID });
-        }
-    }*/
+    protected launchRequest(response: DebugProtocol.LaunchResponse, args: AttachRequestArguments): void {
+        // we stop on the first line
+        this.sendEvent(new StoppedEvent('entry', 0));
+    }
 
     protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
 
         const path = args.source.path;
-        const clientLines = args.lines;
+        const clientLines = args.breakpoints;
 
         // read file contents into array for direct access
         const lines = readFileSync(path).toString().split('\n');
@@ -93,7 +205,7 @@ class HhvmDebugSession extends DebugSession {
         const breakpoints: Breakpoint[] = [];
 
         // verify breakpoint locations
-        for (let i = 0; i < clientLines.length; i += 1) {
+        /*for (let i = 0; i < clientLines.length; i += 1) {
             let l = this.convertClientLineToDebugger(clientLines[i]);
             let verified = false;
             if (l < lines.length) {
@@ -115,7 +227,7 @@ class HhvmDebugSession extends DebugSession {
             const bp = <DebugProtocol.Breakpoint>new Breakpoint(verified, this.convertDebuggerLineToClient(l));
             bp.id = this.breakpointId += 1;
             breakpoints.push(bp);
-        }
+        }*/
         this.breakPoints.set(path, breakpoints);
 
         // send back the actual breakpoint positions
@@ -128,11 +240,11 @@ class HhvmDebugSession extends DebugSession {
     protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
         // return the default thread
-        response.body = {
+        /*response.body = {
             threads: [
                 new Thread(MockDebugSession.THREAD_ID, 'thread 1')
             ]
-        };
+        };*/
         this.sendResponse(response);
     }
 
@@ -141,7 +253,7 @@ class HhvmDebugSession extends DebugSession {
 	 */
     protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
 
-        const words = this.sourceLines[this._currentLine].trim().split(/\s+/);
+        /*const words = this.sourceLines[this._currentLine].trim().split(/\s+/);
 
         const startFrame = typeof args.startFrame === 'number' ? args.startFrame : 0;
         const maxLevels = typeof args.levels === 'number' ? args.levels : words.length - startFrame;
@@ -160,7 +272,7 @@ class HhvmDebugSession extends DebugSession {
         response.body = {
             stackFrames: frames,
             totalFrames: words.length
-        };
+        };*/
         this.sendResponse(response);
     }
 
@@ -217,11 +329,11 @@ class HhvmDebugSession extends DebugSession {
 
     protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
 
-        for (let ln = this._currentLine + 1; ln < this.sourceLines.length; ln += 1) {
+        /*for (let ln = this._currentLine + 1; ln < this.sourceLines.length; ln += 1) {
             if (this.fireEventsForLine(response, ln)) {
                 return;
             }
-        }
+        }*/
         this.sendResponse(response);
         // no more lines: run to end
         this.sendEvent(new TerminatedEvent());
@@ -229,7 +341,7 @@ class HhvmDebugSession extends DebugSession {
 
     protected reverseContinueRequest(response: DebugProtocol.ReverseContinueResponse, args: DebugProtocol.ReverseContinueArguments): void {
 
-        for (let ln = this._currentLine - 1; ln >= 0; ln -= 1) {
+        /*for (let ln = this._currentLine - 1; ln >= 0; ln -= 1) {
             if (this.fireEventsForLine(response, ln)) {
                 return;
             }
@@ -238,15 +350,17 @@ class HhvmDebugSession extends DebugSession {
         // no more lines: stop at first line
         this._currentLine = 0;
         this.sendEvent(new StoppedEvent('entry', MockDebugSession.THREAD_ID));
+        */
     }
 
     protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
 
-        for (let ln = this._currentLine + 1; ln < this.sourceLines.length; ln += 1) {
+        /*for (let ln = this._currentLine + 1; ln < this.sourceLines.length; ln += 1) {
             if (this.fireStepEvent(response, ln)) {
                 return;
             }
         }
+        */
         this.sendResponse(response);
         // no more lines: run to end
         this.sendEvent(new TerminatedEvent());
@@ -254,7 +368,7 @@ class HhvmDebugSession extends DebugSession {
 
     protected stepBackRequest(response: DebugProtocol.StepBackResponse, args: DebugProtocol.StepBackArguments): void {
 
-        for (let ln = this._currentLine - 1; ln >= 0; ln -= 1) {
+        /*for (let ln = this._currentLine - 1; ln >= 0; ln -= 1) {
             if (this.fireStepEvent(response, ln)) {
                 return;
             }
@@ -263,6 +377,7 @@ class HhvmDebugSession extends DebugSession {
         // no more lines: stop at first line
         this._currentLine = 0;
         this.sendEvent(new StoppedEvent('entry', MockDebugSession.THREAD_ID));
+        */
     }
 
     protected evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): void {
@@ -281,13 +396,15 @@ class HhvmDebugSession extends DebugSession {
 	 */
     private fireStepEvent(response: DebugProtocol.Response, ln: number): boolean {
 
-        if (this.sourceLines[ln].trim().length > 0) {	// non-empty line
+        /*if (this.sourceLines[ln].trim().length > 0) {	// non-empty line
             this._currentLine = ln;
             this.sendResponse(response);
             this.sendEvent(new StoppedEvent('step', MockDebugSession.THREAD_ID));
             return true;
         }
+        */
         return false;
+
     }
 
 	/**
@@ -296,7 +413,7 @@ class HhvmDebugSession extends DebugSession {
     private fireEventsForLine(response: DebugProtocol.Response, ln: number): boolean {
 
         // find the breakpoints for the current source file
-        const breakpoints = this.breakPoints.get(this.sourceFile);
+        /*const breakpoints = this.breakPoints.get(this.sourceFile);
         if (breakpoints) {
             const bps = breakpoints.filter(bp => bp.line === this.convertDebuggerLineToClient(ln));
             if (bps.length > 0) {
@@ -322,10 +439,10 @@ class HhvmDebugSession extends DebugSession {
         if (this.sourceLines[ln].indexOf('exception') >= 0) {
             this._currentLine = ln;
             this.sendResponse(response);
-            this.sendEvent(new StoppedEvent('exception', MockDebugSession.THREAD_ID));
+            this.sendEvent(new StoppedEvent('exception', HhvmDebugSession.THREAD_ID));
             this.log('exception in line', ln);
             return true;
-        }
+        }*/
 
         return false;
     }
