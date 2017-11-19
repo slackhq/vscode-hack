@@ -19,6 +19,10 @@ export function start(hhClient: string): boolean {
     }
 }
 
+export async function version(): Promise<hack.Version | undefined> {
+    return run(['--version']);
+}
+
 export async function check(): Promise<hack.CheckResponse> {
     return run(['check']);
 }
