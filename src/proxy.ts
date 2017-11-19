@@ -70,7 +70,11 @@ export async function autoComplete(text: string, position: number): Promise<hack
 }
 
 export async function format(text: string, startPos: number, endPos: number): Promise<hack.FormatResponse> {
-    return run(['--format', startPos.toString(), endPos.toString()], text);
+    // `endPos` is incremented to stop `hh_client --format` from removing the
+    // final character when there is no newline at the end of the file.
+    //
+    // This appears to be a bug in `hh_client --format`.
+    return run(['--format', startPos.toString(), (endPos + 1).toString()], text);
 }
 
 async function run(args: string[], stdin?: string): Promise<any> {
