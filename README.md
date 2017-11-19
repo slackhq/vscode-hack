@@ -42,7 +42,8 @@ This extension is supported on Linux and Mac OS X 10.10 onwards ([see HHVM compa
 
 This extension adds the following Visual Studio Code settings. These can be set in user preferences (⌘+,) or workspace settings (`.vscode/settings.json`).
 
-* `hack.clientPath`: Absolute path to the `hh_client` executable. This can be left empty if `hh_client` is already in your environment $PATH. 
+* `hack.clientPath`: Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well.
+* `hack.workspaceRootPath`: Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.
 * `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `false`).
 
 ## Issues

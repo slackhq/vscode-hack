@@ -3,21 +3,8 @@
  */
 
 import * as ps from 'child_process';
-import * as vscode from 'vscode';
+import * as config from './Config';
 import * as hack from './types/hack';
-
-export function start(hhClient: string): boolean {
-    try {
-        ps.execFileSync(hhClient, ['start', vscode.workspace.rootPath || '']);
-        return true;
-    } catch (err) {
-        if (err.status === 77) {
-            // server was already running
-            return true;
-        }
-        return false;
-    }
-}
 
 export async function version(): Promise<hack.Version | undefined> {
     return run(['--version']);
@@ -77,11 +64,12 @@ export async function format(text: string, startPos: number, endPos: number): Pr
     return run(['--format', startPos.toString(), (endPos + 1).toString()], text);
 }
 
-async function run(args: string[], stdin?: string): Promise<any> {
+async function run(extraArgs: string[], stdin?: string): Promise<any> {
     return new Promise<any>((resolve, _) => {
-        args = args.concat(['--json', vscode.workspace.rootPath || '']);
-        const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client';
-        const p = ps.execFile(String(hhClient), args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
+        const args = config.hhClient.split(' ');
+        const command = String(args.shift());
+        args.push(...extraArgs, '--json', config.workspace);
+        const p = ps.execFile(command, args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
                 console.error(`Hack: hh_client execution error: ${err}`);

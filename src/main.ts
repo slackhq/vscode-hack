@@ -4,6 +4,7 @@
 
 import * as vscode from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
+import * as config from './Config';
 import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
 import * as hh_client from './proxy';
@@ -12,27 +13,17 @@ import { HackTypeChecker } from './typechecker';
 
 export async function activate(context: vscode.ExtensionContext) {
 
-    // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
-    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client';
+    // check if a compatible verison of hh_client is installed, or show an error message and deactivate extension typecheck & intellisense features
     const version = await hh_client.version();
     if (!version) {
         vscode.window.showErrorMessage(
-            `Invalid hh_client executable: '${hhClient}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`
+            `Invalid hh_client executable: '${config.hhClient}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`
         );
         return;
     }
 
-    if (version.api_version >= 5 && vscode.workspace.getConfiguration('hack').get('useLanguageServer')) {
-        const languageClient = new LanguageClient(
-            'Hack Language Server',
-            {
-                command: String(hhClient),
-                args: ['lsp']
-            },
-            {
-                documentSelector: ['hack']
-            }
-        );
+    if (version.api_version >= 5 && config.useLanguageServer) {
+        const languageClient = new LanguageClient('Hack Language Server', { command: config.hhClient, args: ['lsp'] }, { documentSelector: ['hack'] });
         context.subscriptions.push(languageClient.start());
         return;
     }
@@ -60,8 +51,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await typechecker.run();
 
     // create coverage checker and run on file open & save, if enabled in settings
-    const enableCoverageCheck = vscode.workspace.getConfiguration('hack').get('enableCoverageCheck') || false;
-    if (enableCoverageCheck) {
+    if (config.enableCoverageCheck) {
         await new HackCoverageChecker().start(context);
     }
 }
