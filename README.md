@@ -8,6 +8,11 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.6.0
+- Experimental Language Server support - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
+- Support for running against a containerized Hack typecheck server (see Docker section in README). Thanks [@beatscode](https://github.com/beatscode)!
+- Fixed [#13](https://github.com/PranayAgarwal/vscode-hack/issues/13) - Running formatter removes last line of file if there is no trailing newline. Thanks [@beefsack](https://github.com/beefsack)!
+
 ### v0.5.0
 - Added Code Actions to automatically suppress typechecker errors via HH_FIXME comments.
 
@@ -45,6 +50,22 @@ This extension adds the following Visual Studio Code settings. These can be set 
 * `hack.clientPath`: Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well.
 * `hack.workspaceRootPath`: Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.
 * `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `false`).
+* `hack.useLanguageServer`: [Experimental] Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above (default: `false`).
+
+### Docker
+
+The extension can be used in a contanerized development environment. Simply configure `clientPath` to be a `docker exec` command and specify a `workspaceRootPath` mapping.
+
+E.g. if your container was started using
+```bash
+$ docker run -d -t --name my-hhvm -v /home/user/repos/project:/mnt/project hhvm/hhvm:latest
+```
+
+Configure
+```json
+"hack.clientPath": "docker exec -i my-hhvm hh_client",
+"hack.workspaceRootPath": "/mnt/project"
+```
 
 ## Issues
 

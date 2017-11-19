@@ -2,6 +2,16 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.6.0 - 2017-11-19
+- Experimental Language Server support:
+  - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
+- Support for running against a containerized Hack typecheck server (see Docker section in README). Thanks [@beatscode](https://github.com/beatscode)!
+- Fixed [#13](https://github.com/PranayAgarwal/vscode-hack/issues/13) - Running formatter removes last line of file if there is no trailing newline. Thanks [@beefsack](https://github.com/beefsack)!
+- Updated Hack language grammar to latest version.
+- Development changes:
+  - Bumped up minimum supported VS Code engine version to 1.15.0 for better extension API compatibility.
+  - Project is now compiled in TypeScript strict mode.
+
 ## v0.5.0 - 2017-04-06
 - Added Code Actions to automatically suppress typechecker errors via HH_FIXME comments.
 
