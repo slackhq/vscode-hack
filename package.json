@@ -69,12 +69,14 @@
       "title": "Hack configuration",
       "properties": {
         "hack.clientPath": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": "string",
           "default": null,
-          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
+          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well."
+        },
+        "hack.workspaceRootPath": {
+          "type": "string",
+          "default": null,
+          "description": "Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container."
         },
         "hack.enableCoverageCheck": {
           "type": "boolean",
