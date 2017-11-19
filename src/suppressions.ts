@@ -10,7 +10,7 @@ export function suppressError(document: vscode.TextDocument, line: number, error
     const prefixIndex = fullLine.firstNonWhitespaceCharacterIndex;
     const prefix = fullLine.text.substr(0, prefixIndex);
     errorCodes.forEach(code => {
-        edit.insert(document.uri, new vscode.Position(line, 0), prefix + '/* HH_FIXME[' + code + '] */\n');
+        edit.insert(document.uri, new vscode.Position(line, 0), `${prefix}/* HH_FIXME[${code}] */\n`);
     });
     return vscode.workspace.applyEdit(edit);
 }
