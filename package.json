@@ -3,7 +3,7 @@
   "version": "0.5.1",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.8.0"
+    "vscode": "^1.15.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
   },
-  "main": "./out/src/main",
+  "main": "./out/main",
   "contributes": {
     "languages": [
       {
@@ -80,6 +80,11 @@
           "type": "boolean",
           "default": false,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
+        },
+        "hack.useLanguageServer": {
+          "type": "boolean",
+          "default": false,
+          "description": "[Experimental] Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
         }
       }
     },
@@ -108,6 +113,7 @@
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "^2.6.1",
-    "vscode": "^1.1.7"
+    "vscode": "^1.1.7",
+    "vscode-languageclient": "^3.5.0"
   }
 }

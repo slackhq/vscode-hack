@@ -2,6 +2,12 @@
  * Types for hh_client responses
  */
 
+type Version = {
+    commit: string,
+    commit_time: number,
+    api_version: number
+}
+
 type Position = {
     filename: string,
     line: number,

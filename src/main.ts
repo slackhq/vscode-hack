@@ -3,6 +3,7 @@
  */
 
 import * as vscode from 'vscode';
+import { LanguageClient } from 'vscode-languageclient';
 import { HackCoverageChecker } from './coveragechecker';
 import * as providers from './providers';
 import * as hh_client from './proxy';
@@ -11,21 +12,33 @@ import { HackTypeChecker } from './typechecker';
 
 export async function activate(context: vscode.ExtensionContext) {
 
-    const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
-
     // start local hhvm server if it isn't running already, or show an error message and deactivate extension typecheck & intellisense features if unable to do so
-    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath');
-    const startCode = hh_client.start((hhClient === null) ? 'hh_client' : String(hhClient));
-    if (!startCode) {
-        if (hhClient) {
-            vscode.window.showErrorMessage(`Invalid hh_client executable: '${hhClient}'. Please configure a valid path and reload your workspace.`);
-        } else {
-            vscode.window.showErrorMessage('Couldn\'t find hh_client executable in path. Please ensure that HHVM is correctly installed and reload your workspace.');
-        }
+    const hhClient = vscode.workspace.getConfiguration('hack').get('clientPath') || 'hh_client';
+    const version = await hh_client.version();
+    if (!version) {
+        vscode.window.showErrorMessage(
+            `Invalid hh_client executable: '${hhClient}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`
+        );
+        return;
+    }
+
+    if (version.api_version >= 5 && vscode.workspace.getConfiguration('hack').get('useLanguageServer')) {
+        const languageClient = new LanguageClient(
+            'Hack Language Server',
+            {
+                command: String(hhClient),
+                args: ['lsp']
+            },
+            {
+                documentSelector: ['hack']
+            }
+        );
+        context.subscriptions.push(languageClient.start());
         return;
     }
 
     // register language functionality providers
+    const HACK_MODE: vscode.DocumentFilter = { language: 'hack', scheme: 'file' };
     context.subscriptions.push(vscode.languages.registerHoverProvider(HACK_MODE, new providers.HackHoverProvider()));
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(HACK_MODE, new providers.HackDocumentSymbolProvider()));
     context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new providers.HackWorkspaceSymbolProvider()));
