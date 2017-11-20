@@ -61,15 +61,6 @@ Configure
 
 Please file all bugs, issues, feature requests etc. at the [GitHub issues page](https://github.com/PranayAgarwal/vscode-hack/issues).
 
-*Current known issues:*
-
-- ([#1](https://github.com/PranayAgarwal/vscode-hack/issues/1), [Microsoft/vscode#10915](https://github.com/Microsoft/vscode/issues/10915)) The editor may not select the Hack language mode for `.php` files even if they start with ```<?hh```. To get around this, either manually select "Hack" as the file language from the selector on the bottom right of the screen, or configure your project workspace to open all `.php` files in Hack mode by adding the following to your workspace settings:
-
-```json
-    "files.associations": {
-        "*.php": "hack"
-    }
-```
 ## Contributing
 
 There are lots of ways to help! You can file new bugs and feature requests, or fix a pending one. To contribute to the source code, fork the repository on GitHub and create a pull request. Check out the [VS Code extension development guide](https://code.visualstudio.com/docs/extensions/overview) to get started.
