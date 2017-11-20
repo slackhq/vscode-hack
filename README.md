@@ -8,20 +8,10 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
-## v0.6.0
+## v0.6.1
 - Experimental Language Server support - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
 - Support for running against a containerized Hack typecheck server (see Docker section in README). Thanks [@beatscode](https://github.com/beatscode)!
 - Fixed [#13](https://github.com/PranayAgarwal/vscode-hack/issues/13) - Running formatter removes last line of file if there is no trailing newline. Thanks [@beefsack](https://github.com/beefsack)!
-
-### v0.5.0
-- Added Code Actions to automatically suppress typechecker errors via HH_FIXME comments.
-
-### v0.4.0
-- Fixed document symbol outline (⇧⌘O) break in newer hh_client versions.
-- Added a new setting to enable type coverage checking (now off by default).
-- Updated Hack grammar for better syntax highlighting.
-- Lots of performance improvements, mainly by refactoring the codebase to use async/await.
-- Works best with HHVM 3.18 or later.
 
 See the full list of releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases) as well as the project [changelog](https://github.com/PranayAgarwal/vscode-hack/blob/master/CHANGELOG.md).
 

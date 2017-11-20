@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.15.0"
@@ -108,6 +108,9 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "lint": "tslint --force -p ."
   },
+  "dependencies": {
+    "vscode-languageclient": "^3.5.0"
+  },
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
@@ -115,7 +118,6 @@
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "^2.6.1",
-    "vscode": "^1.1.7",
-    "vscode-languageclient": "^3.5.0"
+    "vscode": "^1.1.7"
   }
 }

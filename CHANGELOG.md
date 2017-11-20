@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.6.1 - 2017-11-19
+- Patch to include "vscode-languageclient" package in `dependencies` section rather than `devDependencies`.
+
 ## v0.6.0 - 2017-11-19
 - Experimental Language Server support:
   - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
