@@ -66,10 +66,7 @@ export async function format(text: string, startPos: number, endPos: number): Pr
 
 async function run(extraArgs: string[], stdin?: string): Promise<any> {
     return new Promise<any>((resolve, _) => {
-        const args = config.hhClient.split(' ');
-        const command = String(args.shift());
-        args.push(...extraArgs, '--json', config.workspace);
-        const p = ps.execFile(command, args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
+        const p = ps.execFile(config.hhClientPath, [...config.hhClientArgs, ...extraArgs, '--json', config.workspace], { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
                 console.error(`Hack: hh_client execution error: ${err}`);

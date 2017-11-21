@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.6.2 - 2017-11-20
+- Extend Language Server mode support to containerized typechecker instances as well.
+
 ## v0.6.1 - 2017-11-19
 - Patch to include "vscode-languageclient" package in `dependencies` section rather than `devDependencies`.
 

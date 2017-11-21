@@ -3,8 +3,8 @@
  */
 
 import * as vscode from 'vscode';
-import * as config from './Config';
 import * as hh_client from './proxy';
+import * as utils from './Utils';
 
 type UnfilteredTypeCoverageRegion = {
     regionType: string,
@@ -30,13 +30,6 @@ export class HackCoverageChecker implements vscode.Disposable {
     constructor() {
         this.coverageStatus = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         this.hhvmCoverDiag = vscode.languages.createDiagnosticCollection('hack_coverage');
-    }
-
-    private static mapFromWorkspacePath = (fileName: string) => {
-        if (config.workspace && vscode.workspace.rootPath) {
-            return fileName.replace(vscode.workspace.rootPath, config.workspace);
-        }
-        return fileName;
     }
 
     /**
@@ -155,7 +148,7 @@ export class HackCoverageChecker implements vscode.Disposable {
             this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), cachedFileDiagnostics);
             return;
         }
-        const colorResult = await hh_client.color(HackCoverageChecker.mapFromWorkspacePath(document.fileName));
+        const colorResult = await hh_client.color(utils.mapFromWorkspacePath(document.fileName));
         if (!colorResult) {
             this.coverageStatus.hide();
             this.hhvmCoverDiag.clear();

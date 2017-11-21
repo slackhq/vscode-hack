@@ -3,21 +3,14 @@
  */
 
 import * as vscode from 'vscode';
-import * as config from './Config';
 import * as hh_client from './proxy';
+import * as utils from './Utils';
 
 export class HackTypeChecker {
     private hhvmTypeDiag: vscode.DiagnosticCollection;
 
     constructor(hhvmTypeDiag: vscode.DiagnosticCollection) {
         this.hhvmTypeDiag = hhvmTypeDiag;
-    }
-
-    private static mapToWorkspacePath(fileName: string): string {
-        if (config.workspace && vscode.workspace.rootPath) {
-            return fileName.replace(config.workspace, vscode.workspace.rootPath);
-        }
-        return fileName;
     }
 
     public async run() {
@@ -46,7 +39,7 @@ export class HackTypeChecker {
                 vscode.DiagnosticSeverity.Error);
             diagnostic.code = code;
             diagnostic.source = 'Hack';
-            const file = HackTypeChecker.mapToWorkspacePath(error.message[0].path);
+            const file = utils.mapToWorkspacePath(error.message[0].path);
             const cachedFileDiagnostics = diagnosticMap.get(file);
             if (cachedFileDiagnostics) {
                 cachedFileDiagnostics.push(diagnostic);

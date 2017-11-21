@@ -10,6 +10,7 @@ import * as providers from './providers';
 import * as hh_client from './proxy';
 import * as suppressions from './suppressions';
 import { HackTypeChecker } from './typechecker';
+import * as utils from './Utils';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -17,13 +18,16 @@ export async function activate(context: vscode.ExtensionContext) {
     const version = await hh_client.version();
     if (!version) {
         vscode.window.showErrorMessage(
-            `Invalid hh_client executable: '${config.hhClient}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`
+            `Invalid hh_client executable: '${config.clientPath}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`
         );
         return;
     }
 
     if (version.api_version >= 5 && config.useLanguageServer) {
-        const languageClient = new LanguageClient('Hack Language Server', { command: config.hhClient, args: ['lsp'] }, { documentSelector: ['hack'] });
+        const languageClient = new LanguageClient(
+            'Hack Language Server',
+            { command: config.hhClientPath, args: [...config.hhClientArgs, 'lsp'] },
+            { documentSelector: ['hack'], uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri } });
         context.subscriptions.push(languageClient.start());
         return;
     }

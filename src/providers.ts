@@ -3,9 +3,9 @@
  */
 
 import * as vscode from 'vscode';
-import * as config from './Config';
 import * as hh_client from './proxy';
 import { OutlineResponse } from './types/hack';
+import * as utils from './Utils';
 
 const symbolArray = [
     { key: 'function', value: vscode.SymbolKind.Function },
@@ -65,20 +65,6 @@ const pushSymbols = (outline: OutlineResponse[], symbols: vscode.SymbolInformati
     });
 };
 
-const mapFromWorkspacePath = (fileName: string) => {
-    if (config.workspace && vscode.workspace.rootPath) {
-        return fileName.replace(vscode.workspace.rootPath, config.workspace);
-    }
-    return fileName;
-};
-
-const mapToWorkspacePath = (fileName: string) => {
-    if (config.workspace && vscode.workspace.rootPath) {
-        return fileName.replace(config.workspace, vscode.workspace.rootPath);
-    }
-    return fileName;
-};
-
 export class HackHoverProvider implements vscode.HoverProvider {
     public provideHover(document: vscode.TextDocument, position: vscode.Position): vscode.ProviderResult<vscode.Hover> {
         const wordPosition = document.getWordRangeAtPosition(position);
@@ -88,7 +74,7 @@ export class HackHoverProvider implements vscode.HoverProvider {
         const startPosition = wordPosition.start;
         const line: number = startPosition.line + 1;
         const character: number = startPosition.character + 1;
-        return hh_client.typeAtPos(mapFromWorkspacePath(document.fileName), line, character).then(hoverType => {
+        return hh_client.typeAtPos(utils.mapFromWorkspacePath(document.fileName), line, character).then(hoverType => {
             if (!hoverType) {
                 return;
             }
@@ -122,7 +108,7 @@ export class HackWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvid
                     desc = desc.slice(0, element.desc.indexOf(' in '));
                 }
                 const kind = getSymbolKind(desc);
-                const uri: vscode.Uri = vscode.Uri.file(mapToWorkspacePath(element.filename));
+                const uri: vscode.Uri = vscode.Uri.file(utils.mapToWorkspacePath(element.filename));
                 const container = element.scope || (element.name.includes('\\') ? element.name.slice(0, element.name.lastIndexOf('\\')) : undefined);
                 const range = getRange(element.line, element.line, element.char_start, element.char_end);
                 symbols.push(new vscode.SymbolInformation(name, kind, range, uri, container));
@@ -204,7 +190,7 @@ export class HackReferenceProvider implements vscode.ReferenceProvider {
                 const locations: vscode.Location[] = [];
                 foundRefs.forEach(ref => {
                     const location = new vscode.Location(
-                        vscode.Uri.file(mapToWorkspacePath(ref.filename)),
+                        vscode.Uri.file(utils.mapToWorkspacePath(ref.filename)),
                         new vscode.Range(
                             new vscode.Position(ref.line - 1, ref.char_start - 1),
                             new vscode.Position(ref.line - 1, ref.char_end)));
@@ -232,7 +218,7 @@ export class HackDefinitionProvider implements vscode.DefinitionProvider {
             foundDefinition.forEach(element => {
                 if (element.definition_pos) {
                     const location: vscode.Location = new vscode.Location(
-                        vscode.Uri.file(mapToWorkspacePath(element.definition_pos.filename) || document.fileName),
+                        vscode.Uri.file(utils.mapToWorkspacePath(element.definition_pos.filename) || document.fileName),
                         new vscode.Range(
                             new vscode.Position(element.definition_pos.line - 1, element.definition_pos.char_start - 1),
                             new vscode.Position(element.definition_pos.line - 1, element.definition_pos.char_end)));
