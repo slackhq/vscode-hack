@@ -26,7 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (version.api_version >= 5 && config.useLanguageServer) {
         const languageClient = new LanguageClient(
             'Hack Language Server',
-            { command: config.hhClientPath, args: [...config.hhClientArgs, 'lsp'] },
+            { command: config.hhClientCommand, args: [...config.hhClientArgs, 'lsp'] },
             { documentSelector: ['hack'], uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri } });
         context.subscriptions.push(languageClient.start());
         return;

@@ -9,7 +9,7 @@ const hackConfig = vscode.workspace.getConfiguration('hack');
 
 export const clientPath: string = hackConfig.get('clientPath') || 'hh_client';
 export const hhClientArgs: string[] = clientPath.split(' ');
-export const hhClientPath: string = String(hhClientArgs.shift());
+export const hhClientCommand: string = String(hhClientArgs.shift());
 
 export const workspace: string = hackConfig.get('workspaceRootPath') || vscode.workspace.rootPath || '';
 export const enableCoverageCheck: boolean = hackConfig.get('enableCoverageCheck') || false;
