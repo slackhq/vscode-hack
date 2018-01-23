@@ -66,7 +66,7 @@ export async function format(text: string, startPos: number, endPos: number): Pr
 
 async function run(extraArgs: string[], stdin?: string): Promise<any> {
     return new Promise<any>((resolve, _) => {
-        const args: string[] = [...config.hhClientArgs, ...extraArgs, '--json', config.workspace];
+        const args: string[] = [...config.hhClientArgs, ...extraArgs, '--json', '--from', 'vscode-hack', config.workspace];
         const p = ps.execFile(config.hhClientCommand, args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
