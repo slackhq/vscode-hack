@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.7.0
+- Language Server mode is now on by default for users running HHVM 3.23 or later. Add `"hack.useLanguageServer": false` to your workspace config to disable it.
+
 ## v0.6.2
 - Experimental Language Server support - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
 - Support for running against a containerized Hack typecheck server (see Docker section in README). Thanks [@beatscode](https://github.com/beatscode)!
@@ -40,7 +43,7 @@ This extension adds the following Visual Studio Code settings. These can be set 
 * `hack.clientPath`: Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well.
 * `hack.workspaceRootPath`: Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.
 * `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `false`).
-* `hack.useLanguageServer`: [Experimental] Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above (default: `false`).
+* `hack.useLanguageServer`: Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above (default: `true`).
 
 ### Docker
 

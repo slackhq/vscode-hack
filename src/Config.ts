@@ -13,4 +13,9 @@ export const hhClientCommand: string = String(hhClientArgs.shift());
 
 export const workspace: string = hackConfig.get('workspaceRootPath') || vscode.workspace.rootPath || '';
 export const enableCoverageCheck: boolean = hackConfig.get('enableCoverageCheck') || false;
-export const useLanguageServer: boolean = hackConfig.get('useLanguageServer') || false;
+
+let useLanguageServerConfig: boolean | undefined = hackConfig.get('useLanguageServer');
+if (useLanguageServerConfig === undefined) {
+    useLanguageServerConfig = true;
+}
+export const useLanguageServer: boolean = useLanguageServerConfig;

@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.15.0"
@@ -85,8 +85,8 @@
         },
         "hack.useLanguageServer": {
           "type": "boolean",
-          "default": false,
-          "description": "[Experimental] Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
+          "default": true,
+          "description": "Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
         }
       }
     },

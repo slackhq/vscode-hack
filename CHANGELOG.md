@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.7.0 - 2018-01-25
+- Language Server mode is now on by default for users running HHVM 3.23 or later. Add `"hack.useLanguageServer": false` to your workspace config to disable it.
+
 ## v0.6.2 - 2017-11-20
 - Extend Language Server mode support to containerized typechecker instances as well.
 
