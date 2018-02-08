@@ -7,36 +7,50 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}"
+            ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/out/**/*.js" ],
+            "outFiles": [
+                "${workspaceRoot}/out/**/*.js"
+            ],
             "preLaunchTask": "npm: watch"
         },
         {
-            "name": "Launch Debug Server",
+            "name": "Debug Server",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/src/debugger/debugger.ts",
             "sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/out/**/*.js" ]
+            "outFiles": [
+                "${workspaceRoot}/out/**/*.js"
+            ]
         },
         {
-            "name": "Launch Tests",
+            "name": "Tests",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test" ],
+            "args": [
+                "--extensionDevelopmentPath=${workspaceRoot}",
+                "--extensionTestsPath=${workspaceRoot}/out/test"
+            ],
             "stopOnEntry": false,
             "sourceMaps": true,
-            "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
+            "outFiles": [
+                "${workspaceRoot}/out/test/**/*.js"
+            ],
             "preLaunchTask": "npm: watch"
         }
     ],
     "compounds": [
-		{
-			"name": "Extension + Debug Server",
-			"configurations": [ "Extension", "Launch Debug Server" ]
-		}
-	]
+        {
+            "name": "Extension + Debug Server",
+            "configurations": [
+                "Extension",
+                "Debug Server"
+            ]
+        }
+    ]
 }

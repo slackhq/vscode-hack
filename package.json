@@ -26,8 +26,6 @@
     "color": "#5d5d5d",
     "theme": "dark"
   },
-  "preview": false,
-  "private": true,
   "author": {
     "name": "Pranay Agarwal"
   },
@@ -39,17 +37,10 @@
     "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
   },
   "main": "./out/main",
-  "activationEvents": [
-    "workspaceContains:.hhconfig",
-    "onLanguage:hack"
-  ],
   "contributes": {
     "breakpoints": [
       {
         "language": "hack"
-      },
-      {
-        "language": "php"
       }
     ],
     "debuggers": [
@@ -185,6 +176,9 @@
       }
     ]
   },
+  "activationEvents": [
+    "workspaceContains:.hhconfig"
+  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -194,8 +188,8 @@
     "lint": "tslint --force -p ."
   },
   "dependencies": {
-    "vscode-debugadapter": "^1.18.0-pre.1",
-    "vscode-debugprotocol": "^1.17.0",
+    "vscode-debugadapter": "^1.26.0",
+    "vscode-debugprotocol": "^1.26.0",
     "vscode-languageclient": "^3.5.0"
   },
   "devDependencies": {
@@ -206,6 +200,6 @@
     "tslint-microsoft-contrib": "^5.0.1",
     "typescript": "^2.6.1",
     "vscode": "^1.1.7",
-    "vscode-debugadapter-testsupport": "^1.17.0"
+    "vscode-debugadapter-testsupport": "^1.26.0"
   }
 }
