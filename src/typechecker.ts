@@ -2,14 +2,16 @@
  * @file VS Code diagnostics integration with Hack typechecker.
  */
 
-'use strict';
-
 import * as vscode from 'vscode';
 import * as hh_client from './proxy';
+import * as utils from './Utils';
 
-// tslint:disable-next-line:export-name
 export class HackTypeChecker {
-    constructor(private hhvmTypeDiag: vscode.DiagnosticCollection) {}
+    private hhvmTypeDiag: vscode.DiagnosticCollection;
+
+    constructor(hhvmTypeDiag: vscode.DiagnosticCollection) {
+        this.hhvmTypeDiag = hhvmTypeDiag;
+    }
 
     public async run() {
         const typecheckResult = await hh_client.check();
@@ -22,8 +24,12 @@ export class HackTypeChecker {
         const diagnosticMap: Map<string, vscode.Diagnostic[]> = new Map();
         typecheckResult.errors.forEach(error => {
             let fullMessage = '';
+            let code: number = 0;
             error.message.forEach(messageUnit => {
-                fullMessage = fullMessage + messageUnit.descr + ' [' + messageUnit.code + ']' + '\n';
+                if (code === 0) {
+                    code = messageUnit.code;
+                }
+                fullMessage = `${fullMessage} ${messageUnit.descr} [${messageUnit.code}]\n`;
             });
             const diagnostic = new vscode.Diagnostic(
                 new vscode.Range(
@@ -31,10 +37,12 @@ export class HackTypeChecker {
                     new vscode.Position(error.message[0].line - 1, error.message[0].end)),
                 fullMessage,
                 vscode.DiagnosticSeverity.Error);
+            diagnostic.code = code;
             diagnostic.source = 'Hack';
-            const file = error.message[0].path;
-            if (diagnosticMap.has(file)) {
-                diagnosticMap.get(file).push(diagnostic);
+            const file = utils.mapToWorkspacePath(error.message[0].path);
+            const cachedFileDiagnostics = diagnosticMap.get(file);
+            if (cachedFileDiagnostics) {
+                cachedFileDiagnostics.push(diagnostic);
             } else {
                 diagnosticMap.set(file, [diagnostic]);
             }

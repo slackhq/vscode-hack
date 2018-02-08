@@ -1,14 +1,14 @@
 {
   "name": "vscode-hack",
-  "displayName": "Hack",
-  "version": "0.4.0",
+  "version": "0.7.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.5.0"
+    "vscode": "^1.15.0"
   },
   "license": "MIT",
+  "displayName": "Hack",
   "description": "Hack language & HHVM debugger support for Visual Studio Code.",
-  "icon": "images/logo.svg",
+  "icon": "images/logo.png",
   "categories": [
     "Debuggers",
     "Languages",
@@ -38,7 +38,7 @@
   "bugs": {
     "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
   },
-  "main": "./out/src/main",
+  "main": "./out/main",
   "activationEvents": [
     "workspaceContains:.hhconfig",
     "onLanguage:hack"
@@ -157,17 +157,24 @@
       "title": "Hack configuration",
       "properties": {
         "hack.clientPath": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": "string",
           "default": null,
-          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
+          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well."
+        },
+        "hack.workspaceRootPath": {
+          "type": "string",
+          "default": null,
+          "description": "Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container."
         },
         "hack.enableCoverageCheck": {
           "type": "boolean",
           "default": false,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
+        },
+        "hack.useLanguageServer": {
+          "type": "boolean",
+          "default": true,
+          "description": "Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
         }
       }
     },
@@ -179,25 +186,26 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "./node_modules/typescript/bin/tsc -p ./",
-    "compile": "./node_modules/typescript/bin/tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
-    "lint": "node ./node_modules/tslint/bin/tslint -r ./node_modules/tslint-microsoft-contrib ./src/*.ts ./test/*.ts"
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "lint": "tslint --force -p ."
   },
   "dependencies": {
     "vscode-debugadapter": "^1.18.0-pre.1",
-    "vscode-debugprotocol": "^1.17.0"
+    "vscode-debugprotocol": "^1.17.0",
+    "vscode-languageclient": "^3.5.0"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.40",
-    "@types/node": "^6.0.40",
-    "cson": "^4.0.0",
-    "mocha": "^3.2.0",
-    "tslint": "^4.5.1",
-    "tslint-microsoft-contrib": "^4.0.0",
-    "typescript": "^2.2.1",
-    "vscode": "^1.1.0",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.53",
+    "cson": "^4.1.0",
+    "tslint": "^5.8.0",
+    "tslint-microsoft-contrib": "^5.0.1",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.7",
     "vscode-debugadapter-testsupport": "^1.17.0"
   }
 }

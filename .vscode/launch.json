@@ -3,20 +3,15 @@
     "version": "0.1.0",
     "configurations": [
         {
-            "name": "Launch Extension",
+            "name": "Extension",
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}"
-            ],
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
             "stopOnEntry": false,
-            "smartStep": true,
             "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/out/src/**/*.js"
-            ],
-            "preLaunchTask": "npm"
+            "outFiles": [ "${workspaceRoot}/out/**/*.js" ],
+            "preLaunchTask": "npm: watch"
         },
         {
             "name": "Launch Debug Server",
@@ -31,23 +26,17 @@
             "type": "extensionHost",
             "request": "launch",
             "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}",
-                "--extensionTestsPath=${workspaceRoot}/out/test"
-            ],
+            "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test" ],
             "stopOnEntry": false,
-            "smartStep": true,
             "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/out/test/**/*.js"
-            ],
-            "preLaunchTask": "npm"
+            "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
+            "preLaunchTask": "npm: watch"
         }
     ],
     "compounds": [
 		{
 			"name": "Extension + Debug Server",
-			"configurations": [ "Launch Extension", "Launch Debug Server" ]
+			"configurations": [ "Extension", "Launch Debug Server" ]
 		}
 	]
 }
