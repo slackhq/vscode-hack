@@ -3,7 +3,7 @@
   "version": "0.7.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.15.0"
+    "vscode": "^1.18.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -11,8 +11,10 @@
   "icon": "images/logo.png",
   "categories": [
     "Languages",
+    "Debuggers",
     "Linters",
     "Snippets",
+    "Formatters",
     "Other"
   ],
   "keywords": [
@@ -64,6 +66,69 @@
         "path": "./snippets/hack.json"
       }
     ],
+    "breakpoints": [
+      {
+        "language": "hack"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "hhvm",
+        "label": "HHVM",
+        "program": "./out/debugger.js",
+        "runtime": "node",
+        "languages": [
+          "hack"
+        ],
+        "configurationAttributes": {
+          "attach": {
+            "required": [
+              "host",
+              "port"
+            ],
+            "properties": {
+              "host": {
+                "type": "string",
+                "description": "Host name/IP address of HHVM server.",
+                "default": "localhost"
+              },
+              "port": {
+                "type": "number",
+                "description": "Debug port to attach to (default 8999).",
+                "default": 8999
+              },
+              "stopOnRequest": {
+                "type": "boolean",
+                "description": "Automatically break at the beginning of every web request to the connected sandbox.",
+                "default": false
+              }
+            }
+          }
+        },
+        "configurationSnippets": [
+          {
+            "label": "HHVM: Attach to Server",
+            "description": "Attach to a HHVM server",
+            "body": {
+              "name": "Attach to Server",
+              "type": "hhvm",
+              "request": "attach",
+              "host": "${1:localhost}",
+              "port": 8999
+            }
+          },
+          {
+            "label": "HHVM: Run Script",
+            "description": "Run the current script",
+            "body": {
+              "name": "Run Script",
+              "type": "hhvm",
+              "request": "launch"
+            }
+          }
+        ]
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "Hack configuration",
@@ -109,6 +174,8 @@
     "lint": "tslint --force -p ."
   },
   "dependencies": {
+    "vscode-debugadapter": "^1.26.0",
+    "vscode-debugprotocol": "^1.26.0",
     "vscode-languageclient": "^3.5.0"
   },
   "devDependencies": {
@@ -117,7 +184,7 @@
     "cson": "^4.1.0",
     "tslint": "^5.8.0",
     "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.7"
+    "typescript": "^2.6.2",
+    "vscode": "^1.1.10"
   }
 }
