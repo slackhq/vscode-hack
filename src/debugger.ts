@@ -56,30 +56,18 @@ class HHVMDebuggerWrapper {
             : DEFAULT_HHVM_DEBUGGER_PORT;
 
         if (Number.isNaN(attachPort)) {
+            fs.appendFileSync('/tmp/ext.log', 'Invalid HHVM debug port specified\n');
             throw new Error('Invalid HHVM debug port specified.');
         }
+
+        fs.appendFileSync('/tmp/ext.log', `Attaching to port:${attachPort}\n`);
 
         const socket = new net.Socket();
         socket
             .once('connect', () => {
-                socket.on('data', chunk => {
-                    fs.appendFileSync('/tmp/ext.log', `Received socket message: ${chunk.toString()} .\n`);
-                    this.processDebuggerMessage(chunk);
-                });
-
-                socket.on('close', () => {
-                    process.exit(0);
-                });
-
-                socket.on('disconnect', () => {
-                    process.stderr.write(
-                        'The connection to the debug target has been closed.',
-                    );
-                    process.exit(0);
-                });
-
+                fs.appendFileSync('/tmp/ext.log', 'Socket event: connect\n');
                 const callback = (data: string) => {
-                    socket.write(data + '\0', 'utf8');
+                    socket.write(`${data}\0`, 'utf8');
                 };
 
                 callback(JSON.stringify(attachMessage));
@@ -94,10 +82,26 @@ class HHVMDebuggerWrapper {
                 };
                 this.writeResponseMessage(attachResponse);
             })
+            .on('data', chunk => {
+                fs.appendFileSync('/tmp/ext.log', `Received socket message: ${chunk.toString()} .\n`);
+                this.processDebuggerMessage(chunk);
+            })
+            .on('close', () => {
+                fs.appendFileSync('/tmp/ext.log', 'Socket event: close\n');
+                process.exit(0);
+            })
+            .on('disconnect', () => {
+                fs.appendFileSync('/tmp/ext.log', 'Socket event: disconnect\n');
+                process.stderr.write(
+                    'The connection to the debug target has been closed.'
+                );
+                process.exit(0);
+            })
             .on('error', error => {
+                fs.appendFileSync('/tmp/ext.log', `Socket event: error\nMessage:${error.toString()}\n`);
                 if (retries >= 5) {
                     process.stderr.write(
-                        'Error communicating with debugger target: ' + error.toString(),
+                        `Error communicating with debugger target: ${error.toString()}`
                     );
                     process.exit((<any>error).code);
                 } else {
@@ -106,9 +110,7 @@ class HHVMDebuggerWrapper {
                     // for HHVM to receive a TCP socket error and realize the client is
                     // gone. Rather than failing to reconnect, wait a moment and try
                     // again to provide a better user experience.
-                    setTimeout(() => {
-                        this.attachTarget(attachMessage, retries + 1);
-                    }, 1000);
+                    setTimeout(() => { this.attachTarget(attachMessage, retries + 1); }, 1000);
                 }
             });
 
@@ -151,24 +153,24 @@ class HHVMDebuggerWrapper {
             const block: string = chunk.toString();
             this.writeOutputEvent('stdout', block);
         });
-        targetProcess.stdout.on('error', () => { });
+        // targetProcess.stdout.on('error', () => { });
 
         // Wrap any stderr from the target into a VS Code stderr event.
         targetProcess.stderr.on('data', chunk => {
             const block: string = chunk.toString();
             this.writeOutputEvent('stderr', block);
         });
-        targetProcess.stderr.on('error', () => { });
+        // targetProcess.stderr.on('error', () => { });
 
         targetProcess.stdio[3].on('data', chunk => {
             this.processDebuggerMessage(chunk);
         });
-        targetProcess.stdio[3].on('error', () => { });
+        // targetProcess.stdio[3].on('error', () => { });
 
         // Read data from the debugger client on stdin and forward to the
         // debugger engine in the target.
         const callback = (data: string) => {
-            targetProcess.stdio[3].write(data + '\0', 'utf8');
+            targetProcess.stdin.write(`${data}\0`, 'utf8');
         };
 
         callback(JSON.stringify(launchMessage));
@@ -257,12 +259,12 @@ class HHVMDebuggerWrapper {
                     this.attachTarget(requestMsg);
                     return true;
 
-                case 'initialize':
+                /*case 'initialize':
                     this.writeResponseMessage({
                         request_seq: requestMsg.seq,
                         success: true,
                         command: requestMsg.command
-                    });
+                    });*/
                 default:
                     break;
             }
@@ -294,7 +296,7 @@ class HHVMDebuggerWrapper {
                 this.writeOutputWithHeader(JSON.stringify(obj));
             } catch (e) {
                 process.stderr.write(
-                    `Error parsing message from target: ${e.toString()}: ${message}`,
+                    `Error parsing message from target: ${e.toString()}: ${message}`
                 );
             }
 
@@ -350,7 +352,7 @@ class HHVMDebuggerWrapper {
 
     private writeOutputWithHeader(output: string) {
         const length = Buffer.byteLength(output, 'utf8');
-        process.stdout.write('Content-Length: ' + length + TWO_CRLF, 'utf8');
+        process.stdout.write(`Content-Length: ${length}${TWO_CRLF}`, 'utf8');
         process.stdout.write(output, 'utf8');
     }
 }
