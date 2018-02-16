@@ -75,7 +75,7 @@
       {
         "type": "hhvm",
         "label": "HHVM",
-        "program": "./out/debugger.js",
+        "program": "./out/debuggerNew",
         "runtime": "node",
         "languages": [
           "hack"
