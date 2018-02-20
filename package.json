@@ -82,24 +82,24 @@
         ],
         "configurationAttributes": {
           "attach": {
-            "required": [
-              "host",
-              "port"
-            ],
             "properties": {
               "host": {
                 "type": "string",
-                "description": "Host name/IP address of HHVM server.",
+                "description": "Host name/IP address of HHVM server (default: localhost).",
                 "default": "localhost"
               },
               "port": {
                 "type": "number",
-                "description": "Debug port to attach to (default 8999).",
+                "description": "Debug port to attach to (default: 8999).",
                 "default": 8999
+              },
+              "remoteSiteRoot": {
+                "type": "string",
+                "description": "Absolute path to workspace root on the remote server (default: local root)."
               },
               "stopOnRequest": {
                 "type": "boolean",
-                "description": "Automatically break at the beginning of every web request to the connected sandbox.",
+                "description": "Automatically break at the beginning of every web request to the connected sandbox (default: false).",
                 "default": false
               }
             }
@@ -110,18 +110,19 @@
             "label": "HHVM: Attach to Server",
             "description": "Attach to a HHVM server",
             "body": {
-              "name": "Attach to Server",
+              "name": "HHVM: Attach to Server",
               "type": "hhvm",
               "request": "attach",
               "host": "${1:localhost}",
-              "port": 8999
+              "port": 8999,
+              "remoteSiteRoot": "${workspaceFolder}"
             }
           },
           {
             "label": "HHVM: Run Script",
             "description": "Run the current script",
             "body": {
-              "name": "Run Script",
+              "name": "HHVM: Run Script",
               "type": "hhvm",
               "request": "launch"
             }
