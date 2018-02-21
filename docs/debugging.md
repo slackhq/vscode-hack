@@ -8,7 +8,7 @@ Add a new HHVM `launch` config to `.vscode/launch.json`. The default template sh
 
 Debug -> Start Debugging (F5) with this configuration selected will launch the currently open PHP/Hack script in a new HHVM process and pipe input/output to the editor OUTPUT tab.
 
-## For remote debugging
+## For remote server debugging
 
 Start your HHVM server with the following additional configuration strings set:
 
@@ -40,3 +40,11 @@ E.g. publish port 8998 to the Docker host and in your container install and run:
 `socat tcp-listen:8998,reuseaddr,fork tcp:localhost:8999`
 
 This will foward connections to exposed port 8998 to port 8999 in your container.
+
+### Common server debugging setups
+
+![Common debugging setups](images/debugger-setups.png)
+
+1. Everything running locally on the same network.
+2. Connected to debugging port on a remote server through a SSH tunnel.
+3. Running HHVM in a Docker container and forwarding debugger port via [socat](http://www.dest-unreach.org/socat/doc/socat.html).

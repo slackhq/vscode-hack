@@ -67,7 +67,7 @@ socket.on('data', chunk => {
             output.body = undefined;
         }
         if (output.type === 'response' && output.command === 'stackTrace') {
-            output.body.stackFrames.forEach((o, i, a) => {
+            output.body.stackFrames.forEach((_, i, a) => {
                 a[i].column = 5;
             });
         }
