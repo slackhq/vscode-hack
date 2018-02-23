@@ -45,6 +45,7 @@ This will foward connections to exposed port 8998 to port 8999 in your container
 
 ![Common debugging setups](images/debugger-setups.png)
 
-1. Everything running locally on the same network.
-2. Connected to debugging port on a remote server through a SSH tunnel.
-3. Running HHVM in a Docker container and forwarding debugger port via [socat](http://www.dest-unreach.org/socat/doc/socat.html).
+1. Single PHP/Hack script launched by VS Code 
+2. Everything running locally on the same network
+3. Connected to debugging port on a remote server through a SSH tunnel
+4. Running HHVM in a Docker container and forwarding debugger port via [socat](http://www.dest-unreach.org/socat/doc/socat.html)
