@@ -6,9 +6,102 @@
   "rules": {
     "typedef": false,
     "no-backbone-get-set-outside-model": false,
+<<<<<<< HEAD
     "no-relative-imports": false,
     "export-name": false,
     "newline-before-return": false,
+=======
+    "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "log",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-constant-condition": false,
+    "no-control-regex": true,
+    "no-debugger": true,
+    "no-duplicate-case": true,
+    "no-duplicate-super": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
+    "no-floating-promises": true,
+    "no-for-in-array": true,
+    "no-import-side-effect": true,
+    "no-increment-decrement": false,
+    "no-invalid-regexp": true,
+    "no-invalid-template-strings": true,
+    "no-invalid-this": true,
+    "no-jquery-raw-elements": true,
+    "no-misused-new": true,
+    "no-non-null-assertion": true,
+    "no-reference-import": true,
+    "no-regex-spaces": true,
+    "no-sparse-arrays": true,
+    "no-stateless-class": true,
+    "no-string-literal": true,
+    "no-string-throw": true,
+    "no-unnecessary-bind": true,
+    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-initializer": true,
+    "no-unnecessary-override": true,
+    "no-unsafe-any": true,
+    "no-unsafe-finally": true,
+    "no-unused-expression": true,
+    "no-use-before-declare": true,
+    "no-with-statement": true,
+    "promise-function-async": true,
+    "promise-must-complete": true,
+    "radix": true,
+    "react-this-binding-issue": true,
+    "react-unused-props-and-state": true,
+    "restrict-plus-operands": true,
+    "strict-boolean-expressions": true,
+    "switch-default": true,
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "use-isnan": true,
+    "use-named-parameter": true,
+    "valid-typeof": true,
+    "adjacent-overload-signatures": true,
+    "array-type": [
+      true,
+      "array"
+    ],
+    "arrow-parens": false,
+    "callable-types": true,
+    "chai-prefer-contains-to-index-of": true,
+    "chai-vague-errors": true,
+    "class-name": true,
+    "comment-format": true,
+    "completed-docs": [
+      true,
+      "classes"
+    ],
+    "export-name": false,
+    "function-name": true,
+    "import-name": true,
+    "interface-name": false,
+    "jsdoc-format": true,
+    "max-classes-per-file": [
+      false,
+      3
+    ],
+    "max-file-line-count": true,
+    "max-func-body-length": [
+      true,
+      100,
+      {
+        "ignore-parameters-to-function-regex": "describe"
+      }
+    ],
+>>>>>>> Debugger updates:
     "max-line-length": [
       true,
       180

@@ -75,7 +75,7 @@
       {
         "type": "hhvm",
         "label": "HHVM",
-        "program": "./out/debuggerNew",
+        "program": "./out/debugger",
         "runtime": "node",
         "languages": [
           "hack"
@@ -96,11 +96,6 @@
               "remoteSiteRoot": {
                 "type": "string",
                 "description": "Absolute path to workspace root on the remote server (default: local root)."
-              },
-              "stopOnRequest": {
-                "type": "boolean",
-                "description": "Automatically break at the beginning of every web request to the connected sandbox (default: false).",
-                "default": false
               }
             }
           }

@@ -2,7 +2,7 @@
 
 HHVM versions 3.25 and later come with a built-in debugging extension that can be enabled with a runtime flag. You can use the VS Code debug interface to launch and debug PHP/Hack scripts or attach to an existing HHVM server process on a local or remote machine.
 
-## For local execution
+## For local script execution
 
 Add a new HHVM `launch` config to `.vscode/launch.json`. The default template should be enough to get started, but you can change the values if needed:
 
@@ -10,12 +10,12 @@ Debug -> Start Debugging (F5) with this configuration selected will launch the c
 
 ## For remote server debugging
 
-Start your HHVM server with the following additional configuration strings set:
+Start your HHVM server with the following additional configuration strings:
 
 `Eval.Debugger.VSDebugEnable`: Enable the debugging extension  
 `Eval.Debugger.VSDebugListenPort`: [Optional] Change the port the debugger listens on (default: `8999`)  
 
-E.g. `hhvm -m server -d hhvm.server.type=fastcgi -d hhvm.server.port=9000 -v Eval.Debugger.VSDebugEnable=1 -v Eval.Debugger.VSDebugListenPort=1234`
+E.g. `hhvm -m server -p 8080 -v Eval.Debugger.VSDebugEnable=1 -v Eval.Debugger.VSDebugListenPort=1234`
 
 Add a new HHVM `attach` config to `.vscode/launch.json` and configure as needed:
 
@@ -33,7 +33,7 @@ You can now connect to localhost:8999 as normal.
 
 ### Docker containers
 
-For the same reason, Docker port forwarding won't work for the debugger port. You need to use SSH tunneling or other solutions like [socat](http://www.dest-unreach.org/socat/) instead.
+For the same reason, Docker port forwarding won't work for the debugger port. You need to either use your host network driver for the container (`docker run` with `--network host`) or use SSH tunneling or other solutions like [socat](http://www.dest-unreach.org/socat/) instead.
 
 E.g. publish port 8998 to the Docker host and in your container install and run:
 

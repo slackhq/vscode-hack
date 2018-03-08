@@ -21,7 +21,9 @@ const CONTENT_LENGTH_PATTERN = new RegExp('Content-Length: (\\d+)');
 
 let socketData = '';
 let sequenceNumber = 0;
-let remoteSiteRoot = '';
+let mapSiteRoot = false;
+let remoteSiteRoot: string;
+let remoteSiteRootPattern: RegExp;
 
 fs.writeFileSync('/tmp/ext.log', 'Started debugging.\n');
 const socket = net.createConnection({ port: DEFAULT_HHVM_DEBUGGER_PORT });
@@ -45,31 +47,6 @@ socket.on('data', chunk => {
         if (output.type === 'event') {
             // Add a sequence number to the data.
             output.seq = ++sequenceNumber;
-        }
-        if (output.type === 'response' && output.command === 'threads') {
-            // There's a bug in the hhvm implementation of the threads response.
-            // `body` should have a single field called `threads` rather than a list of threads.
-            output.body = { threads: output.body };
-        }
-        if (output.type === 'response' && output.command === 'initialize') {
-            // Also need to configure that the debugger supports breaking on exceptions
-            output.body.exceptionBreakpointFilters = [
-                {
-                    filter: 'all',
-                    label: 'All Exceptions',
-                    default: true
-                }
-            ];
-            // output.body.supportsExceptionInfoRequest = false;
-        }
-        if (output.type === 'response' && output.command === 'attach') {
-            // don't resend configuration options
-            output.body = undefined;
-        }
-        if (output.type === 'response' && output.command === 'stackTrace') {
-            output.body.stackFrames.forEach((_, i, a) => {
-                a[i].column = 5;
-            });
         }
         if (output.type === 'event' && output.event === 'stopped') {
             if (output.body.reason.startsWith('Exception')) {
@@ -168,7 +145,11 @@ process.stdin.on('data', chunk => {
                 }
             });
         } else if (data.command === 'attach') {
-            remoteSiteRoot = data.arguments.remoteSiteRoot;
+            if (data.arguments.remoteSiteRoot && data.arguments.remoteSiteRoot !== '/Users/pranay/repos/webapp') {
+                mapSiteRoot = true;
+                remoteSiteRoot = data.arguments.remoteSiteRoot;
+                remoteSiteRootPattern = new RegExp(escapeRegExp(remoteSiteRoot), 'g');
+            }
             writeSocket(message);
         } else {
             writeSocket(message);
@@ -182,7 +163,9 @@ process.stdin.on('data', chunk => {
 
 function writeStdout(output: {}) {
     let message = JSON.stringify(output);
-    message = message.replace(new RegExp(escapeRegExp(remoteSiteRoot), 'g'), '/Users/pranay/repos/webapp');
+    if (mapSiteRoot) {
+        message = message.replace(remoteSiteRootPattern, '/home/pranay/repos/hacksite');
+    }
     const length = Buffer.byteLength(message, 'utf8');
 
     fs.appendFileSync('/tmp/ext.log', `Sending to VSCode: ${message}\n`);
@@ -190,7 +173,10 @@ function writeStdout(output: {}) {
 }
 
 function writeSocket(output: string) {
-    output = output.replace(new RegExp(escapeRegExp('/Users/pranay/repos/webapp'), 'g'), remoteSiteRoot);
+    if (mapSiteRoot) {
+        output = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
+    }
+    output = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
     fs.appendFileSync('/tmp/ext.log', `Sending to HHVM: ${output}\n`);
     socket.write(`${output}\0`, 'utf8');
 }
