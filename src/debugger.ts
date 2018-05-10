@@ -13,7 +13,6 @@
  */
 
 import * as child_process from 'child_process';
-import * as fs from 'fs';
 import * as net from 'net';
 import * as os from 'os';
 import { Writable } from 'stream';
@@ -70,12 +69,10 @@ class HHVMDebuggerWrapper {
 
     public debug() {
         process.stdin.on('data', chunk => {
-            log(`Data passed to debug node process stdin: ${chunk}`);
             this.processClientMessage(chunk);
         });
 
         process.on('disconnect', () => {
-            log('Debug node process disconnected');
             process.exit();
         });
     }
@@ -92,17 +89,14 @@ class HHVMDebuggerWrapper {
             args.sandboxUser = os.userInfo().username;
         }
 
-        log(`Connecting HHVM socket on ${attachPort}`);
         const socket = net.createConnection({ port: attachPort });
         socket
             .once('connect', () => {
-                log('HHVM socket connected');
                 socket.on('data', chunk => {
                     this.processDebuggerMessage(chunk);
                 });
 
                 socket.on('close', () => {
-                    log('HHVM socket closed');
                     this.writeOutputWithHeader({
                         seq: ++this.sequenceNumber,
                         type: 'event',
@@ -113,13 +107,11 @@ class HHVMDebuggerWrapper {
                 });
 
                 socket.on('disconnect', () => {
-                    log('HHVM socket disconnected');
                     process.stderr.write('The connection to the debug target has been closed.');
                     process.exit(0);
                 });
 
                 const callback = (data: string) => {
-                    log(`Writing message to HHVM socket: ${data}`);
                     socket.write(`${data}\0`, 'utf8');
                 };
 
@@ -137,7 +129,6 @@ class HHVMDebuggerWrapper {
             })
             .on('error', error => {
                 if (retries >= 5) {
-                    log('Error opening HHVM socket. Exiting.');
                     process.stderr.write(`Error communicating with debugger target: ${error.toString()}\n`);
                     process.exit((<any>error).code);
                 } else {
@@ -146,7 +137,6 @@ class HHVMDebuggerWrapper {
                     // for HHVM to receive a TCP socket error and realize the client is
                     // gone. Rather than failing to reconnect, wait a moment and try
                     // again to provide a better user experience.
-                    log('Error opening HHVM socket. Retrying.');
                     setTimeout(() => this.attachTarget(attachMessage, retries + 1), 2000);
                 }
             });
@@ -185,7 +175,6 @@ class HHVMDebuggerWrapper {
             env: process.env
         };
 
-        log(`Launching ${hhvmPath} with args ${hhvmArgs.join()}`);
         const targetProcess = child_process.spawn(hhvmPath, hhvmArgs, options);
 
         // Exit with the same error code the target exits with.
@@ -214,7 +203,6 @@ class HHVMDebuggerWrapper {
         // Read data from the debugger client on stdin and forward to the
         // debugger engine in the target.
         const callback = (data: string) => {
-            log(`Writing message to launched HHVM stdin: ${data}`);
             (<Writable>targetProcess.stdio[3]).write(`${data}\0`, 'utf8');
         };
 
@@ -407,8 +395,6 @@ class HHVMDebuggerWrapper {
             return true;
         }
 
-        log('Not handling request');
-
         return false;
     }
 
@@ -420,7 +406,6 @@ class HHVMDebuggerWrapper {
         let idx = this.currentOutputData.indexOf('\0');
         while (idx > 0) {
             const message = this.currentOutputData.substr(0, idx);
-            log(`Received message from HHVM socket: ${message}`);
 
             // Add a sequence number to the data.
             try {
@@ -428,7 +413,6 @@ class HHVMDebuggerWrapper {
                 obj.seq = ++this.sequenceNumber;
                 this.writeOutputWithHeader(obj);
             } catch (e) {
-                log('Error parsing HHVM message');
                 process.stderr.write(`Error parsing message from target: ${e.toString()}: ${message}\n`);
             }
 
@@ -609,14 +593,7 @@ class HHVMDebuggerWrapper {
         const length = Buffer.byteLength(output, 'utf8');
         process.stdout.write(`Content-Length: ${length}${TWO_CRLF}`, 'utf8');
         process.stdout.write(output, 'utf8');
-
-        log(`Writing data to debug node process stdout: ${output}`);
     }
 }
 
-fs.writeFileSync('/tmp/ext.log', 'Started debugging.\n');
 new HHVMDebuggerWrapper().debug();
-
-function log(text: string) {
-    fs.appendFileSync('/tmp/ext.log', `${text}\n`);
-}
