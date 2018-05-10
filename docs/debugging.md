@@ -4,18 +4,25 @@ HHVM versions 3.25 and later come with a built-in debugging extension that can b
 
 ## For local script execution
 
-Add a new HHVM `launch` config to `.vscode/launch.json`. The default template should be enough to get started, but you can change the values if needed:
+Add a new HHVM `launch` config to `.vscode/launch.json`. The default template should be good enough, but you can change the values if needed:
+
+`script`: The PHP/Hack script to launch. The default value (`${file}`), uses the currently open file in the editor, but this can be set to a static file path.
+`hhvmPath`: [Optional] Absolute path to the HHVM executable (default `hhvm`)
+`hhvmArgs`: [Optional] Extra arguments to pass to HHVM when launching the script, if needed
+`cwd`: [Optional] Working directory for the HHVM process
 
 Debug -> Start Debugging (F5) with this configuration selected will launch the currently open PHP/Hack script in a new HHVM process and pipe input/output to the editor OUTPUT tab.
 
+You will need to set breakpoints before script execution to be able to hit them.
+
 ## For remote server debugging
 
-Start your HHVM server with the following additional configuration strings:
+Start your HHVM server with the following additional configuration strings in server.ini or CLI args:
 
-`Eval.Debugger.VSDebugEnable`: Enable the debugging extension  
-`Eval.Debugger.VSDebugListenPort`: [Optional] Change the port the debugger listens on (default: `8999`)  
+`hhvm.debugger.vs_debug_enable=1` to enable the debugging extension  
+`hhvm.debugger.vs_debug_listen_port=<port>` to optionally change the port the debugger listens on (default: `8999`)  
 
-E.g. `hhvm -m server -p 8080 -v Eval.Debugger.VSDebugEnable=1 -v Eval.Debugger.VSDebugListenPort=1234`
+E.g. `hhvm -m server -p 8080 -d hhvm.debugger.vs_debug_enable=1 -d hhvm.debugger.vs_debug_listen_port=1234`
 
 Add a new HHVM `attach` config to `.vscode/launch.json` and configure as needed:
 

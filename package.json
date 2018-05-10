@@ -85,17 +85,40 @@
             "properties": {
               "host": {
                 "type": "string",
-                "description": "Host name/IP address of HHVM server (default: localhost).",
+                "description": "Host name/IP address of HHVM server (default: localhost)",
                 "default": "localhost"
               },
               "port": {
                 "type": "number",
-                "description": "Debug port to attach to (default: 8999).",
+                "description": "Debug port to attach to (default: 8999)",
                 "default": 8999
               },
               "remoteSiteRoot": {
                 "type": "string",
-                "description": "Absolute path to workspace root on the remote server (default: local root)."
+                "description": "Absolute path to workspace root on the remote server (default: local root)"
+              }
+            }
+          },
+          "launch": {
+            "properties": {
+              "hhvmPath": {
+                "type": "string",
+                "description": "Absolute path to HHVM executable for launching scripts (default: hhvm)",
+                "default": "hhvm"
+              },
+              "hhvmArgs": {
+                "type": "array",
+                "description": "Extra arguments to pass to the HHVM command when launching a script, if any"
+              },
+              "script": {
+                "type": "string",
+                "description": "The PHP/Hack script to launch",
+                "default": "The currently open file"
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Working directory for the launched HHVM process",
+                "default": "The current workspace root"
               }
             }
           }
@@ -103,12 +126,12 @@
         "configurationSnippets": [
           {
             "label": "HHVM: Attach to Server",
-            "description": "Attach to a HHVM server",
+            "description": "Attach to an HHVM server",
             "body": {
               "name": "HHVM: Attach to Server",
               "type": "hhvm",
               "request": "attach",
-              "host": "${1:localhost}",
+              "host": "localhost",
               "port": 8999,
               "remoteSiteRoot": "${workspaceFolder}"
             }
@@ -119,7 +142,8 @@
             "body": {
               "name": "HHVM: Run Script",
               "type": "hhvm",
-              "request": "launch"
+              "request": "launch",
+              "script": "${file}"
             }
           }
         ]
@@ -170,17 +194,17 @@
     "lint": "tslint --force -p ."
   },
   "dependencies": {
-    "vscode-debugadapter": "^1.26.0",
-    "vscode-debugprotocol": "^1.26.0",
-    "vscode-languageclient": "^3.5.0"
+    "vscode-debugadapter": "^1.29.0",
+    "vscode-debugprotocol": "^1.29.0",
+    "vscode-languageclient": "^4.1.3"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.44",
+    "@types/mocha": "^5.2.0",
     "@types/node": "^8.0.53",
-    "cson": "^4.1.0",
-    "tslint": "^5.8.0",
-    "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.6.2",
-    "vscode": "^1.1.10"
+    "cson": "^5.1.0",
+    "tslint": "^5.10.0",
+    "tslint-microsoft-contrib": "^5.0.3",
+    "typescript": "^2.8.3",
+    "vscode": "^1.1.17"
   }
 }

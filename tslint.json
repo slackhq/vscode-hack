@@ -15,6 +15,15 @@
     ],
     "max-classes-per-file": false,
     "no-any": false,
-    "no-increment-decrement": false
+    "no-increment-decrement": false,
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ],
+    "no-constant-condition": false,
+    "interface-name": false,
+    "no-octal-literal": false,
+    "no-empty": false,
+    "no-suspicious-comment": false
   }
 }

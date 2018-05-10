@@ -173,12 +173,13 @@ function writeStdout(output: {}) {
 }
 
 function writeSocket(output: string) {
+    let changedOutput = output;
     if (mapSiteRoot) {
-        output = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
+        changedOutput = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
     }
-    output = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
-    fs.appendFileSync('/tmp/ext.log', `Sending to HHVM: ${output}\n`);
-    socket.write(`${output}\0`, 'utf8');
+    changedOutput = output.replace(new RegExp(escapeRegExp('/home/pranay/repos/hacksite'), 'g'), remoteSiteRoot);
+    fs.appendFileSync('/tmp/ext.log', `Sending to HHVM: ${changedOutput}\n`);
+    socket.write(`${changedOutput}\0`, 'utf8');
 }
 
 function escapeRegExp(str) {
