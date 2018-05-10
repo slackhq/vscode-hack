@@ -12,7 +12,12 @@ export const hhClientArgs: string[] = clientPath.split(' ');
 export const hhClientCommand: string = String(hhClientArgs.shift());
 
 export const workspace: string = hackConfig.get('workspaceRootPath') || vscode.workspace.rootPath || '';
-export const enableCoverageCheck: boolean = hackConfig.get('enableCoverageCheck') || false;
+
+let enableCoverageCheckConfig: boolean | undefined = hackConfig.get('enableConverageCheck');
+if (enableCoverageCheckConfig === undefined) {
+    enableCoverageCheckConfig = true;
+}
+export const enableCoverageCheck: boolean = enableCoverageCheckConfig;
 
 let useLanguageServerConfig: boolean | undefined = hackConfig.get('useLanguageServer');
 if (useLanguageServerConfig === undefined) {

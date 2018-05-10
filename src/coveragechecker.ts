@@ -13,10 +13,7 @@ type UnfilteredTypeCoverageRegion = {
     end: number
 };
 
-export class HackCoverageChecker implements vscode.Disposable {
-
-    // internal cache of known files mapped to their individual coverage errors
-    private cache: Map<string, vscode.Diagnostic[]> = new Map<string, vscode.Diagnostic[]>();
+export class HackCoverageChecker {
 
     // whether coverage errors are visible in the "Problems" tab or not
     private visible: boolean = false;
@@ -96,24 +93,27 @@ export class HackCoverageChecker implements vscode.Disposable {
             percentage: (totalInterestingRegionCount === 0)
                 ? 100
                 : (checkedRegionCount + partialRegionCount / 2) / totalInterestingRegionCount * 100,
-            uncoveredRegions: unfilteredResults.filter(
-                region => region.regionType === 'unchecked' || region.regionType === 'partial')
+            uncoveredRegions: unfilteredResults.filter(region => region.regionType === 'unchecked')
         };
     }
 
     public async start(context: vscode.ExtensionContext) {
-        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(document => { this.run(document, false); }));
-        context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(document => { this.hhvmCoverDiag.delete(document.uri); }));
+
+        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(doc => this.check(doc)));
         context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(editor => {
-            this.coverageStatus.hide();
+            this.hhvmCoverDiag.clear();
             if (editor) {
-                this.run(editor.document, true);
+                this.check(editor.document);
+            } else {
+                this.coverageStatus.hide();
             }
         }));
         context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { this.toggle(); }));
         context.subscriptions.push(this.hhvmCoverDiag, this.coverageStatus);
-        for (const document of vscode.workspace.textDocuments) {
-            await this.run(document, true);
+
+        // Check the active file, if any
+        if (vscode.window.activeTextEditor) {
+            this.check(vscode.window.activeTextEditor.document);
         }
     }
 
@@ -122,40 +122,27 @@ export class HackCoverageChecker implements vscode.Disposable {
             this.hhvmCoverDiag.clear();
             this.visible = false;
         } else {
-            const openEditors = vscode.window.visibleTextEditors;
-            if (openEditors.length > 0) {
-                for (const editor of openEditors) {
-                    await this.run(editor.document, true);
-                }
+            const editor = vscode.window.activeTextEditor;
+            if (editor) {
+                this.check(editor.document);
             }
             this.visible = true;
         }
     }
 
-    public dispose() {
-        throw new Error('Method not implemented.');
-    }
-
-    // todo put percentage in cache as well
-    private async run(document: vscode.TextDocument, useCached: boolean) {
+    private async check(document: vscode.TextDocument) {
         if (document.languageId !== 'hack') {
-            return;
-        }
-        const cachedFileDiagnostics = this.cache.get(document.fileName);
-        if (!useCached && cachedFileDiagnostics) {
-            this.cache.delete(document.fileName);
-        } else if (useCached && cachedFileDiagnostics && this.visible) {
-            this.hhvmCoverDiag.set(vscode.Uri.file(document.fileName), cachedFileDiagnostics);
+            this.coverageStatus.hide();
             return;
         }
         const colorResult = await hh_client.color(utils.mapFromWorkspacePath(document.fileName));
         if (!colorResult) {
             this.coverageStatus.hide();
-            this.hhvmCoverDiag.clear();
             return;
         }
         const coverageResult = HackCoverageChecker.convertTypedRegionsToCoverageResult(colorResult);
         if (!coverageResult) {
+            this.coverageStatus.hide();
             return;
         }
         this.coverageStatus.text = `$(paintcan)  ${coverageResult.percentage.toFixed(0)}%`;
@@ -163,22 +150,21 @@ export class HackCoverageChecker implements vscode.Disposable {
         this.coverageStatus.command = 'hack.toggleCoverageHighlight';
         this.coverageStatus.show();
 
-        const diagnostics: vscode.Diagnostic[] = [];
-        coverageResult.uncoveredRegions.forEach(region => {
-            const text = (region.regionType === 'unchecked')
-                ? 'Un-type checked code. Consider adding type annotations.'
-                : 'Partially type checked code. Consider adding type annotations.';
-            const diagnostic = new vscode.Diagnostic(
-                new vscode.Range(
-                    new vscode.Position(region.line - 1, region.start - 1),
-                    new vscode.Position(region.line - 1, region.end)),
-                text,
-                vscode.DiagnosticSeverity.Warning);
-            diagnostic.source = 'Type Coverage';
-            diagnostics.push(diagnostic);
-        });
-        this.cache.set(document.fileName, diagnostics);
         if (this.visible) {
+            const diagnostics: vscode.Diagnostic[] = [];
+            coverageResult.uncoveredRegions.forEach(region => {
+                const text = (region.regionType === 'unchecked')
+                    ? 'Un-type checked code. Consider adding type annotations.'
+                    : 'Partially type checked code. Consider adding type annotations.';
+                const diagnostic = new vscode.Diagnostic(
+                    new vscode.Range(
+                        new vscode.Position(region.line - 1, region.start - 1),
+                        new vscode.Position(region.line - 1, region.end)),
+                    text,
+                    vscode.DiagnosticSeverity.Information);
+                diagnostic.source = 'Type Coverage';
+                diagnostics.push(diagnostic);
+            });
             this.hhvmCoverDiag.set(document.uri, diagnostics);
         }
     }
