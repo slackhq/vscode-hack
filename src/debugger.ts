@@ -30,6 +30,7 @@ interface HhvmAttachRequestArguments extends DebugProtocol.AttachRequestArgument
     host?: string;
     port?: string;
     remoteSiteRoot?: string;
+    localWorkspaceRoot?: string;
     sandboxUser?: string;
 }
 
@@ -54,6 +55,11 @@ class HHVMDebuggerWrapper {
     private initializeArgs: DebugProtocol.InitializeRequestArguments;
     // private runInTerminalRequest: Promise<void> | undefined;
     private asyncBreakPending: boolean;
+
+    private remoteSiteRoot: string | undefined;
+    private remoteSiteRootPattern: RegExp | undefined;
+    private localWorkspaceRoot: string | undefined;
+    private localWorkspaceRootPattern: RegExp | undefined;
 
     constructor() {
         this.sequenceNumber = 0;
@@ -80,6 +86,11 @@ class HHVMDebuggerWrapper {
     private attachTarget(attachMessage: DebugProtocol.AttachRequest, retries: number = 0) {
         const args: HhvmAttachRequestArguments = attachMessage.arguments;
         const attachPort = args.port ? parseInt(args.port, 10) : DEFAULT_HHVM_DEBUGGER_PORT;
+
+        this.remoteSiteRoot = args.remoteSiteRoot;
+        this.remoteSiteRootPattern = args.remoteSiteRoot ? new RegExp(this.escapeRegExp(args.remoteSiteRoot), 'g') : undefined;
+        this.localWorkspaceRoot = args.localWorkspaceRoot;
+        this.localWorkspaceRootPattern = args.localWorkspaceRoot ? new RegExp(this.escapeRegExp(args.localWorkspaceRoot), 'g') : undefined;
 
         if (Number.isNaN(attachPort)) {
             throw new Error('Invalid HHVM debug port specified.');
@@ -112,7 +123,14 @@ class HHVMDebuggerWrapper {
                 });
 
                 const callback = (data: string) => {
-                    socket.write(`${data}\0`, 'utf8');
+
+                    // Map local workspace file paths to server root, if needed
+                    let mappedData = data;
+                    if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
+                        mappedData = mappedData.replace(this.localWorkspaceRootPattern, this.remoteSiteRoot);
+                    }
+
+                    socket.write(`${mappedData}\0`, 'utf8');
                 };
 
                 callback(JSON.stringify(attachMessage));
@@ -160,7 +178,7 @@ class HHVMDebuggerWrapper {
         }
 
         // const hhvmArgs = args.hhvmArgs;
-        const hhvmArgs = ['--mode', 'vsdebug', String(args.script) ];
+        const hhvmArgs = ['--mode', 'vsdebug', String(args.script)];
         const options = {
             cwd: args.cwd || process.cwd(),
             // FD[3] is used for communicating with the debugger extension.
@@ -589,10 +607,21 @@ class HHVMDebuggerWrapper {
             return;
         }
 
-        const output = JSON.stringify(message);
+        let output = JSON.stringify(message);
+
+        // Map server file paths to local workspace, if needed
+        if (this.remoteSiteRootPattern && this.localWorkspaceRoot) {
+            output = output.replace(this.remoteSiteRootPattern, this.localWorkspaceRoot);
+        }
+
         const length = Buffer.byteLength(output, 'utf8');
         process.stdout.write(`Content-Length: ${length}${TWO_CRLF}`, 'utf8');
         process.stdout.write(output, 'utf8');
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+    private escapeRegExp(str: string) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
     }
 }
 

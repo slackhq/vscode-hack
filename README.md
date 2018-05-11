@@ -8,6 +8,10 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.8.0
+- **HHVM Debugger (Alpha version)** — Launch scripts or attach to an HHVM server straight from VS Code. See the [debugger doc](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md) for details on setup and usage. _This is a very early release. Please file any bugs at the Issues page._
+- Hack coverage check works again. A new icon in the editor status bar shows % coverage for the file and can be clicked to highlight uncovered areas. (Can be disabled by setting `"hack.enableCoverageCheck": false`)
+
 ## v0.7.0
 - Language Server mode is now on by default for users running HHVM 3.23 or later. Add `"hack.useLanguageServer": false` to your workspace config to disable it.
 
@@ -42,7 +46,7 @@ This extension adds the following Visual Studio Code settings. These can be set 
 
 * `hack.clientPath`: Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well.
 * `hack.workspaceRootPath`: Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.
-* `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `false`).
+* `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `true`).
 * `hack.useLanguageServer`: Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above (default: `true`).
 
 ### Docker

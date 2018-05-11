@@ -1,16 +1,16 @@
 {
   "name": "vscode-hack",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.18.0"
   },
   "license": "MIT",
   "displayName": "Hack",
-  "description": "Hack/HHVM support for Visual Studio Code.",
+  "description": "Hack & HHVM support for Visual Studio Code.",
   "icon": "images/logo.png",
   "categories": [
-    "Languages",
+    "Programming Languages",
     "Debuggers",
     "Linters",
     "Snippets",
@@ -95,7 +95,13 @@
               },
               "remoteSiteRoot": {
                 "type": "string",
-                "description": "Absolute path to workspace root on the remote server (default: local root)"
+                "description": "Absolute path to workspace root on the remote server, to map to local workspace",
+                "default": "${workspaceFolder}"
+              },
+              "localWorkspaceRoot": {
+                "type": "string",
+                "description": "Absolute path to local workspace root, to map to remote server",
+                "default": "${workspaceFolder}"
               }
             }
           },
@@ -113,12 +119,12 @@
               "script": {
                 "type": "string",
                 "description": "The PHP/Hack script to launch",
-                "default": "The currently open file"
+                "default": "${file}"
               },
               "cwd": {
                 "type": "string",
                 "description": "Working directory for the launched HHVM process",
-                "default": "The current workspace root"
+                "default": "${workspaceFolder}"
               }
             }
           }
@@ -133,7 +139,8 @@
               "request": "attach",
               "host": "localhost",
               "port": 8999,
-              "remoteSiteRoot": "${workspaceFolder}"
+              "remoteSiteRoot": "${workspaceFolder}",
+              "localWorkspaceRoot": "${workspaceFolder}"
             }
           },
           {

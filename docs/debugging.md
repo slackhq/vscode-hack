@@ -6,7 +6,7 @@ HHVM versions 3.25 and later come with a built-in debugging extension that can b
 
 Add a new HHVM `launch` config to `.vscode/launch.json`. The default template should be good enough, but you can change the values if needed:
 
-`script`: The PHP/Hack script to launch. The default value (`${file}`), uses the currently open file in the editor, but this can be set to a static file path.
+`script`: The PHP/Hack script to launch. Use `${file}` to run the currently open file in the editor, or set to any other static file path.
 `hhvmPath`: [Optional] Absolute path to the HHVM executable (default `hhvm`)
 `hhvmArgs`: [Optional] Extra arguments to pass to HHVM when launching the script, if needed
 `cwd`: [Optional] Working directory for the HHVM process
@@ -27,8 +27,12 @@ E.g. `hhvm -m server -p 8080 -d hhvm.debugger.vs_debug_enable=1 -d hhvm.debugger
 Add a new HHVM `attach` config to `.vscode/launch.json` and configure as needed:
 
 `host`: [Optional] The remote HHVM host (default: `localhost`)  
-`port`: [Optional] The server debugging port, if changed in HHVM config (default: `8999`)  
-`remoteRootPath`: [Optional] Absolute path to site root on the HHVM server (default: local workspace root)
+`port`: [Optional] The server debugging port, if changed in HHVM config (default: `8999`) 
+
+If the site root on the server is different from your local workspace, set the following to automatically map them: 
+
+`remoteSiteRoot`: [Optional] Absolute path to site root on the HHVM server  
+`localWorkspaceRoot`: [Optional] Absolute path to local workspace root. Set to `${workspaceFolder}` to use the current VS Code workspace.
 
 ### SSH tunneling
 
