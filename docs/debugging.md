@@ -6,12 +6,12 @@ HHVM versions 3.25 and later come with a built-in debugging extension that can b
 
 Add a new HHVM `launch` config to `.vscode/launch.json`. The default template should be good enough, but you can change the values if needed:
 
-`script`: The PHP/Hack script to launch. Use `${file}` to run the currently open file in the editor, or set to any other static file path.
-`hhvmPath`: [Optional] Absolute path to the HHVM executable (default `hhvm`)
-`hhvmArgs`: [Optional] Extra arguments to pass to HHVM when launching the script, if needed
+`script`: The PHP/Hack script to launch. Use `${file}` to run the currently open file in the editor, or set to any other static file path.  
+`hhvmPath`: [Optional] Absolute path to the HHVM executable (default `hhvm`)  
+`hhvmArgs`: [Optional] Extra arguments to pass to HHVM when launching the script, if needed  
 `cwd`: [Optional] Working directory for the HHVM process
 
-Debug -> Start Debugging (F5) with this configuration selected will launch the currently open PHP/Hack script in a new HHVM process and pipe input/output to the editor OUTPUT tab.
+Debug -> Start Debugging (F5) with this configuration selected will launch the currently open PHP/Hack script (or the custom configured file) in a new HHVM process and pipe input/output to the editor OUTPUT tab.
 
 You will need to set breakpoints before script execution to be able to hit them.
 
