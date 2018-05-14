@@ -385,28 +385,56 @@
       "name": "storage.type.php",
       "patterns": [
         {
-          "match": "array",
+          "match": "\\barray\\b",
           "name": "storage.type.array.php"
         },
         {
-          "match": "bool|int|float|string|array|resource|mixed",
+          "match": "\\b(?:bool|int|float|string|array|resource|mixed)\\b",
           "name": "storage.type.php"
         },
         {
-          "begin": "shape\\(",
+          "begin": "([A-Za-z_][A-Za-z0-9_]*)<",
+          "beginCaptures": {
+            "1": {
+              "name": "support.class.php"
+            }
+          },
+          "end": ">",
+          "patterns": [
+            {
+              "include": "#type-annotation"
+            }
+          ]
+        },
+        {
+          "begin": "(?=shape\\()",
           "end": "\\)",
           "name": "storage.type.shape.php",
           "patterns": [
             {
-              "include": "#strings"
+              "begin": "(shape\\()",
+              "end": "(=>|\\.\\.\\.)",
+              "endCaptures": {
+                "1": "keyword.operator.key.php"
+              },
+              "patterns": [
+                {
+                  "include": "#strings"
+                },
+                {
+                  "include": "#constants"
+                }
+              ]
             },
             {
-              "include": "#constants"
-            },
-            {
-              "match": "=>",
-              "name": "keyword.operator.key.php"
-            },
+              "include": "#type-annotation"
+            }
+          ]
+        },
+        {
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [
             {
               "include": "#type-annotation"
             }
@@ -1317,12 +1345,23 @@
           "include": "#literal-collections"
         },
         {
-          "match": "\\{",
-          "name": "punctuation.section.scope.begin.php"
-        },
-        {
-          "match": "\\}",
-          "name": "punctuation.section.scope.end.php"
+          "begin": "\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.section.scope.begin.php"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.section.scope.end.php"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#language"
+            }
+          ]
         },
         {
           "include": "#constants"
