@@ -7,10 +7,10 @@ import * as hh_client from './proxy';
 import * as utils from './Utils';
 
 type UnfilteredTypeCoverageRegion = {
-    regionType: string,
-    line: number,
-    start: number,
-    end: number
+    regionType: string;
+    line: number;
+    start: number;
+    end: number;
 };
 
 export class HackCoverageChecker {
@@ -36,8 +36,8 @@ export class HackCoverageChecker {
      * until hhvm returns a better response for coverage runs.
      *
      */
-    private static convertTypedRegionsToCoverageResult(regions: { color: string, text: string }[])
-        : { percentage: number, uncoveredRegions: UnfilteredTypeCoverageRegion[] } {
+    private static convertTypedRegionsToCoverageResult(regions: { color: string; text: string }[])
+        : { percentage: number; uncoveredRegions: UnfilteredTypeCoverageRegion[] } {
         const startColumn = 1;
         let line = 1;
         let column = startColumn;
@@ -135,7 +135,7 @@ export class HackCoverageChecker {
             this.coverageStatus.hide();
             return;
         }
-        const colorResult = await hh_client.color(utils.mapFromWorkspacePath(document.fileName));
+        const colorResult = await hh_client.color(utils.mapFromWorkspaceUri(document.uri, false));
         if (!colorResult) {
             this.coverageStatus.hide();
             return;

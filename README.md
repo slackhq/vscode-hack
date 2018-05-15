@@ -8,6 +8,11 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.8.1
+- Updated Hack language syntax to the latest version
+- Removed some unnecessary PHP snippets
+- Fixed file path mapping in typechecker requests & responses to use the correct scheme (thanks [@fredemmott](https://github.com/fredemmott) for the thorough investigation)
+
 ## v0.8.0
 - **HHVM Debugger (Alpha version)** — Launch scripts or attach to an HHVM server straight from VS Code. See the [debugger doc](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md) for details on setup and usage. _This is a very early release. Please file any bugs at the Issues page._
 - Hack coverage check works again. A new icon in the editor status bar shows % coverage for the file and can be clicked to highlight uncovered areas. (Can be disabled by setting `"hack.enableCoverageCheck": false`)

@@ -11,7 +11,15 @@ export const clientPath: string = hackConfig.get('clientPath') || 'hh_client';
 export const hhClientArgs: string[] = clientPath.split(' ');
 export const hhClientCommand: string = String(hhClientArgs.shift());
 
-export const workspace: string = hackConfig.get('workspaceRootPath') || vscode.workspace.rootPath || '';
+export let mapWorkspace: boolean = false;
+export let workspace: string;
+const workspaceRootPath: string | undefined = hackConfig.get('workspaceRootPath');
+if (workspaceRootPath) {
+    mapWorkspace = true;
+    workspace = workspaceRootPath;
+} else if (vscode.workspace.workspaceFolders) {
+    workspace = vscode.workspace.workspaceFolders[0].uri.fsPath;
+}
 
 let enableCoverageCheckConfig: boolean | undefined = hackConfig.get('enableConverageCheck');
 if (enableCoverageCheckConfig === undefined) {

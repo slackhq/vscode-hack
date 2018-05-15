@@ -21,7 +21,7 @@ export class HackTypeChecker {
             return;
         }
 
-        const diagnosticMap: Map<string, vscode.Diagnostic[]> = new Map();
+        const diagnosticMap: Map<vscode.Uri, vscode.Diagnostic[]> = new Map();
         typecheckResult.errors.forEach(error => {
             let fullMessage = '';
             let code: number = 0;
@@ -39,7 +39,7 @@ export class HackTypeChecker {
                 vscode.DiagnosticSeverity.Error);
             diagnostic.code = code;
             diagnostic.source = 'Hack';
-            const file = utils.mapToWorkspacePath(error.message[0].path);
+            const file = utils.mapToWorkspaceUri(error.message[0].path);
             const cachedFileDiagnostics = diagnosticMap.get(file);
             if (cachedFileDiagnostics) {
                 cachedFileDiagnostics.push(diagnostic);
@@ -48,7 +48,7 @@ export class HackTypeChecker {
             }
         });
         diagnosticMap.forEach((diags, file) => {
-            this.hhvmTypeDiag.set(vscode.Uri.file(file), diags);
+            this.hhvmTypeDiag.set(file, diags);
         });
     }
 }

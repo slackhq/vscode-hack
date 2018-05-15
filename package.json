@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.18.0"
