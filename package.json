@@ -50,7 +50,7 @@
           ".php",
           ".hh"
         ],
-        "firstLine": "^<\\?hh\\b.*$"
+        "firstLine": "^<\\?hh\\b.*|#!.*hhvm.*$"
       }
     ],
     "grammars": [
