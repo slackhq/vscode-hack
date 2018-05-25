@@ -101,63 +101,57 @@ class HHVMDebuggerWrapper {
         }
 
         const socket = net.createConnection({ port: attachPort });
-        socket
-            .once('connect', () => {
-                socket.on('data', chunk => {
-                    this.processDebuggerMessage(chunk);
-                });
 
-                socket.on('close', () => {
-                    this.writeOutputWithHeader({
-                        seq: ++this.sequenceNumber,
-                        type: 'event',
-                        event: 'hhvmConnectionDied'
-                    });
-                    process.stderr.write('The connection to the debug target has been closed.');
-                    process.exit(0);
-                });
+        socket.on('data', chunk => {
+            this.processDebuggerMessage(chunk);
+        });
 
-                socket.on('disconnect', () => {
-                    process.stderr.write('The connection to the debug target has been closed.');
-                    process.exit(0);
-                });
-
-                const callback = (data: string) => {
-
-                    // Map local workspace file paths to server root, if needed
-                    let mappedData = data;
-                    if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
-                        mappedData = mappedData.replace(this.localWorkspaceRootPattern, this.remoteSiteRoot);
-                    }
-
-                    socket.write(`${mappedData}\0`, 'utf8');
-                };
-
-                callback(JSON.stringify(attachMessage));
-                this.debuggerWriteCallback = callback;
-                this.forwardBufferedMessages();
-                this.debugging = true;
-
-                const attachResponse = {
-                    request_seq: attachMessage.seq,
-                    success: true,
-                    command: attachMessage.command
-                };
-                this.writeResponseMessage(attachResponse);
-            })
-            .on('error', error => {
-                if (retries >= 5) {
-                    process.stderr.write(`Error communicating with debugger target: ${error.toString()}\n`);
-                    process.exit((<any>error).code);
-                } else {
-                    // When reconnecting to a target we just disconnected from, especially
-                    // in the case of an unclean disconnection, it may take a moment
-                    // for HHVM to receive a TCP socket error and realize the client is
-                    // gone. Rather than failing to reconnect, wait a moment and try
-                    // again to provide a better user experience.
-                    setTimeout(() => this.attachTarget(attachMessage, retries + 1), 2000);
-                }
+        socket.on('close', () => {
+            this.writeOutputWithHeader({
+                seq: ++this.sequenceNumber,
+                type: 'event',
+                event: 'hhvmConnectionDied'
             });
+            process.stderr.write('The connection to the debug target has been closed.');
+            process.exit(0);
+        });
+
+        const callback = (data: string) => {
+
+            // Map local workspace file paths to server root, if needed
+            let mappedData = data;
+            if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
+                mappedData = mappedData.replace(this.localWorkspaceRootPattern, this.remoteSiteRoot);
+            }
+
+            socket.write(`${mappedData}\0`, 'utf8');
+        };
+
+        callback(JSON.stringify(attachMessage));
+        this.debuggerWriteCallback = callback;
+        this.forwardBufferedMessages();
+        this.debugging = true;
+
+        const attachResponse = {
+            request_seq: attachMessage.seq,
+            success: true,
+            command: attachMessage.command
+        };
+        this.writeResponseMessage(attachResponse);
+
+        socket.on('error', error => {
+            if (retries >= 5) {
+                process.stderr.write(`Error communicating with debugger target: ${error.toString()}\n`);
+                process.exit((<any>error).code);
+            } else {
+                // When reconnecting to a target we just disconnected from, especially
+                // in the case of an unclean disconnection, it may take a moment
+                // for HHVM to receive a TCP socket error and realize the client is
+                // gone. Rather than failing to reconnect, wait a moment and try
+                // again to provide a better user experience.
+                setTimeout(() => this.attachTarget(attachMessage, retries + 1), 2000);
+            }
+        });
     }
 
     private launchTarget(launchMessage: DebugProtocol.LaunchRequest) {
