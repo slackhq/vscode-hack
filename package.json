@@ -139,8 +139,8 @@
               "request": "attach",
               "host": "localhost",
               "port": 8999,
-              "remoteSiteRoot": "${workspaceFolder}",
-              "localWorkspaceRoot": "${workspaceFolder}"
+              "remoteSiteRoot": "^\"\\${workspaceFolder}\"",
+              "localWorkspaceRoot": "^\"\\${workspaceFolder}\""
             }
           },
           {
@@ -150,7 +150,7 @@
               "name": "HHVM: Run Script",
               "type": "hhvm",
               "request": "launch",
-              "script": "${file}"
+              "script": "^\"\\${file}\""
             }
           }
         ]
