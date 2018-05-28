@@ -8,6 +8,10 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.8.2
+- Documents are now recognized as Hack if they start with a shebang pointing to an HHVM executable (e.g. `#!/usr/bin/hhvm`), regardless of extension
+- Debugger bug fixes (configuration snippet templates are copied correctly, stop debug session from getting stuck on bad socket connection)
+
 ## v0.8.1
 - Updated Hack language syntax to the latest version
 - Removed some unnecessary PHP snippets
