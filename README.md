@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v0.8.3
+- Fixed bug in debug launch mode to correctly recognize extra args passed to HHVM
+
 ## v0.8.2
 - Documents are now recognized as Hack if they start with a shebang pointing to an HHVM executable (e.g. `#!/usr/bin/hhvm`), regardless of extension
 - Debugger bug fixes (configuration snippet templates are copied correctly, stop debug session from getting stuck on bad socket connection)
@@ -20,14 +23,6 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 ## v0.8.0
 - **HHVM Debugger (Alpha version)** — Launch scripts or attach to an HHVM server straight from VS Code. See the [debugger doc](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md) for details on setup and usage. _This is a very early release. Please file any bugs at the Issues page._
 - Hack coverage check works again. A new icon in the editor status bar shows % coverage for the file and can be clicked to highlight uncovered areas. (Can be disabled by setting `"hack.enableCoverageCheck": false`)
-
-## v0.7.0
-- Language Server mode is now on by default for users running HHVM 3.23 or later. Add `"hack.useLanguageServer": false` to your workspace config to disable it.
-
-## v0.6.2
-- Experimental Language Server support - If you are running HHVM 3.23 or later, add `"hack.useLanguageServer": true` to your workspace config to start hh_client in Language Server mode (see [#15](https://github.com/PranayAgarwal/vscode-hack/issues/15) for more context).
-- Support for running against a containerized Hack typecheck server (see Docker section in README). Thanks [@beatscode](https://github.com/beatscode)!
-- Fixed [#13](https://github.com/PranayAgarwal/vscode-hack/issues/13) - Running formatter removes last line of file if there is no trailing newline. Thanks [@beefsack](https://github.com/beefsack)!
 
 See the full list of releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases) as well as the project [changelog](https://github.com/PranayAgarwal/vscode-hack/blob/master/CHANGELOG.md).
 

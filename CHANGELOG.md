@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.8.3 - 2018-05-30
+- Fixed bug in debug launch mode to correctly recognize extra args passed to HHVM
+
 ## v0.8.2 - 2018-05-28
 - Documents are now recognized as Hack if they start with a shebang pointing to an HHVM executable (e.g. `#!/usr/bin/hhvm`), regardless of extension
 - Debugger bug fixes (stop debug session from getting stuck on bad socket connection, copy configuration snippet templates correctly)
