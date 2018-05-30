@@ -171,8 +171,9 @@ class HHVMDebuggerWrapper {
             args.sandboxUser = os.userInfo().username;
         }
 
-        // const hhvmArgs = args.hhvmArgs;
-        const hhvmArgs = ['--mode', 'vsdebug', String(args.script)];
+        const hhvmArgs = args.hhvmArgs || [];
+        const scriptArgs = args.script ? args.script.split(' ') : [];
+        const allArgs = ['--mode', 'vsdebug', ...hhvmArgs, ...scriptArgs];
         const options = {
             cwd: args.cwd || process.cwd(),
             // FD[3] is used for communicating with the debugger extension.
@@ -187,7 +188,7 @@ class HHVMDebuggerWrapper {
             env: process.env
         };
 
-        const targetProcess = child_process.spawn(hhvmPath, hhvmArgs, options);
+        const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
 
         // Exit with the same error code the target exits with.
         targetProcess.on('exit', code => process.exit(code));
