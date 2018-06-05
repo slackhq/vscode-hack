@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.8.4 - 2018-06-04
+- Syntax highlighting for `.hhconfig` file
+- Added support for showing related messages for an error when running in non-LSP mode
+
 ## v0.8.3 - 2018-05-30
 - Fixed bug in debug launch mode to correctly recognize extra args passed to HHVM
 
