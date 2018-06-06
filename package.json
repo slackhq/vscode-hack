@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "displayName": "Hack",
-  "description": "Hack & HHVM support for Visual Studio Code.",
+  "description": "Hack language & HHVM debugger support for Visual Studio Code",
   "icon": "images/logo.png",
   "categories": [
     "Programming Languages",
@@ -20,7 +20,8 @@
   "keywords": [
     "hack",
     "hacklang",
-    "hhvm"
+    "hhvm",
+    "php"
   ],
   "galleryBanner": {
     "color": "#5d5d5d",
@@ -56,6 +57,7 @@
         "id": "ini",
         "aliases": [
           "Hack Configuration",
+          "hack",
           "hacklang"
         ],
         "filenames": [
