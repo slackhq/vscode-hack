@@ -32,7 +32,11 @@ export async function activate(context: vscode.ExtensionContext) {
         const languageClient = new LanguageClient(
             'Hack Language Server',
             { command: config.hhClientCommand, args: [...config.hhClientArgs, 'lsp', '--from', 'vscode-hack'] },
-            { documentSelector: [{ language: 'hack', scheme: 'file' }], uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri } });
+            {
+                documentSelector: [{ language: 'hack', scheme: 'file' }],
+                uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
+                initializationOptions: { useTextEditAutocomplete: true }
+            });
         context.subscriptions.push(languageClient.start());
         return;
     }
