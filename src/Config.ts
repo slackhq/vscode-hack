@@ -32,3 +32,20 @@ if (useLanguageServerConfig === undefined) {
     useLanguageServerConfig = true;
 }
 export const useLanguageServer: boolean = useLanguageServerConfig;
+
+export const useHhast: boolean = hackConfig.get('useHhast') || false;
+
+export const hhastLintMode: 'whole-project' | 'open-files' | undefined | null = hackConfig.get('hhastLintMode');
+
+export const hhastPath: string | undefined = hackConfig.get('hhastPath');
+export const hhastArgs: string[] = hackConfig.get('hhastArgs') || [];
+
+// Use the global configuration so that a project can't both provide a malicious hhast-lint executable and whitelist itself in $project/.vscode/settings.json
+const hhastRemembered: { globalValue?: { [key: string]: 'trusted' | 'untrusted' } } | undefined = hackConfig.inspect('hhastRememberedWorkspaces');
+export const hhastRememberedWorkspaces: { [key: string]: 'trusted' | 'untrusted' } = hhastRemembered ? (hhastRemembered.globalValue || {}) : {}
+
+export async function rememberHhastWorkspace(workspace: string, trust: 'trusted' | 'untrusted') {
+    let remembered = hhastRememberedWorkspaces;
+    remembered[workspace] = trust;
+    await hackConfig.update('hhastRememberedWorkspaces', remembered, vscode.ConfigurationTarget.Global);
+}

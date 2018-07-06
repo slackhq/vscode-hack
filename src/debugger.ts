@@ -16,8 +16,8 @@ import * as child_process from 'child_process';
 import * as net from 'net';
 import * as os from 'os';
 import { Writable } from 'stream';
-import { OutputEvent } from 'vscode-debugadapter';
-import { DebugProtocol } from 'vscode-debugprotocol';
+import { OutputEvent } from 'vscode-debugadapter/lib/main';
+import { DebugProtocol } from 'vscode-debugprotocol/lib/debugProtocol';
 
 const TWO_CRLF = '\r\n\r\n';
 const CONTENT_LENGTH_PATTERN = new RegExp('Content-Length: (\\d+)');

@@ -191,6 +191,39 @@
           "type": "boolean",
           "default": true,
           "description": "Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
+        },
+        "hack.useHhast": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically invoke HHAST"
+        },
+        "hack.hhastPath": {
+          "type": "string",
+          "default": "vendor/bin/hhast-lint",
+          "description": "Path to hhast-lint executable. Only works for HHAST 3.27.1 and above"
+        },
+        "hack.hhastArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Additional arguments to pass to hhast-lint"
+        },
+        "hack.hhastRememberedWorkspaces": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["trusted", "untrusted"]
+          },
+          "default": {},
+          "description": "Workspaces where whether or not to use HHAST has been remembered"
+        },
+        "hack.hhastLintMode": {
+          "type": "string",
+          "enum": ["whole-project", "open-files"],
+          "default": null,
+          "description": "Whether to lint the whole project, or just open files"
         }
       }
     },
