@@ -1,7 +1,7 @@
 /** @file Integration with the Hack type checker via the LSP */
 
 import * as vscode from 'vscode';
-import { LanguageClient, HandleDiagnosticsSignature } from 'vscode-languageclient/lib/main';
+import { LanguageClient, HandleDiagnosticsSignature, RevealOutputChannelOn } from 'vscode-languageclient/lib/main';
 import * as config from './Config';
 import * as utils from './Utils';
 import * as hack from './types/hack';
@@ -24,7 +24,10 @@ export class LSPHackTypeChecker {
         uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
         middleware: {
           handleDiagnostics: this.handleDiagnostics,
-        }
+        },
+        // Hack returns errors if commands fail due to syntax errors. Don't
+        // automatically switch to the Output pane in this case.
+        revealOutputChannelOn: RevealOutputChannelOn.Never,
       },
     );
     context.subscriptions.push(languageClient.start());
