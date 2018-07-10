@@ -3,19 +3,20 @@
  */
 
 import * as vscode from 'vscode';
-import * as hh_client from './proxy';
-import * as utils from './Utils';
+import { LanguageClient } from 'vscode-languageclient';
 
-type UnfilteredTypeCoverageRegion = {
-    regionType: string;
-    line: number;
-    start: number;
-    end: number;
+type CoverageResponse = {
+    coveredPercent: number;
+    uncoveredRanges: {
+        message: string;
+        range: vscode.Range;
+    }[];
+    defaultMessage: string;
 };
 
 export class HackCoverageChecker {
 
-    // whether coverage errors are visible in the "Problems" tab or not
+    // whether coverage errors are highlighted in code and visible in the "Problems" tab
     private visible: boolean = false;
 
     // the percentage coverage indicator in the status bar
@@ -24,77 +25,13 @@ export class HackCoverageChecker {
     // the global coverage error collection
     private hhvmCoverDiag: vscode.DiagnosticCollection;
 
-    constructor() {
+    // the global hack language client instance
+    private languageClient: LanguageClient;
+
+    constructor(languageClient: LanguageClient) {
         this.coverageStatus = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         this.hhvmCoverDiag = vscode.languages.createDiagnosticCollection('hack_coverage');
-    }
-
-    /**
-     * Converts a list of covered regions (from hh_client --color) to line/character positions in a file.
-     *
-     * Copied from https://github.com/facebook/nuclide/blob/master/pkg/nuclide-hack-rpc/lib/TypedRegions.js
-     * until hhvm returns a better response for coverage runs.
-     *
-     */
-    private static convertTypedRegionsToCoverageResult(regions: { color: string; text: string }[])
-        : { percentage: number; uncoveredRegions: UnfilteredTypeCoverageRegion[] } {
-        const startColumn = 1;
-        let line = 1;
-        let column = startColumn;
-        const unfilteredResults: UnfilteredTypeCoverageRegion[] = [];
-        regions.forEach(region => {
-            const regionType = region.color;
-            function addMessage(width: number) {
-                if (width > 0) {
-                    const lastResult = unfilteredResults[unfilteredResults.length - 1];
-                    const endColumn = column + width - 1;
-                    // Often we'll get contiguous blocks of errors on the same line.
-                    if (lastResult && lastResult.regionType === regionType && lastResult.line === line && lastResult.end === column - 1) {
-                        // So we just merge them into 1 block.
-                        lastResult.end = endColumn;
-                    } else {
-                        unfilteredResults.push({
-                            regionType,
-                            line,
-                            start: column,
-                            end: endColumn
-                        });
-                    }
-                }
-            }
-
-            const strings = region.text.split('\n');
-            if (strings.length <= 0) {
-                return;
-            }
-
-            // Add message for each line ending in a new line.
-            const lines = strings.slice(0, -1);
-            lines.forEach(text => {
-                addMessage(text.length);
-                line += 1;
-                column = startColumn;
-            });
-
-            // Add message for the last string which does not end in a new line.
-            const lastString = strings[strings.length - 1];
-            addMessage(lastString.length);
-            column += lastString.length;
-        });
-
-        const totalInterestingRegionCount = unfilteredResults.reduce(
-            (count, region) => (region.regionType !== 'default' ? count + 1 : count), 0);
-        const checkedRegionCount = unfilteredResults.reduce(
-            (count, region) => (region.regionType === 'checked' ? count + 1 : count), 0);
-        const partialRegionCount = unfilteredResults.reduce(
-            (count, region) => (region.regionType === 'partial' ? count + 1 : count), 0);
-
-        return {
-            percentage: (totalInterestingRegionCount === 0)
-                ? 100
-                : (checkedRegionCount + partialRegionCount / 2) / totalInterestingRegionCount * 100,
-            uncoveredRegions: unfilteredResults.filter(region => region.regionType === 'unchecked')
-        };
+        this.languageClient = languageClient;
     }
 
     public async start(context: vscode.ExtensionContext) {
@@ -131,37 +68,31 @@ export class HackCoverageChecker {
     }
 
     private async check(document: vscode.TextDocument) {
-        if (document.languageId !== 'hack') {
+        if (document.languageId !== 'hack' && document.uri.scheme !== 'file') {
             this.coverageStatus.hide();
             return;
         }
-        const colorResult = await hh_client.color(utils.mapFromWorkspaceUri(document.uri, false));
-        if (!colorResult) {
+
+        let coverageResponse: CoverageResponse;
+        try {
+            coverageResponse = <CoverageResponse>await this.languageClient.sendRequest(
+                'textDocument/typeCoverage',
+                { textDocument: this.languageClient.code2ProtocolConverter.asTextDocumentIdentifier(document) }
+            );
+        } catch (e) {
             this.coverageStatus.hide();
             return;
         }
-        const coverageResult = HackCoverageChecker.convertTypedRegionsToCoverageResult(colorResult);
-        if (!coverageResult) {
-            this.coverageStatus.hide();
-            return;
-        }
-        this.coverageStatus.text = `$(paintcan)  ${coverageResult.percentage.toFixed(0)}%`;
-        this.coverageStatus.tooltip = `This file is ${coverageResult.percentage.toFixed(0)}% covered by Hack.\nClick to toggle highlighting of uncovered areas.`;
+
+        this.coverageStatus.text = `$(paintcan)  ${coverageResponse.coveredPercent}%`;
+        this.coverageStatus.tooltip = `This file is ${coverageResponse.coveredPercent}% covered by Hack.\nClick to toggle highlighting of uncovered areas.`;
         this.coverageStatus.command = 'hack.toggleCoverageHighlight';
         this.coverageStatus.show();
 
-        if (this.visible) {
+        if (this.visible && coverageResponse.uncoveredRanges) {
             const diagnostics: vscode.Diagnostic[] = [];
-            coverageResult.uncoveredRegions.forEach(region => {
-                const text = (region.regionType === 'unchecked')
-                    ? 'Un-type checked code. Consider adding type annotations.'
-                    : 'Partially type checked code. Consider adding type annotations.';
-                const diagnostic = new vscode.Diagnostic(
-                    new vscode.Range(
-                        new vscode.Position(region.line - 1, region.start - 1),
-                        new vscode.Position(region.line - 1, region.end)),
-                    text,
-                    vscode.DiagnosticSeverity.Information);
+            coverageResponse.uncoveredRanges.forEach(uncoveredRange => {
+                const diagnostic = new vscode.Diagnostic(uncoveredRange.range, uncoveredRange.message, vscode.DiagnosticSeverity.Information);
                 diagnostic.source = 'Type Coverage';
                 diagnostics.push(diagnostic);
             });
