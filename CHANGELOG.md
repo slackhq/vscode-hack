@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v0.8.5 - 2018-07-09
+- Only send LSP requests for documents with `file://` scheme
+- Send LSP initializtion option to use text edit autocomplete (fixes broken variable completion)
+
 ## v0.8.4 - 2018-06-04
 - Syntax highlighting for `.hhconfig` file
 - Added support for showing related messages for an error when running in non-LSP mode
