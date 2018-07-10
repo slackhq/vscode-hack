@@ -4,12 +4,10 @@
 
 import * as vscode from 'vscode';
 import * as config from './Config';
-import { HackCoverageChecker } from './coveragechecker';
-import * as hh_client from './proxy';
 import { LegacyHackTypeChecker } from './LegacyHackTypeChecker';
 import { LSPHackTypeChecker } from './LSPHackTypeChecker';
 import { LSPHHASTLint } from './LSPHHASTLint';
-
+import * as hh_client from './proxy';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -22,13 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
         return;
     }
 
-    let services: Promise<void>[] = [];
-
-    // create coverage checker and run on file open & save, if enabled in settings
-    if (config.enableCoverageCheck) {
-        services.push(new HackCoverageChecker().start(context));
-    }
-
+    const services: Promise<void>[] = [];
     services.push(LSPHHASTLint.startIfConfiguredAndEnabled(context));
 
     if (LSPHackTypeChecker.isSupported(version) && config.useLanguageServer) {
@@ -38,7 +30,6 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     await Promise.all(services);
-
 }
 
 export function deactivate() {

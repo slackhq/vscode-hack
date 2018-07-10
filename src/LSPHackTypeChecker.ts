@@ -1,8 +1,11 @@
-/** @file Integration with the Hack type checker via the LSP */
+/**
+ * @file Integration with the Hack type checker via the LSP
+ */
 
 import * as vscode from 'vscode';
 import { LanguageClient, HandleDiagnosticsSignature, RevealOutputChannelOn } from 'vscode-languageclient/lib/main';
 import * as config from './Config';
+import { HackCoverageChecker } from './coveragechecker';
 import * as utils from './Utils';
 import * as hack from './types/hack';
 
@@ -30,6 +33,11 @@ export class LSPHackTypeChecker {
         revealOutputChannelOn: RevealOutputChannelOn.Never,
       },
     );
+    languageClient.onReady().then(async () => {
+      if (config.enableCoverageCheck && languageClient.initializeResult && (<any>languageClient.initializeResult.capabilities).typeCoverageProvider) {
+        await new HackCoverageChecker(languageClient).start(context);
+      }
+    });
     context.subscriptions.push(languageClient.start());
   }
 

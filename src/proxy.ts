@@ -14,10 +14,6 @@ export async function check(): Promise<hack.CheckResponse> {
     return run(['check']);
 }
 
-export async function color(fileName: string): Promise<hack.ColorResponse> {
-    return run(['--color', fileName]);
-}
-
 export async function typeAtPos(fileName: string, line: number, character: number): Promise<string | undefined> {
     const arg: string = `${fileName}:${line}:${character}`;
     const args: string[] = ['--type-at-pos', arg];

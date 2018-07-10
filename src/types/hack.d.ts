@@ -38,11 +38,6 @@ type CheckResponse = {
     }[]
 };
 
-type ColorResponse = {
-    color: string,
-    text: string
-}[];
-
 export type OutlineResponse = {
     name: string,
     kind: string,
