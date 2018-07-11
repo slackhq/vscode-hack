@@ -21,9 +21,9 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     const services: Promise<void>[] = [];
-    services.push(LSPHHASTLint.startIfConfiguredAndEnabled(context));
+    services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
 
-    if (LSPHackTypeChecker.isSupported(version) && config.useLanguageServer) {
+    if (LSPHackTypeChecker.IS_SUPPORTED(version) && config.useLanguageServer) {
         services.push((new LSPHackTypeChecker(context)).run());
     } else {
         services.push((new LegacyHackTypeChecker(context)).run());

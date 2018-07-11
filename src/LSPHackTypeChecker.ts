@@ -3,17 +3,21 @@
  */
 
 import * as vscode from 'vscode';
-import { LanguageClient, HandleDiagnosticsSignature, RevealOutputChannelOn } from 'vscode-languageclient/lib/main';
+import { HandleDiagnosticsSignature, LanguageClient, RevealOutputChannelOn } from 'vscode-languageclient';
 import * as config from './Config';
 import { HackCoverageChecker } from './coveragechecker';
-import * as utils from './Utils';
 import * as hack from './types/hack';
+import * as utils from './Utils';
 
 export class LSPHackTypeChecker {
   private context: vscode.ExtensionContext;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
+  }
+
+  public static IS_SUPPORTED(version: hack.Version): boolean {
+    return version.api_version >= 5;
   }
 
   public async run(): Promise<void> {
@@ -26,12 +30,12 @@ export class LSPHackTypeChecker {
         initializationOptions: { useTextEditAutocomplete: true },
         uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
         middleware: {
-          handleDiagnostics: this.handleDiagnostics,
+          handleDiagnostics: this.handleDiagnostics
         },
         // Hack returns errors if commands fail due to syntax errors. Don't
         // automatically switch to the Output pane in this case.
-        revealOutputChannelOn: RevealOutputChannelOn.Never,
-      },
+        revealOutputChannelOn: RevealOutputChannelOn.Never
+      }
     );
     languageClient.onReady().then(async () => {
       if (config.enableCoverageCheck && languageClient.initializeResult && (<any>languageClient.initializeResult.capabilities).typeCoverageProvider) {
@@ -45,7 +49,7 @@ export class LSPHackTypeChecker {
     next(uri, diagnostics.map(d => {
       // See https://github.com/facebook/hhvm/blob/028402226993d53d68e17125e0b7c8dd87ea6c17/hphp/hack/src/errors/errors.ml#L174
       let kind: string;
-      switch (Math.floor((d.code as number) / 1000)) {
+      switch (Math.floor((<number>d.code) / 1000)) {
         case 1:
           kind = 'Parsing';
           break;
@@ -66,14 +70,9 @@ export class LSPHackTypeChecker {
           break;
         default:
           kind = 'Other';
-          break;
       }
-      d.message = kind + '[' + d.code + '] ' + d.message;
+      d.message = `${kind}[${d.code}] ${d.message}`;
       return d;
     }));
-  }
-
-  public static isSupported(version: hack.Version): boolean {
-    return version.api_version >= 5;
   }
 }

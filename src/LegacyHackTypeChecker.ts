@@ -4,10 +4,10 @@
  */
 
 import * as vscode from 'vscode';
-import * as hh_client from './proxy';
-import * as utils from './Utils';
 import * as providers from './providers';
+import * as hh_client from './proxy';
 import * as suppressions from './suppressions';
+import * as utils from './Utils';
 
 export class LegacyHackTypeChecker {
     private hhvmTypeDiag: vscode.DiagnosticCollection;
