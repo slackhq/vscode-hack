@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "0.8.5",
+  "version": "1.0.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.22.0"
@@ -194,7 +194,7 @@
         },
         "hack.useHhast": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Automatically invoke HHAST"
         },
         "hack.hhastPath": {
@@ -210,20 +210,20 @@
           "default": [],
           "description": "Additional arguments to pass to hhast-lint"
         },
-        "hack.hhastRememberedWorkspaces": {
+        "hack.hhastLintMode": {
+          "type": "string",
+          "enum": ["whole-project", "open-files"],
+          "default": null,
+          "description": "Whether to lint the whole project, or just open files"
+        },
+        "hack.rememberedWorkspaces": {
           "type": "object",
           "additionalProperties": {
             "type": "string",
             "enum": ["trusted", "untrusted"]
           },
           "default": {},
-          "description": "Workspaces where whether or not to use HHAST has been remembered"
-        },
-        "hack.hhastLintMode": {
-          "type": "string",
-          "enum": ["whole-project", "open-files"],
-          "default": null,
-          "description": "Whether to lint the whole project, or just open files"
+          "description": "Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered"
         }
       }
     },

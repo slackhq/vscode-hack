@@ -8,15 +8,10 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
-## v0.8
-- **HHVM Debugger (Alpha version)** — Launch scripts or attach to an HHVM server straight from VS Code. See the [debugger doc](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md) for details on setup and usage. _This is a very early release. Please file any bugs at the Issues page._
-- Hack coverage check works again. A new icon in the editor status bar shows % coverage for the file and can be clicked to highlight uncovered areas. (Can be disabled by setting `"hack.enableCoverageCheck": false`)
-- Updated Hack language syntax to the latest version
-- Removed some unnecessary PHP snippets
-- Fixed file path mapping in typechecker requests & responses to use the correct scheme (thanks [@fredemmott](https://github.com/fredemmott) for the thorough investigation)
-- Documents are now recognized as Hack if they start with a shebang pointing to an HHVM executable (e.g. `#!/usr/bin/hhvm`), regardless of extension
-- Syntax highlighting for `.hhconfig` file
-- Added support for showing related messages for an error when running in non-LSP mode
+## v1.0.0
+- **Integration with HHAST Linter** (thanks [@fredemmott](https://github.com/fredemmott)!). The extension now supports Hack linting and autofixing via [HHAST](https://github.com/hhvm/hhast/) (v3.27.2 or later required). Set up linting for your project by following instructions in the HHAST library, then look at workspace-specific linter settings in the Configuration section below.
+- Type coverage now uses the language server
+- [Fix] Output panel will no longer automatically steal focus on extension errors
 
 See the full list of releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases) as well as the project [changelog](https://github.com/PranayAgarwal/vscode-hack/blob/master/CHANGELOG.md).
 
@@ -31,6 +26,7 @@ See the full list of releases and features added on the [Github releases page](h
 * Go To/Peek Definition
 * Find All References
 * Hack Coverage Check
+* Linting
 * [Debugger Support](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md)
 
 ![Hack for Visual Studio Code](https://cloud.githubusercontent.com/assets/341507/19377806/d7838da0-919d-11e6-9873-f5a6aa48aea4.gif)
@@ -47,6 +43,11 @@ This extension adds the following Visual Studio Code settings. These can be set 
 * `hack.workspaceRootPath`: Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.
 * `hack.enableCoverageCheck`: Enable calculation of Hack type coverage percentage for every file and display in status bar (default: `true`).
 * `hack.useLanguageServer`: Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above (default: `true`).
+* `hack.useHhast`: Enable linting (need [HHAST](https://github.com/hhvm/hhast) library set up and configured in project) (default: `true`).
+* `hack.hhastPath`: Use alternate hhast-lint path. Can be abolute or relative to workspace root (default: `vendor/bin/hhast-lint`).
+* `hack.hhastArgs`: Optional list of arguments passed to hhast-lint executable.
+* `hack.hhastLintMode`: Whether to lint the entire project (`whole-project`) or just the open files (`open-files`).
+* `hack.rememberedWorkspaces`: Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered. **Note:** This config can only be defined in VS Code global (user) settings.
 
 ### Docker
 

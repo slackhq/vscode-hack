@@ -2,6 +2,11 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v1.0.0 - 2018-07-19
+- **Integration with HHAST Linter** (thanks [@fredemmott](https://github.com/fredemmott)!). The extension now supports Hack linting and autofixing via [HHAST](https://github.com/hhvm/hhast/) (v3.27.2 or later required). Set up linting for your project by following instructions in the HHAST library, then look at workspace-specific linter settings in the extension Configuration section.
+- Type coverage now uses the language server
+- [Fix] Output panel will no longer automatically steal focus on extension errors
+
 ## v0.8.5 - 2018-07-09
 - Only send LSP requests for documents with `file://` scheme
 - Send LSP initializtion option to use text edit autocomplete (fixes broken variable completion)
