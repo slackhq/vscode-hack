@@ -246,7 +246,7 @@
     ]
   },
   "activationEvents": [
-    "onLanguage:hack"
+    "workspaceContains:.hhconfig"
   ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
