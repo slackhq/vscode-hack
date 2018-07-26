@@ -224,6 +224,17 @@
           },
           "default": {},
           "description": "Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered"
+        },
+        "hack.trace.server": {
+          "type": "string",
+          "scope": "window",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the Hack language server."
         }
       }
     },
