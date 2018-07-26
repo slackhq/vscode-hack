@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.22.0"
+    "vscode": "^1.25.0"
   },
   "license": "MIT",
   "displayName": "Hack",
