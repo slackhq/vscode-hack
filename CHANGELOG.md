@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v1.0.1 - 2018-07-26
+- Add automatic LSP request tracing via new `hack.tracing.server` config option (thanks [@auchenberg](https://github.com/auchenberg)!)
+
 ## v1.0.0 - 2018-07-19
 - **Integration with HHAST Linter** (thanks [@fredemmott](https://github.com/fredemmott)!). The extension now supports Hack linting and autofixing via [HHAST](https://github.com/hhvm/hhast/) (v3.27.2 or later required). Set up linting for your project by following instructions in the HHAST library, then look at workspace-specific linter settings in the extension Configuration section.
 - Type coverage now uses the language server
