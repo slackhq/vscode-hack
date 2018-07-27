@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.22.0"
+    "vscode": "^1.25.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -224,6 +224,17 @@
           },
           "default": {},
           "description": "Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered"
+        },
+        "hack.trace.server": {
+          "type": "string",
+          "scope": "window",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the Hack language server."
         }
       }
     },
@@ -248,7 +259,7 @@
   "dependencies": {
     "vscode-debugadapter": "^1.29.0",
     "vscode-debugprotocol": "^1.29.0",
-    "vscode-languageclient": "^4.1.4"
+    "vscode-languageclient": "^4.4.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.1",

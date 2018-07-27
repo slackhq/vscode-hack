@@ -22,10 +22,13 @@ export class LSPHackTypeChecker {
 
   public async run(): Promise<void> {
     const context = this.context;
-    const languageClient = new LanguageClient(
-      'Hack Language Server',
-      { command: config.hhClientCommand, args: [...config.hhClientArgs, 'lsp', '--from', 'vscode-hack'] },
-      {
+
+    const serverOptions = {
+      command: config.hhClientCommand,
+      args: [...config.hhClientArgs, 'lsp', '--from', 'vscode-hack']
+    };
+
+    const clientOptions =  {
         documentSelector: [{ language: 'hack', scheme: 'file' }],
         initializationOptions: { useTextEditAutocomplete: true },
         uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
@@ -35,8 +38,10 @@ export class LSPHackTypeChecker {
         // Hack returns errors if commands fail due to syntax errors. Don't
         // automatically switch to the Output pane in this case.
         revealOutputChannelOn: RevealOutputChannelOn.Never
-      }
-    );
+    };
+
+    const languageClient = new LanguageClient('hack', 'Hack Language Server', serverOptions, clientOptions);
+
     languageClient.onReady().then(async () => {
       if (config.enableCoverageCheck && languageClient.initializeResult && (<any>languageClient.initializeResult.capabilities).typeCoverageProvider) {
         await new HackCoverageChecker(languageClient).start(context);
