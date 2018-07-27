@@ -87,6 +87,7 @@ export class LSPHHASTLint {
     }
 
     const hhast = new LanguageClient(
+      'hack',
       'HHAST',
       { command: this.hhastPath, args: [...config.hhastArgs, '--mode', 'lsp', '--from', 'vscode-hack'] },
       {
