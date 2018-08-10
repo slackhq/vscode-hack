@@ -55,7 +55,7 @@ export class LSPHHASTLint {
     }
 
     const result = await vscode.window.showWarningMessage(
-      `This project uses ${hhastPath} to lint? This has the same security risks as executing any other code in the repository.`,
+      `Do you want to use ${hhastPath} to lint? This has the same security risks as executing any other code in the repository.`,
       {},
       'Yes',
       'Always',
