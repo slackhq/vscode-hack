@@ -247,9 +247,83 @@
     "commands": [
       {
         "command": "hack.toggleCoverageHighlight",
-        "title": "Hack: Toggle Coverage Highlight"
+        "title": "Toggle Coverage Highlight",
+        "category": "Hack"
+      },
+      {
+        "command": "hack.runAllTests",
+        "title": "Run All",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.runTest",
+        "title": "Run",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.debugTest",
+        "title": "Debug",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByClass",
+        "title": "Group by Class",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByPath",
+        "title": "Group by Path",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByResult",
+        "title": "Group by Result",
+        "category": "Hack Test"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == hacktest",
+          "command": "hack.runAllTests",
+          "group": "navigation"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByClass"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByPath"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByResult"
+        }
+      ],
+      "view/item/context": [
+        {
+          "when": "view == hacktest AND viewItem == class",
+          "command": "hack.runAllTests"
+        },
+        {
+          "when": "view == hacktest AND viewItem == test",
+          "command": "hack.runTest"
+        },
+        {
+          "when": "view == hacktest AND viewItem == test",
+          "command": "hack.debugTest"
+        }
+      ]
+    },
+    "views": {
+      "test": [
+        {
+          "id": "hacktest",
+          "name": "Hack Test"
+        }
+      ]
+    }
   },
   "activationEvents": [
     "workspaceContains:.hhconfig"
