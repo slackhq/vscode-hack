@@ -32,10 +32,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/PranayAgarwal/vscode-hack.git"
+    "url": "https://github.com/slackhq/vscode-hack.git"
   },
   "bugs": {
-    "url": "https://github.com/PranayAgarwal/vscode-hack/issues"
+    "url": "https://github.com/slackhq/vscode-hack/issues"
   },
   "main": "./out/main",
   "contributes": {

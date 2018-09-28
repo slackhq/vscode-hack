@@ -1,6 +1,6 @@
 # Hack for Visual Studio Code
 
-[![Build Status](https://travis-ci.org/PranayAgarwal/vscode-hack.svg?branch=master)](https://travis-ci.org/PranayAgarwal/vscode-hack)
+[![Build Status](https://travis-ci.org/slackhq/vscode-hack.svg?branch=master)](https://travis-ci.org/slackhq/vscode-hack)
 
 This extension adds rich Hack language & HHVM support to Visual Studio Code. Visit [http://hacklang.org](http://hacklang.org) to get started with Hack.
 
@@ -13,7 +13,7 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 - Type coverage now uses the language server
 - [Fix] Output panel will no longer automatically steal focus on extension errors
 
-See the full list of releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases) as well as the project [changelog](https://github.com/PranayAgarwal/vscode-hack/blob/master/CHANGELOG.md).
+See the full list of releases and features added on the [Github releases page](https://github.com/slackhq/vscode-hack/releases) as well as the project [changelog](https://github.com/slackhq/vscode-hack/blob/master/CHANGELOG.md).
 
 ## Features
 
@@ -27,7 +27,7 @@ See the full list of releases and features added on the [Github releases page](h
 * Find All References
 * Hack Coverage Check
 * Linting
-* [Debugger Support](https://github.com/PranayAgarwal/vscode-hack/blob/master/docs/debugging.md)
+* [Debugger Support](https://github.com/slackhq/vscode-hack/blob/master/docs/debugging.md)
 
 ![Hack for Visual Studio Code](https://cloud.githubusercontent.com/assets/341507/19377806/d7838da0-919d-11e6-9873-f5a6aa48aea4.gif)
 
@@ -66,12 +66,12 @@ Configure
 
 ## Issues
 
-Please file all bugs, issues, feature requests etc. at the [GitHub issues page](https://github.com/PranayAgarwal/vscode-hack/issues).
+Please file all bugs, issues, feature requests etc. at the [GitHub issues page](https://github.com/slackhq/vscode-hack/issues).
 
 ## Contributing
 
-There are lots of ways to help! You can file new bugs and feature requests, or fix a pending one. To contribute to the source code, fork the repository on GitHub and create a pull request. Check out the [VS Code extension development guide](https://code.visualstudio.com/docs/extensions/overview) to get started.
+There are lots of ways to help! You can file new bugs and feature requests, or fix a pending one. To contribute to the source code, fork the repository on GitHub and create a pull request. Please read our [Contributors Guide](CONTRIBUTING.md) and check out the [VS Code extension development guide](https://code.visualstudio.com/docs/extensions/overview) to get started.
 
 ## License
 
-The source code for this extension is hosted at [https://github.com/PranayAgarwal/vscode-hack](https://github.com/PranayAgarwal/vscode-hack) and is available under the [MIT license](LICENSE.md).
+The source code for this extension is hosted at [https://github.com/slackhq/vscode-hack](https://github.com/slackhq/vscode-hack) and is available under the [MIT license](LICENSE.md).
