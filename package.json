@@ -258,7 +258,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
+    "postinstall": "node ./node_modules/vscode/bin/install && node ./build/notice-file-generate.js",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "lint": "tslint --force -p ."
   },
@@ -271,6 +271,7 @@
     "@types/mocha": "^5.2.1",
     "@types/node": "^8.0.53",
     "cson": "^5.1.0",
+    "license-checker": "^24.0.1",
     "tslint": "^5.10.0",
     "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.9.1",
