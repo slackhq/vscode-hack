@@ -2,6 +2,12 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v1.1.0 - 2018-11-12
+- Moved project repository to https://github.com/slackhq org and added required notices and docs
+- Enabled LSP request tracing for hhast-lint
+- Fixed typo in hhast-lint security prompt text
+- Language syntax now tracks [atom-ide-hack](https://github.com/hhvm/atom-ide-hack) project
+
 ## v1.0.1 - 2018-07-26
 - Add automatic LSP request tracing via new `hack.tracing.server` config option (thanks [@auchenberg](https://github.com/auchenberg)!)
 
