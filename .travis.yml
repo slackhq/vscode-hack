@@ -25,11 +25,17 @@ script:
 - vsce package
 
 deploy:
-  provider: releases
-  api_key:
-    secure: kPNHzpvgrRn77LtacJT/3P4fwUETP6Mv1xFmgbwq/YKXwUQLWLMMo6HnI6bVy5SieIz9TxEIVepkcKdpGvsW1N15B7IgLaljVw0iamw6VUsDYmKBWvQHTdVuuAezeAGs9tHOQ/er3eVJwKJwnwtI1oUXET/OMWtwvob60zApHm3VD9yzwZ0YQEOjINKgIHJMMnAgG39fUr6HDVxFRObSxpNmovBVeGxlkPw9IWGYeZNHwS62ROtnbFIEn4bbEtGq7sd/yz3EdwsY7KZXI1eWGK41zuqlTt1RJHypd7vcY2VqzffDkY1YrUMwZOhMY0uA9yZjpl4d0WA84qE1vTOjyHdJnW9nKCVPrN/EYMNoJos4ng6aNcRBAEb4WrzpzppyQlmn8MFFNPfN0RQ1MGpNIug9K/x29k2vw2hYDZQ6r5dU/Np0Cg5cl/l7buV0R1lKAE04dL3GaoVjwGsM2I4CVvVXYVq6utA2nNlIyRDbbtAFcpT2E8/H/MFePvHOcD8QKi6bTJBGH1B9TTC0/W9FbKgGKdW4ZTS8NkE6ePE/FfTZwgmfy9eQQNImPuRzNy4t3OB5DS+SYAaMKhoHcq1lPxTOPCO0HHI2WhnkVXhzsTSiiJ29gtWqwyxNKdMhfZijYUlxkUSGdHg/6Ltz3y8lbkF4wZPD+brD27QU4P4KZBk=
-  file_glob: true
-  file: "*.vsix"
-  skip_cleanup: true
-  on:
-    tags: true
+  - provider: releases
+    api_key:
+      secure: kPNHzpvgrRn77LtacJT/3P4fwUETP6Mv1xFmgbwq/YKXwUQLWLMMo6HnI6bVy5SieIz9TxEIVepkcKdpGvsW1N15B7IgLaljVw0iamw6VUsDYmKBWvQHTdVuuAezeAGs9tHOQ/er3eVJwKJwnwtI1oUXET/OMWtwvob60zApHm3VD9yzwZ0YQEOjINKgIHJMMnAgG39fUr6HDVxFRObSxpNmovBVeGxlkPw9IWGYeZNHwS62ROtnbFIEn4bbEtGq7sd/yz3EdwsY7KZXI1eWGK41zuqlTt1RJHypd7vcY2VqzffDkY1YrUMwZOhMY0uA9yZjpl4d0WA84qE1vTOjyHdJnW9nKCVPrN/EYMNoJos4ng6aNcRBAEb4WrzpzppyQlmn8MFFNPfN0RQ1MGpNIug9K/x29k2vw2hYDZQ6r5dU/Np0Cg5cl/l7buV0R1lKAE04dL3GaoVjwGsM2I4CVvVXYVq6utA2nNlIyRDbbtAFcpT2E8/H/MFePvHOcD8QKi6bTJBGH1B9TTC0/W9FbKgGKdW4ZTS8NkE6ePE/FfTZwgmfy9eQQNImPuRzNy4t3OB5DS+SYAaMKhoHcq1lPxTOPCO0HHI2WhnkVXhzsTSiiJ29gtWqwyxNKdMhfZijYUlxkUSGdHg/6Ltz3y8lbkF4wZPD+brD27QU4P4KZBk=
+    file_glob: true
+    file: "*.vsix"
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: script
+    script: vsce publish -p $VS_TOKEN
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true
