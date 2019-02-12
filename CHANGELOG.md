@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v1.2.0 - 2019-02-12
+- **Support for `.hack` files** — VS Code will automatically classify files with the `.hack` extension as Hack, and these files will now syntax highlight correctly even without the `<?hh` opener. (`.hack` files are supported in HHVM 4.0.0 onward, so you will see typechecker errors if you are using them with an earlier version).
+
 ## v1.1.0 - 2018-11-12
 - Moved project repository to https://github.com/slackhq org and added required notices and docs
 - Enabled LSP request tracing for hhast-lint
