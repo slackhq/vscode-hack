@@ -69,7 +69,7 @@
     "grammars": [
       {
         "language": "hack",
-        "scopeName": "text.html.hack",
+        "scopeName": "source.hack",
         "path": "./syntaxes/hack.json"
       }
     ],

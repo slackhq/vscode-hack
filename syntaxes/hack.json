@@ -1,16 +1,15 @@
 {
-  "scopeName": "text.html.hack",
-  "name": "HACK",
+  "scopeName": "source.hack",
+  "name": "Hack",
   "fileTypes": [
     "hh",
     "php",
     "hack"
   ],
-  "firstLineMatch": "<?hh",
   "foldingStartMarker": "(/\\*|\\{\\s*$|<<<HTML)",
   "foldingStopMarker": "(\\*/|^\\s*\\}|^HTML;)",
   "injections": {
-    "text.html.hack - (meta.embedded | meta.tag), L:text.html.hack meta.tag, L:source.js.embedded.html": {
+    "source.hack - (meta.embedded | meta.tag), L:source.hack meta.tag, L:source.js.embedded.html": {
       "patterns": [
         {
           "begin": "(^\\s*)(?=<\\?(?![^?]*\\?>))",
@@ -132,6 +131,9 @@
   "patterns": [
     {
       "include": "text.html.basic"
+    },
+    {
+      "include": "#language"
     }
   ],
   "repository": {
