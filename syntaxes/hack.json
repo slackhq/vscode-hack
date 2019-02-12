@@ -3,7 +3,8 @@
   "name": "HACK",
   "fileTypes": [
     "hh",
-    "php"
+    "php",
+    "hack"
   ],
   "firstLineMatch": "<?hh",
   "foldingStartMarker": "(/\\*|\\{\\s*$|<<<HTML)",
