@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v1.2.1 - 2019-02-19
+- Fixed [#40](https://github.com/slackhq/vscode-hack/issues/40) — Syntax highlighting breaks for `.hack` files that contain `<?hh`.
+
 ## v1.2.0 - 2019-02-12
 - **Support for `.hack` files** — VS Code will automatically classify files with the `.hack` extension as Hack, and these files will now syntax highlight correctly even without the `<?hh` opener. (`.hack` files are supported in HHVM 4.0.0 onward, so you will see typechecker errors if you are using them with an earlier version).
 
