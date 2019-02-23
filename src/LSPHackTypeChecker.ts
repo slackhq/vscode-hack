@@ -3,9 +3,10 @@
  */
 
 import * as vscode from 'vscode';
-import { HandleDiagnosticsSignature, LanguageClient, RevealOutputChannelOn } from 'vscode-languageclient';
+import { HandleDiagnosticsSignature, LanguageClient, LanguageClientOptions, RevealOutputChannelOn } from 'vscode-languageclient';
 import * as config from './Config';
 import { HackCoverageChecker } from './coveragechecker';
+import { ProgressIndicator } from './LSPHackExtensions';
 import * as hack from './types/hack';
 import * as utils from './Utils';
 
@@ -28,7 +29,7 @@ export class LSPHackTypeChecker {
       args: [...config.hhClientArgs, 'lsp', '--from', 'vscode-hack']
     };
 
-    const clientOptions =  {
+    const clientOptions: LanguageClientOptions =  {
         documentSelector: [{ language: 'hack', scheme: 'file' }],
         initializationOptions: { useTextEditAutocomplete: true },
         uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
@@ -41,6 +42,7 @@ export class LSPHackTypeChecker {
     };
 
     const languageClient = new LanguageClient('hack', 'Hack Language Server', serverOptions, clientOptions);
+    languageClient.registerFeature(new ProgressIndicator());
 
     languageClient.onReady().then(async () => {
       if (config.enableCoverageCheck && languageClient.initializeResult && (<any>languageClient.initializeResult.capabilities).typeCoverageProvider) {
