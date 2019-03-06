@@ -10,8 +10,8 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## v2.0.0
 * **Remote development support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
-* This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
-* The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
+  * This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
+  * The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
 * Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
 
 ## v1.2.0
