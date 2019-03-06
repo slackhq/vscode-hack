@@ -9,7 +9,7 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 ## Latest releases
 
 ## v2.0.0
-* **Remote development support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
+* **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
   * This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
   * The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
 * Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
@@ -54,7 +54,7 @@ This extension adds the following Visual Studio Code settings. These can be set 
 
 ### Remote Development
 
-The extension supports connecting to an external HHVM development environment for local typechecking, linting and all other intellisense features. The current supported methods are SSH into a remote host or exec in a local Docker container.
+The extension supports connecting to an external HHVM development environment for local typechecking, linting and all other intellisense features. The current supported connection methods are SSH into a remote host or exec in a local Docker container.
 
 To enable this, set the following config values:
 
