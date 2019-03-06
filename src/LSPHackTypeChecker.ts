@@ -6,6 +6,7 @@ import * as vscode from 'vscode';
 import { HandleDiagnosticsSignature, LanguageClient, RevealOutputChannelOn } from 'vscode-languageclient';
 import * as config from './Config';
 import { HackCoverageChecker } from './coveragechecker';
+import * as remote from './remote';
 import * as hack from './types/hack';
 import * as utils from './Utils';
 
@@ -24,8 +25,8 @@ export class LSPHackTypeChecker {
     const context = this.context;
 
     const serverOptions = {
-      command: config.hhClientCommand,
-      args: [...config.hhClientArgs, 'lsp', '--from', 'vscode-hack']
+      command: remote.getCommand(config.clientPath),
+      args: remote.getArgs(config.clientPath, ['lsp', '--from', 'vscode-hack'])
     };
 
     const clientOptions =  {

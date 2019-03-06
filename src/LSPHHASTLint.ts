@@ -6,10 +6,12 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { HandleDiagnosticsSignature, LanguageClient } from 'vscode-languageclient';
 import * as config from './Config';
+import * as remote from './remote';
+import * as utils from './Utils';
 
 type LintMode = 'whole-project' | 'open-files';
 type InitializationOptions = {
-  'lintMode' ?: LintMode;
+  'lintMode'?: LintMode;
 };
 
 export class LSPHHASTLint {
@@ -18,7 +20,9 @@ export class LSPHHASTLint {
 
   constructor(context: vscode.ExtensionContext, hhastPath: string) {
     this.context = context;
-    this.hhastPath = hhastPath;
+    this.hhastPath = (config.remoteEnabled && config.remoteWorkspacePath)
+      ? hhastPath.replace(config.localWorkspacePath, config.remoteWorkspacePath)
+      : hhastPath;
   }
 
   /** Start if HHAST support is enabled, the project uses HHAST, and the user
@@ -28,7 +32,7 @@ export class LSPHHASTLint {
     if (!config.useHhast) {
       return;
     }
-    const workspace = config.workspace;
+    const workspace = config.localWorkspacePath;
     const usesLint: boolean = await new Promise<boolean>((resolve, _) => fs.access(`${workspace}/hhast-lint.json`, err => resolve(!err)));
     if (!usesLint) {
       return;
@@ -89,10 +93,14 @@ export class LSPHHASTLint {
     const hhast = new LanguageClient(
       'hack',
       'HHAST',
-      { command: this.hhastPath, args: [...config.hhastArgs, '--mode', 'lsp', '--from', 'vscode-hack'] },
+      {
+        command: remote.getCommand(this.hhastPath),
+        args: remote.getArgs(this.hhastPath, [...config.hhastArgs, '--mode', 'lsp', '--from', 'vscode-hack'])
+      },
       {
         documentSelector: [{ language: 'hack', scheme: 'file' }],
         initializationOptions: initializationOptions,
+        uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
         middleware: {
           handleDiagnostics: this.handleDiagnostics
         }

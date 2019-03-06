@@ -11,18 +11,11 @@ import * as config from './Config';
  * @param file The file URI to convert
  * @param includeScheme Whether to include the file:// scheme in the response or not
  */
-export const mapFromWorkspaceUri = (file: vscode.Uri, includeScheme: boolean = true): string => {
-    if (!config.mapWorkspace && includeScheme) {
+export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
+    if (!config.remoteEnabled || !config.remoteWorkspacePath) {
         return file.toString();
     }
-    let filePath = file.fsPath;
-    if (config.mapWorkspace && vscode.workspace.workspaceFolders) {
-        filePath = filePath.replace(vscode.workspace.workspaceFolders[0].uri.fsPath, config.workspace);
-    }
-    if (includeScheme) {
-        return vscode.Uri.file(filePath).toString();
-    }
-    return filePath;
+    return file.toString().replace(config.localWorkspacePath, config.remoteWorkspacePath);
 };
 
 /**
@@ -32,8 +25,8 @@ export const mapFromWorkspaceUri = (file: vscode.Uri, includeScheme: boolean = t
  */
 export const mapToWorkspaceUri = (file: string): vscode.Uri => {
     let filePath = file;
-    if (config.mapWorkspace && vscode.workspace.workspaceFolders) {
-        filePath = filePath.replace(config.workspace, vscode.workspace.workspaceFolders[0].uri.fsPath);
+    if (config.remoteEnabled && config.remoteWorkspacePath) {
+        filePath = filePath.replace(config.remoteWorkspacePath, config.localWorkspacePath);
     }
     if (filePath.startsWith('file://')) {
         return vscode.Uri.parse(filePath);
