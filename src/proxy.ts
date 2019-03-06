@@ -4,6 +4,7 @@
 
 import * as ps from 'child_process';
 import * as config from './Config';
+import * as remote from './remote';
 import * as hack from './types/hack';
 
 export async function version(): Promise<hack.Version | undefined> {
@@ -62,8 +63,10 @@ export async function format(text: string, startPos: number, endPos: number): Pr
 
 async function run(extraArgs: string[], stdin?: string): Promise<any> {
     return new Promise<any>((resolve, _) => {
-        const args: string[] = [...config.hhClientArgs, ...extraArgs, '--json', '--from', 'vscode-hack', config.workspace];
-        const p = ps.execFile(config.hhClientCommand, args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
+        const workspacePath = (config.remoteEnabled && config.remoteWorkspacePath) ? config.remoteWorkspacePath : config.localWorkspacePath;
+        const command = remote.getCommand(config.clientPath);
+        const args = remote.getArgs(config.clientPath, [...extraArgs, '--json', '--from', 'vscode-hack', workspacePath]);
+        const p = ps.execFile(command, args, { maxBuffer: 1024 * 1024 }, (err: any, stdout, stderr) => {
             if (err !== null && err.code !== 0 && err.code !== 2) {
                 // any hh_client failure other than typecheck errors
                 console.error(`Hack: hh_client execution error: ${err}`);

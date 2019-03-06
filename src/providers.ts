@@ -73,7 +73,7 @@ export class HackHoverProvider implements vscode.HoverProvider {
         const startPosition = wordPosition.start;
         const line: number = startPosition.line + 1;
         const character: number = startPosition.character + 1;
-        return hh_client.typeAtPos(utils.mapFromWorkspaceUri(document.uri, false), line, character).then(hoverType => {
+        return hh_client.typeAtPos(utils.mapFromWorkspaceUri(document.uri), line, character).then(hoverType => {
             if (!hoverType) {
                 return;
             }

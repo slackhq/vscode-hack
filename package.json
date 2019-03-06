@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.25.0"
@@ -175,13 +175,14 @@
       "properties": {
         "hack.clientPath": {
           "type": "string",
-          "default": null,
-          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH. A `docker exec` command is supported as well."
+          "default": "hh_client",
+          "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
         },
         "hack.workspaceRootPath": {
           "type": "string",
           "default": null,
-          "description": "Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container."
+          "description": "Absolute path to the workspace root directory. This will be the VS Code workspace root by default, but can be changed if the project is in a subdirectory or mounted in a Docker container.",
+          "deprecationMessage": "Use hack.remote.workspacePath instead"
         },
         "hack.enableCoverageCheck": {
           "type": "boolean",
@@ -196,12 +197,14 @@
         "hack.useHhast": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically invoke HHAST"
+          "description": "Enable linting (needs HHAST library set up and configured in project)",
+          "markdownDescription": "Enable linting (needs [HHAST](https://github.com/hhvm/hhast) library set up and configured in project)"
         },
         "hack.hhastPath": {
           "type": "string",
           "default": "vendor/bin/hhast-lint",
-          "description": "Path to hhast-lint executable. Only works for HHAST 3.27.1 and above"
+          "description": "Use an alternate hhast-lint path. Can be abolute or relative to workspace root.",
+          "markdownDescription": "Use an alternate `hhast-lint` path. Can be abolute or relative to workspace root."
         },
         "hack.hhastArgs": {
           "type": "array",
@@ -209,7 +212,7 @@
             "type": "string"
           },
           "default": [],
-          "description": "Additional arguments to pass to hhast-lint"
+          "description": "Optional list of arguments passed to hhast-lint executable"
         },
         "hack.hhastLintMode": {
           "type": "string",
@@ -217,8 +220,12 @@
             "whole-project",
             "open-files"
           ],
+          "enumDescriptions": [
+            "Lint the entire project and show all errors",
+            "Only lint the currently open files"
+          ],
           "default": null,
-          "description": "Whether to lint the whole project, or just open files"
+          "description": "Whether to lint the entire project or just the open files"
         },
         "hack.rememberedWorkspaces": {
           "type": "object",
@@ -232,6 +239,39 @@
           "default": {},
           "description": "Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered"
         },
+        "hack.remote.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run the Hack language tools on an external host"
+        },
+        "hack.remote.type": {
+          "type": "string",
+          "enum": [
+            "ssh",
+            "docker"
+          ],
+          "enumDescriptions": [
+            "Run typechecker on a remote server via SSH",
+            "Run typechecker in a Docker container"
+          ],
+          "description": "The remote connection method"
+        },
+        "hack.remote.workspacePath": {
+          "type": "string",
+          "description": "Absolute location of workspace root in the remote file system"
+        },
+        "hack.remote.ssh.host": {
+          "type": "string",
+          "description": "Address for the remote development server to connect to (in the format `[user@]hostname`)"
+        },
+        "hack.remote.ssh.flags": {
+          "type": "array",
+          "description": "Additional command line options to pass when establishing the SSH connection"
+        },
+        "hack.remote.docker.containerName": {
+          "type": "string",
+          "description": "Name of the local Docker container to run the language tools in"
+        },
         "hack.trace.server": {
           "type": "string",
           "scope": "window",
@@ -241,7 +281,7 @@
             "verbose"
           ],
           "default": "off",
-          "description": "Traces the communication between VS Code and the Hack language server."
+          "description": "Traces the communication between VS Code and the Hack & HHAST language servers"
         }
       }
     },
