@@ -2,6 +2,12 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.0.0 - 2019-03-06
+- **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section in README.md for more details.
+  - This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
+  - The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
+- Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
+
 ## v1.2.1 - 2019-02-19
 - Fixed [#40](https://github.com/slackhq/vscode-hack/issues/40) — Syntax highlighting breaks for `.hack` files that contain `<?hh`.
 

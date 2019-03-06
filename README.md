@@ -9,10 +9,10 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 ## Latest releases
 
 ## v2.0.0
-* **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
-  * This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
-  * The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
-* Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
+- **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
+  - This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
+  - The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
+- Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
 
 ## v1.2.0
 - **Support for `.hack` files** — VS Code will automatically classify files with the `.hack` extension as Hack, and these files will now syntax highlight correctly even without the `<?hh` opener. (`.hack` files are supported in HHVM 4.0.0 onward, so you will see typechecker errors if you are using them with an earlier version).
