@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.1.0 - 2019-03-08
+- **Syntax Highlighting Updates** — Editor will now recognize `arraykey`, `nonnull`, `dict`, `vec` and `keyset` as valid storage types.
+
 ## v2.0.0 - 2019-03-06
 - **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section in README.md for more details.
   - This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
