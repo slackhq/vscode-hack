@@ -585,7 +585,7 @@
           "include": "#interface"
         },
         {
-          "begin": "(?xi)\n^\\s*\n(type)\n\\s+\n([a-z0-9_]+)",
+          "begin": "(?xi)\n^\\s*\n(type|newtype)\n\\s+\n([a-z0-9_]+)",
           "beginCaptures": {
             "1": {
               "name": "storage.type.typedecl.php"
