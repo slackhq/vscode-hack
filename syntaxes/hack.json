@@ -298,7 +298,9 @@
               "begin": "(shape\\()",
               "end": "(=>)",
               "endCaptures": {
-                "1": "keyword.operator.key.php"
+                "1": {
+                  "name": "keyword.operator.key.php"
+                }
               },
               "patterns": [
                 {
