@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.2.0
+- **Syntax Highlighting Updates** — The editor now recognizes several Hack-specific storage types and some other keywords & methods. Thanks [azjezz](https://github.com/azjezz)!
+
 ## v2.0.0
 - **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
   - This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
