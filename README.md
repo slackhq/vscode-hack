@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.3.0
+- Extension will ask to reload the workspace on changes to remote configuration settings.
+
 ## v2.2.0
 - **Syntax Highlighting Updates** — The editor now recognizes several Hack-specific storage types and some other keywords & methods. Thanks [azjezz](https://github.com/azjezz)!
 

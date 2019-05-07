@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.3.0 - 2019-05-06
+- Show modal asking users to reload the workspace on changes to `hack.remote.*` configuration settings.
+
 ## v2.2.0 - 2019-04-22
 - **Syntax Highlighting Updates** — Support for `__dispose`, `__disposeAsync`, `newtype` and `async`.
 
