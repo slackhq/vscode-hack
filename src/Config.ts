@@ -34,3 +34,13 @@ export const remoteWorkspacePath = hackConfig.get<string>('remote.workspacePath'
 export const sshHost = hackConfig.get<string>('remote.ssh.host', '');
 export const sshArgs = hackConfig.get<string[]>('remote.ssh.args', []);
 export const dockerContainerName = hackConfig.get<string>('remote.docker.containerName', '');
+
+// Prompt to reload workspace on certain configuration updates
+vscode.workspace.onDidChangeConfiguration(async event => {
+    if (event.affectsConfiguration('hack.remote')) {
+        const selection = await vscode.window.showInformationMessage('Please reload your workspace to apply the latest Hack configuration changes.', { modal: true }, 'Reload');
+        if (selection === 'Reload') {
+            vscode.commands.executeCommand('workbench.action.reloadWindow');
+        }
+    }
+});

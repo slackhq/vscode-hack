@@ -30,6 +30,7 @@
     // these rules require type info
     "no-unsafe-any": false,
     "strict-boolean-expressions": false,
-    "completed-docs": false
+    "completed-docs": false,
+    "await-promise": false
   }
 }
