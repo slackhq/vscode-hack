@@ -8,20 +8,14 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.4.0
+- Debugger now supports attaching to a Unix socket instead of TCP port.
+
 ## v2.3.0
 - Extension will ask to reload the workspace on changes to remote configuration settings.
 
 ## v2.2.0
 - **Syntax Highlighting Updates** — The editor now recognizes several Hack-specific storage types and some other keywords & methods. Thanks [azjezz](https://github.com/azjezz)!
-
-## v2.0.0
-- **Remote language server connection support** — You can now connect to an external development environment for Hack typechecking, linting and all other intellisense features. Current supported methods are SSH and Docker. See the **Remote Development** section below for more details.
-  - This version may cause breaking changes to your existing setup if you were already using Docker via a custom `hack.clientPath` executable.
-  - The `hack.workspaceRootPath` config has been renamed to `hack.remote.workspacePath`.
-- Running the extension with LSP mode disabled is now unsupported. It will be fully removed in a future version of the extension.
-
-## v1.2.0
-- **Support for `.hack` files** — VS Code will automatically classify files with the `.hack` extension as Hack, and these files will now syntax highlight correctly even without the `<?hh` opener. (`.hack` files are supported in HHVM 4.0.0 onward, so you will see typechecker errors if you are using them with an earlier version).
 
 See the full list of releases and features added on the [Github releases page](https://github.com/slackhq/vscode-hack/releases) as well as the project [changelog](https://github.com/slackhq/vscode-hack/blob/master/CHANGELOG.md).
 

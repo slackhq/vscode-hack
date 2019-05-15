@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.4.0 - 2019-05-15
+- Add support for Unix domain sockets for debugger "attach" target.
+
 ## v2.3.0 - 2019-05-06
 - Show modal asking users to reload the workspace on changes to `hack.remote.*` configuration settings.
 
