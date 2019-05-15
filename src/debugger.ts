@@ -7,9 +7,6 @@
  * exposes the debugger over a TCP port. This adapter is a thin Node executable that connects
  * the two.
  *
- * The current implementation is based on Nuclide's HHVM debug adapter located at
- * https://github.com/facebook/nuclide/blob/master/pkg/nuclide-debugger-hhvm-rpc/lib/hhvmDebugger.js
- *
  */
 
 import * as child_process from 'child_process';
@@ -29,6 +26,7 @@ type DebuggerWriteCallback = (data: string) => void;
 interface HhvmAttachRequestArguments extends DebugProtocol.AttachRequestArguments {
     host?: string;
     port?: string;
+    socket?: string;
     remoteSiteRoot?: string;
     localWorkspaceRoot?: string;
     sandboxUser?: string;
@@ -92,15 +90,16 @@ class HHVMDebuggerWrapper {
         this.localWorkspaceRoot = args.localWorkspaceRoot;
         this.localWorkspaceRootPattern = args.localWorkspaceRoot ? new RegExp(this.escapeRegExp(args.localWorkspaceRoot), 'g') : undefined;
 
-        if (Number.isNaN(attachPort)) {
-            throw new Error('Invalid HHVM debug port specified.');
+        if (!args.socket && Number.isNaN(attachPort)) {
+            throw new Error('Invalid HHVM debug port or socket path.');
         }
 
         if (!args.sandboxUser || args.sandboxUser.trim() === '') {
             args.sandboxUser = os.userInfo().username;
         }
 
-        const socket = net.createConnection({ port: attachPort });
+        const socketArgs = args.socket ? { path: args.socket } : { port: attachPort};
+        const socket = net.createConnection(socketArgs);
 
         socket.on('data', chunk => {
             this.processDebuggerMessage(chunk);

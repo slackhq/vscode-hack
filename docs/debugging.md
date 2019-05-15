@@ -20,14 +20,18 @@ You will need to set breakpoints before script execution to be able to hit them.
 Start your HHVM server with the following additional configuration strings in server.ini or CLI args:
 
 `hhvm.debugger.vs_debug_enable=1` to enable the debugging extension  
-`hhvm.debugger.vs_debug_listen_port=<port>` to optionally change the port the debugger listens on (default: `8999`)  
+`hhvm.debugger.vs_debug_listen_port=<port>` to optionally change the port the debugger listens on (default: `8999`)
+`hhvm.debugger.vs_debug_domain_socket_path=<socket file path>` to optionally expose the debugger interface over a unix socket rather than a TCP port
 
 E.g. `hhvm -m server -p 8080 -d hhvm.debugger.vs_debug_enable=1 -d hhvm.debugger.vs_debug_listen_port=1234`
+
+You can also use the `--mode vsdebug`, `--vsDebugPort` and `--vsDebugDomainSocketPath` command line arguments for the same purpose.
 
 Add a new HHVM `attach` config to `.vscode/launch.json` and configure as needed:
 
 `host`: [Optional] The remote HHVM host (default: `localhost`)  
 `port`: [Optional] The server debugging port, if changed in HHVM config (default: `8999`) 
+`socket`: [Optional] Path to a Unix domain socket path. If specified, the debugger will attach to this socket rather than a TCP port.
 
 If the site root on the server is different from your local workspace, set the following to automatically map them: 
 

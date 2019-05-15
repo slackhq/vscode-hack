@@ -106,6 +106,10 @@
                 "description": "Debug port to attach to (default: 8999)",
                 "default": 8999
               },
+              "socket": {
+                "type": "string",
+                "description": "Path to the Unix domain socket to attach to"
+              },
               "remoteSiteRoot": {
                 "type": "string",
                 "description": "Absolute path to workspace root on the remote server, to map to local workspace",
