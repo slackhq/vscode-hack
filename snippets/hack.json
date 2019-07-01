@@ -58,7 +58,7 @@
     },
     "elseif …": {
       "prefix": "elseif",
-      "body": "elseif (${1:condition}) {\n\t${0:# code...}\n}"
+      "body": "else if (${1:condition}) {\n\t${0:# code...}\n}"
     },
     "for …": {
       "prefix": "for",
