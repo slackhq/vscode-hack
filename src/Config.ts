@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 const hackConfig = vscode.workspace.getConfiguration('hack');
 
 export const clientPath = hackConfig.get<string>('clientPath') || 'hh_client';
-export const enableCoverageCheck = hackConfig.get<boolean>('enableConverageCheck', true);
+export const enableCoverageCheck = hackConfig.get<boolean>('enableCoverageCheck', true);
 export const useLanguageServer = hackConfig.get<boolean>('useLanguageServer', true);
 export const useHhast = hackConfig.get<boolean>('useHhast', true);
 export const hhastLintMode: 'whole-project' | 'open-files' = hackConfig.get('hhastLintMode', 'whole-project');
