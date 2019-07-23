@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.4.1 - 2019-07-23
+- Bug fixes in coverage checker
+- Syntax highlighting updates
+
 ## v2.4.0 - 2019-05-15
 - Add support for Unix domain sockets for debugger "attach" target.
 
