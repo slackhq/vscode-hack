@@ -36,21 +36,21 @@ export class HackCoverageChecker {
 
     public async start(context: vscode.ExtensionContext) {
 
-        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(doc => this.check(doc)));
-        context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(editor => {
-            this.hhvmCoverDiag.clear();
+        context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(async doc => this.check(doc)));
+        context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(async editor => {
             if (editor) {
-                this.check(editor.document);
+                await this.check(editor.document);
             } else {
+                this.hhvmCoverDiag.clear();
                 this.coverageStatus.hide();
             }
         }));
-        context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', () => { this.toggle(); }));
+        context.subscriptions.push(vscode.commands.registerCommand('hack.toggleCoverageHighlight', async () => this.toggle()));
         context.subscriptions.push(this.hhvmCoverDiag, this.coverageStatus);
 
         // Check the active file, if any
         if (vscode.window.activeTextEditor) {
-            this.check(vscode.window.activeTextEditor.document);
+            await this.check(vscode.window.activeTextEditor.document);
         }
     }
 
@@ -59,16 +59,17 @@ export class HackCoverageChecker {
             this.hhvmCoverDiag.clear();
             this.visible = false;
         } else {
+            this.visible = true;
             const editor = vscode.window.activeTextEditor;
             if (editor) {
-                this.check(editor.document);
+                await this.check(editor.document);
             }
-            this.visible = true;
         }
     }
 
     private async check(document: vscode.TextDocument) {
-        if (document.languageId !== 'hack' && document.uri.scheme !== 'file') {
+        this.hhvmCoverDiag.clear();
+        if (document.languageId !== 'hack' || document.uri.scheme !== 'file') {
             this.coverageStatus.hide();
             return;
         }
@@ -92,7 +93,7 @@ export class HackCoverageChecker {
         if (this.visible && coverageResponse.uncoveredRanges) {
             const diagnostics: vscode.Diagnostic[] = [];
             coverageResponse.uncoveredRanges.forEach(uncoveredRange => {
-                const diagnostic = new vscode.Diagnostic(uncoveredRange.range, uncoveredRange.message, vscode.DiagnosticSeverity.Information);
+                const diagnostic = new vscode.Diagnostic(uncoveredRange.range, uncoveredRange.message || coverageResponse.defaultMessage, vscode.DiagnosticSeverity.Information);
                 diagnostic.source = 'Type Coverage';
                 diagnostics.push(diagnostic);
             });
