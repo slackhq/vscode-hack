@@ -68,7 +68,7 @@ export class HackCoverageChecker {
     }
 
     private async check(document: vscode.TextDocument) {
-        if (document.languageId !== 'hack' && document.uri.scheme !== 'file') {
+        if (document.languageId !== 'hack' || document.uri.scheme !== 'file') {
             this.coverageStatus.hide();
             return;
         }
