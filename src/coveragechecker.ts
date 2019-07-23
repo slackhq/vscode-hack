@@ -76,7 +76,7 @@ export class HackCoverageChecker {
 
         let coverageResponse: CoverageResponse;
         try {
-            coverageResponse = await this.languageClient.sendRequest(
+            coverageResponse = <CoverageResponse>await this.languageClient.sendRequest(
                 'textDocument/typeCoverage',
                 { textDocument: this.languageClient.code2ProtocolConverter.asTextDocumentIdentifier(document) }
             );
