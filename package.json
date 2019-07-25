@@ -3,7 +3,7 @@
   "version": "2.4.1",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.25.0"
+    "vscode": "^1.30.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -308,18 +308,17 @@
     "lint": "tslint --force -p ."
   },
   "dependencies": {
-    "vscode-debugadapter": "^1.29.0",
-    "vscode-debugprotocol": "^1.29.0",
-    "vscode-languageclient": "^4.4.0"
+    "vscode-debugadapter": "^1.35.0",
+    "vscode-debugprotocol": "^1.35.0",
+    "vscode-languageclient": "^5.2.1"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.1",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^8.0.53",
-    "cson": "^5.1.0",
-    "license-checker": "^24.0.1",
-    "tslint": "^5.10.0",
-    "tslint-microsoft-contrib": "^5.0.3",
+    "license-checker": "^25.0.1",
+    "tslint": "^5.18.0",
+    "tslint-microsoft-contrib": "^6.2.0",
     "typescript": "^2.9.1",
-    "vscode": "^1.1.33"
+    "vscode": "^1.1.35"
   }
 }
