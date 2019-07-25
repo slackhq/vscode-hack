@@ -24,7 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
     services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
 
     if (LSPHackTypeChecker.IS_SUPPORTED(version) && config.useLanguageServer) {
-        services.push((new LSPHackTypeChecker(context)).run());
+        services.push((new LSPHackTypeChecker(context, version)).run());
     } else {
         services.push((new LegacyHackTypeChecker(context)).run());
     }

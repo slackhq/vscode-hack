@@ -3,7 +3,7 @@
  */
 
 import * as vscode from 'vscode';
-import { HandleDiagnosticsSignature, LanguageClient, RevealOutputChannelOn } from 'vscode-languageclient';
+import { HandleDiagnosticsSignature, LanguageClient, RevealOutputChannelOn, LanguageClientOptions, ServerOptions } from 'vscode-languageclient';
 import * as config from './Config';
 import { HackCoverageChecker } from './coveragechecker';
 import * as remote from './remote';
@@ -12,9 +12,14 @@ import * as utils from './Utils';
 
 export class LSPHackTypeChecker {
   private context: vscode.ExtensionContext;
+  private versionText: string;
+  private status: vscode.StatusBarItem;
 
-  constructor(context: vscode.ExtensionContext) {
+  constructor(context: vscode.ExtensionContext, version: hack.Version) {
     this.context = context;
+    this.versionText = this.getVersionText(version);
+    this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
+    context.subscriptions.push(this.status);
   }
 
   public static IS_SUPPORTED(version: hack.Version): boolean {
@@ -24,26 +29,44 @@ export class LSPHackTypeChecker {
   public async run(): Promise<void> {
     const context = this.context;
 
-    const serverOptions = {
+    this.status.text = "$(alert) " + this.versionText;
+    this.status.tooltip = "hh_server is not running for this workspace.";
+    this.status.show();
+
+    const serverOptions: ServerOptions = {
       command: remote.getCommand(config.clientPath),
       args: remote.getArgs(config.clientPath, ['lsp', '--from', 'vscode-hack'])
     };
 
-    const clientOptions =  {
-        documentSelector: [{ language: 'hack', scheme: 'file' }],
-        initializationOptions: { useTextEditAutocomplete: true },
-        uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
-        middleware: {
-          handleDiagnostics: this.handleDiagnostics
-        },
-        // Hack returns errors if commands fail due to syntax errors. Don't
-        // automatically switch to the Output pane in this case.
-        revealOutputChannelOn: RevealOutputChannelOn.Never
+    const clientOptions: LanguageClientOptions = {
+      documentSelector: [{ language: 'hack', scheme: 'file' }],
+      initializationOptions: { useTextEditAutocomplete: true },
+      uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
+      middleware: {
+        handleDiagnostics: this.handleDiagnostics
+      },
+      // Hack returns errors if commands fail due to syntax errors. Don't
+      // automatically switch to the Output pane in this case.
+      revealOutputChannelOn: RevealOutputChannelOn.Never
     };
 
     const languageClient = new LanguageClient('hack', 'Hack Language Server', serverOptions, clientOptions);
-
     languageClient.onReady().then(async () => {
+      languageClient.onRequest("window/showStatus", params => {
+        if (params.shortMessage) {
+          this.status.text = this.versionText + " " + params.shortMessage;
+        } else {
+          this.status.text = this.versionText
+        }
+        this.status.tooltip = params.message || "";
+
+        if (params.type === 1 || params.type === 2) {
+          this.status.text = "$(alert) " + this.status.text;
+        }
+
+        return {};
+      });
+
       if (config.enableCoverageCheck && languageClient.initializeResult && (<any>languageClient.initializeResult.capabilities).typeCoverageProvider) {
         await new HackCoverageChecker(languageClient).start(context);
       }
@@ -80,5 +103,19 @@ export class LSPHackTypeChecker {
       d.message = `${kind}[${d.code}] ${d.message}`;
       return d;
     }));
+  }
+
+  private getVersionText(version: hack.Version): string {
+    const hhvmVersion = version.commit.split('-').pop();
+    let statusText = "";
+    if (hhvmVersion) {
+      statusText = `HHVM ${hhvmVersion}`;
+      if (config.remoteEnabled && config.remoteType === 'ssh') {
+        statusText += " (Remote)";
+      } else if (config.remoteEnabled && config.remoteType === 'docker') {
+        statusText += " (Docker)";
+      }
+    }
+    return statusText;
   }
 }
