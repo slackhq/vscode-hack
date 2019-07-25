@@ -9,6 +9,7 @@ import { HackCoverageChecker } from './coveragechecker';
 import * as remote from './remote';
 import * as hack from './types/hack';
 import * as utils from './Utils';
+import { ShowStatusRequest } from './types/lsp';
 
 export class LSPHackTypeChecker {
   private context: vscode.ExtensionContext;
@@ -52,7 +53,7 @@ export class LSPHackTypeChecker {
 
     const languageClient = new LanguageClient('hack', 'Hack Language Server', serverOptions, clientOptions);
     languageClient.onReady().then(async () => {
-      languageClient.onRequest("window/showStatus", params => {
+      languageClient.onRequest("window/showStatus", (params: ShowStatusRequest) => {
         if (params.shortMessage) {
           this.status.text = this.versionText + " " + params.shortMessage;
         } else {

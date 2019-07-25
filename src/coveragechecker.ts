@@ -4,15 +4,7 @@
 
 import * as vscode from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
-
-type CoverageResponse = {
-    coveredPercent: number;
-    uncoveredRanges: {
-        message: string;
-        range: vscode.Range;
-    }[];
-    defaultMessage: string;
-};
+import { TypeCoverageResponse } from './types/lsp';
 
 export class HackCoverageChecker {
 
@@ -74,9 +66,9 @@ export class HackCoverageChecker {
             return;
         }
 
-        let coverageResponse: CoverageResponse;
+        let coverageResponse: TypeCoverageResponse;
         try {
-            coverageResponse = <CoverageResponse>await this.languageClient.sendRequest(
+            coverageResponse = await this.languageClient.sendRequest<TypeCoverageResponse>(
                 'textDocument/typeCoverage',
                 { textDocument: this.languageClient.code2ProtocolConverter.asTextDocumentIdentifier(document) }
             );
