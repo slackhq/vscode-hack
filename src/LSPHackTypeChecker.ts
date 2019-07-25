@@ -107,14 +107,11 @@ export class LSPHackTypeChecker {
 
   private getVersionText(version: hack.Version): string {
     const hhvmVersion = version.commit.split('-').pop();
-    let statusText = "";
-    if (hhvmVersion) {
-      statusText = `HHVM ${hhvmVersion}`;
-      if (config.remoteEnabled && config.remoteType === 'ssh') {
-        statusText += " (Remote)";
-      } else if (config.remoteEnabled && config.remoteType === 'docker') {
-        statusText += " (Docker)";
-      }
+    let statusText = hhvmVersion ? `HHVM ${hhvmVersion}` : "HHVM";
+    if (config.remoteEnabled && config.remoteType === 'ssh') {
+      statusText += " (Remote)";
+    } else if (config.remoteEnabled && config.remoteType === 'docker') {
+      statusText += " (Docker)";
     }
     return statusText;
   }
