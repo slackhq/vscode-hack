@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.5.0 - 2019-07-25
+- Added a connection indicator in the editor status bar which shows HHVM version & LSP status/errors. This should make it easier to debug problems in IDE functionality related to hh_server crashes or restarts.
+
 ## v2.4.1 - 2019-07-23
 - Bug fixes in coverage checker
 - Syntax highlighting updates

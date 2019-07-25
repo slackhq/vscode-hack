@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.5.0
+- New connection indicator in the editor status bar which shows HHVM version & LSP status/errors. This should make it easier to debug problems in IDE functionality related to hh_server crashes or restarts.
+
 ## v2.4.0
 - Debugger now supports attaching to a Unix socket instead of TCP port.
 
