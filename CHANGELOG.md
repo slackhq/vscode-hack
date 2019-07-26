@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.5.1 - 2019-07-26
+- Fix — in later HHVM versions the LSP doesn't send over connection status, so hide the status bar indicator for those cases.
+
 ## v2.5.0 - 2019-07-25
 - Added a connection indicator in the editor status bar which shows HHVM version & LSP status/errors. This should make it easier to debug problems in IDE functionality related to hh_server crashes or restarts.
 
