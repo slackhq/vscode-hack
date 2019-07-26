@@ -30,9 +30,9 @@ export class LSPHackTypeChecker {
   public async run(): Promise<void> {
     const context = this.context;
 
-    this.status.text = "$(alert) " + this.versionText;
-    this.status.tooltip = "hh_server is not running for this workspace.";
-    this.status.show();
+    // this.status.text = "$(alert) " + this.versionText;
+    // this.status.tooltip = "hh_server is not running for this workspace.";
+    // this.status.show();
 
     const serverOptions: ServerOptions = {
       command: remote.getCommand(config.clientPath),
@@ -65,6 +65,7 @@ export class LSPHackTypeChecker {
           this.status.text = "$(alert) " + this.status.text;
         }
 
+        this.status.show();
         return {};
       });
 
