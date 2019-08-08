@@ -7,7 +7,12 @@ import * as vscode from 'vscode';
 
 const hackConfig = vscode.workspace.getConfiguration('hack');
 
-export const clientPath = hackConfig.get<string>('clientPath') || 'hh_client';
+// tslint:disable-next-line:no-non-null-assertion
+export const localWorkspacePath = vscode.workspace.workspaceFolders![0].uri.fsPath;
+
+export let clientPath = hackConfig.get<string>('clientPath') || 'hh_client';
+clientPath = clientPath.replace('${workspaceFolder}', localWorkspacePath);
+
 export const enableCoverageCheck = hackConfig.get<boolean>('enableCoverageCheck', true);
 export const useLanguageServer = hackConfig.get<boolean>('useLanguageServer', true);
 export const useHhast = hackConfig.get<boolean>('useHhast', true);
@@ -24,9 +29,6 @@ export async function rememberHhastWorkspace(newWorkspace: string, trust: 'trust
     remembered[newWorkspace] = trust;
     await hackConfig.update('rememberedWorkspaces', remembered, vscode.ConfigurationTarget.Global);
 }
-
-// tslint:disable-next-line:no-non-null-assertion
-export const localWorkspacePath = vscode.workspace.workspaceFolders![0].uri.fsPath;
 
 export const remoteEnabled = hackConfig.get<boolean>('remote.enabled', false);
 export const remoteType: 'ssh' | 'docker' | undefined = hackConfig.get('remote.type', undefined);
