@@ -8,6 +8,7 @@ import { LegacyHackTypeChecker } from './LegacyHackTypeChecker';
 import { LSPHackTypeChecker } from './LSPHackTypeChecker';
 import { LSPHHASTLint } from './LSPHHASTLint';
 import * as hh_client from './proxy';
+import { HackTestDataProvider } from './TestRunner';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -28,6 +29,8 @@ export async function activate(context: vscode.ExtensionContext) {
     } else {
         services.push((new LegacyHackTypeChecker(context)).run());
     }
+
+    context.subscriptions.push(vscode.window.registerTreeDataProvider('hacktest', new HackTestDataProvider()));
 
     await Promise.all(services);
 }

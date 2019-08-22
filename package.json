@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "2.5.1",
+  "version": "3.0.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.30.0"
@@ -190,7 +190,7 @@
         },
         "hack.enableCoverageCheck": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
         },
         "hack.useLanguageServer": {
@@ -292,9 +292,99 @@
     "commands": [
       {
         "command": "hack.toggleCoverageHighlight",
-        "title": "Hack: Toggle Coverage Highlight"
+        "title": "Toggle Coverage Highlight",
+        "category": "Hack"
+      },
+      {
+        "command": "hack.refreshTestView",
+        "title": "Refresh",
+        "category": "Hack Test",
+        "icon": {
+          "dark": "images/dark/refresh.svg",
+          "light": "images/light/refresh.svg"
+        }
+      },
+      {
+        "command": "hack.runAllTests",
+        "title": "Run All",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.runTest",
+        "title": "Run",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.debugTest",
+        "title": "Debug",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByClass",
+        "title": "Group by Class",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByPath",
+        "title": "Group by Path",
+        "category": "Hack Test"
+      },
+      {
+        "command": "hack.groupTestsByResult",
+        "title": "Group by Result",
+        "category": "Hack Test"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == hacktest",
+          "command": "hack.refreshTestView",
+          "group": "navigation"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.runAllTests",
+          "group": "navigation"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByClass"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByPath"
+        },
+        {
+          "when": "view == hacktest",
+          "command": "hack.groupTestsByResult"
+        }
+      ],
+      "view/item/context": [
+        {
+          "when": "view == hacktest && viewItem == class",
+          "command": "hack.runAllTests"
+        },
+        {
+          "when": "view == hacktest && viewItem == test",
+          "command": "hack.runTest",
+          "group": "inline"
+        },
+        {
+          "when": "view == hacktest && viewItem == test",
+          "command": "hack.debugTest",
+          "group": "inline"
+        }
+      ]
+    },
+    "views": {
+      "test": [
+        {
+          "id": "hacktest",
+          "name": "Hack Test"
+        }
+      ]
+    }
   },
   "activationEvents": [
     "workspaceContains:.hhconfig"
