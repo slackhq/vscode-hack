@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.6.0 - 2019-09-16
+- Config values now support the `${workspaceFolder}` variable.
+
 ## v2.5.1 - 2019-07-26
 - Fix — in later HHVM versions the LSP doesn't send over connection status, so hide the status bar indicator for those cases.
 
