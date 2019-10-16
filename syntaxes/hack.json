@@ -1,11 +1,11 @@
 {
-  "scopeName": "text.html.hack",
-  "name": "HACK",
+  "scopeName": "source.hack",
+  "name": "Hack",
   "fileTypes": [
     "hh",
-    "php"
+    "php",
+    "hack"
   ],
-  "firstLineMatch": "<?hh",
   "foldingStartMarker": "(/\\*|\\{\\s*$|<<<HTML)",
   "foldingStopMarker": "(\\*/|^\\s*\\}|^HTML;)",
   "injections": {
@@ -436,7 +436,7 @@
           "name": "storage.type.array.php"
         },
         {
-          "match": "\\b(?:bool|int|float|string|array|resource|mixed)\\b",
+          "match": "\\b(?:bool|int|float|string|array|resource|mixed|arraykey|nonnull|dict|vec|keyset)\\b",
           "name": "storage.type.php"
         },
         {
@@ -758,7 +758,7 @@
           "include": "#interface"
         },
         {
-          "begin": "(?xi)\n^\\s*\n(type)\n\\s+\n([a-z0-9_]+)",
+          "begin": "(?xi)\n^\\s*\n(type|newtype)\n\\s+\n([a-z0-9_]+)",
           "beginCaptures": {
             "1": {
               "name": "storage.type.typedecl.php"
@@ -1125,7 +1125,7 @@
           ]
         },
         {
-          "begin": "(?x)\n\\s*((?:(?:final|abstract|async|public|private|protected|static)\\s+)*)\n(function)\n(?:\\s+|(\\s*&\\s*))\n(?:\n  (__(?:call|construct|destruct|get|set|isset|unset|tostring|clone|set_state|sleep|wakeup|autoload|invoke|callStatic)(?=[^a-zA-Z0-9_\\x7f-\\xff]))\n  |\n  ([a-zA-Z0-9_]+)\n)",
+          "begin": "(?x)\n\\s*((?:(?:final|abstract|async|public|private|protected|static)\\s+)*)\n(function)\n(?:\\s+|(\\s*&\\s*))\n(?:\n  (__(?:call|construct|destruct|get|set|isset|unset|tostring|clone|set_state|sleep|wakeup|autoload|invoke|callStatic|dispose|disposeAsync)(?=[^a-zA-Z0-9_\\x7f-\\xff]))\n  |\n  ([a-zA-Z0-9_]+)\n)",
           "beginCaptures": {
             "1": {
               "patterns": [
@@ -1274,10 +1274,10 @@
               "name": "storage.type.php"
             }
           },
-          "match": "(?i)\\s*\\(\\s*(array|real|double|float|int(eger)?|bool(ean)?|string|object|binary|unset)\\s*\\)"
+          "match": "(?i)\\s*\\(\\s*(array|real|double|float|int(eger)?|bool(ean)?|string|object|binary|unset|arraykey|nonnull|dict|vec|keyset)\\s*\\)"
         },
         {
-          "match": "(?i)\\b(array|real|double|float|int(eger)?|bool(ean)?|string|class|clone|var|function|interface|trait|parent|self|object)\\b",
+          "match": "(?i)\\b(array|real|double|float|int(eger)?|bool(ean)?|string|class|clone|var|function|interface|trait|parent|self|object|arraykey|nonnull|dict|vec|keyset)\\b",
           "name": "storage.type.php"
         },
         {
