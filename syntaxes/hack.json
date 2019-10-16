@@ -8,129 +8,12 @@
   ],
   "foldingStartMarker": "(/\\*|\\{\\s*$|<<<HTML)",
   "foldingStopMarker": "(\\*/|^\\s*\\}|^HTML;)",
-  "injections": {
-    "text.html.hack - (meta.embedded | meta.tag), L:text.html.hack meta.tag, L:source.js.embedded.html": {
-      "patterns": [
-        {
-          "begin": "(^\\s*)(?=<\\?(?![^?]*\\?>))",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.whitespace.embedded.leading.php"
-            }
-          },
-          "end": "(?!\\G)(\\s*$\\n)?",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.whitespace.embedded.trailing.php"
-            }
-          },
-          "patterns": [
-            {
-              "begin": "<\\?(?i:php|=)?",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.section.embedded.begin.php"
-                }
-              },
-              "contentName": "source.hack",
-              "end": "(\\?)>",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.section.embedded.end.php"
-                },
-                "1": {
-                  "name": "source.hack"
-                }
-              },
-              "name": "meta.embedded.block.php",
-              "patterns": [
-                {
-                  "include": "#language"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "begin": "<\\?(?i:php|=)?(?![^?]*\\?>)",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.section.embedded.begin.php"
-            }
-          },
-          "contentName": "source.hack",
-          "end": "(\\?)>",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.section.embedded.end.php"
-            },
-            "1": {
-              "name": "source.hack"
-            }
-          },
-          "name": "meta.embedded.block.php",
-          "patterns": [
-            {
-              "include": "#language"
-            }
-          ]
-        },
-        {
-          "begin": "<\\?(?i:php|=)?",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.section.embedded.begin.php"
-            }
-          },
-          "end": ">",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.section.embedded.end.php"
-            }
-          },
-          "name": "meta.embedded.line.php",
-          "patterns": [
-            {
-              "captures": {
-                "1": {
-                  "name": "source.hack"
-                },
-                "2": {
-                  "name": "punctuation.section.embedded.end.php"
-                },
-                "3": {
-                  "name": "source.hack"
-                }
-              },
-              "match": "\\G(\\s*)((\\?))(?=>)",
-              "name": "meta.special.empty-tag.php"
-            },
-            {
-              "begin": "\\G",
-              "contentName": "source.hack",
-              "end": "(\\?)(?=>)",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.section.embedded.end.php"
-                },
-                "1": {
-                  "name": "source.hack"
-                }
-              },
-              "patterns": [
-                {
-                  "include": "#language"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  },
   "patterns": [
     {
       "include": "text.html.basic"
+    },
+    {
+      "include": "#language"
     }
   ],
   "repository": {
@@ -1125,12 +1008,12 @@
           ]
         },
         {
-          "begin": "(?x)\n\\s*((?:(?:final|abstract|async|public|private|protected|static)\\s+)*)\n(function)\n(?:\\s+|(\\s*&\\s*))\n(?:\n  (__(?:call|construct|destruct|get|set|isset|unset|tostring|clone|set_state|sleep|wakeup|autoload|invoke|callStatic|dispose|disposeAsync)(?=[^a-zA-Z0-9_\\x7f-\\xff]))\n  |\n  ([a-zA-Z0-9_]+)\n)",
+          "begin": "(?x)\n\\s*((?:(?:final|abstract|public|private|protected|static|async)\\s+)*)\n(function)\n(?:\\s+|(\\s*&\\s*))\n(?:\n  (__(?:call|construct|destruct|get|set|isset|unset|tostring|clone|set_state|sleep|wakeup|autoload|invoke|callStatic|dispose|disposeAsync)(?=[^a-zA-Z0-9_\\x7f-\\xff]))\n  |\n  ([a-zA-Z0-9_]+)\n)",
           "beginCaptures": {
             "1": {
               "patterns": [
                 {
-                  "match": "final|abstract|async|public|private|protected|static",
+                  "match": "final|abstract|public|private|protected|static|async",
                   "name": "storage.modifier.php"
                 }
               ]
@@ -2348,7 +2231,7 @@
           "name": "support.function.url.php"
         },
         {
-          "match": "(?i)\\b(s(trval|e(ttype|rialize))|i(s(set|_(s(calar|tring)|nu(ll|meric)|callable|int(eger)?|object|double|float|long|array|re(source|al)|bool))|ntval|mport_request_variables)|d(oubleval|ebug_zval_dump)|unse(t|rialize)|print_r|empty|var_(dump|export)|floatval|get(type|_(defined_vars|resource_type))|boolval)\\b",
+          "match": "(?i)\\b(s(trval|e(ttype|rialize))|i(s(set|_(s(calar|tring)|nu(ll|meric)|callable|int(eger)?|object|double|float|long|array|re(source|al)|bool|arraykey|nonnull|dict|vec|keyset))|ntval|mport_request_variables)|d(oubleval|ebug_zval_dump)|unse(t|rialize)|print_r|empty|var_(dump|export)|floatval|get(type|_(defined_vars|resource_type))|boolval)\\b",
           "name": "support.function.var.php"
         },
         {
