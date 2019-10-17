@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.7.0
+- Lots of syntax highlighting updates. Thanks [tspence](https://github.com/tspence)!
+
 ## v2.5.0
 - New connection indicator in the editor status bar which shows HHVM version & LSP status/errors. This should make it easier to debug problems in IDE functionality related to hh_server crashes or restarts.
 

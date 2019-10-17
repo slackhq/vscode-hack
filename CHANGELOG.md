@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.7.0 - 2019-10-17
+- Lots of syntax highlighting updates. Thanks [tspence](https://github.com/tspence)!
+
 ## v2.6.0 - 2019-09-16
 - Config values now support the `${workspaceFolder}` variable.
 
