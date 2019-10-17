@@ -171,6 +171,53 @@
         }
       ]
     },
+    "attributes": {
+      "patterns": [
+        {
+          "begin": "(<<)(?!<)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.attributes.php"
+            }
+          },
+          "end": "(>>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.attributes.php"
+            }
+          },
+          "name": "meta.attributes.php",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "match": "([A-Za-z_][A-Za-z0-9_]*)",
+              "name": "entity.other.attribute-name.php"
+            },
+            {
+              "begin": "(\\()",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.definition.parameters.begin.php"
+                }
+              },
+              "end": "(\\))",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.definition.parameters.end.php"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#language"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     "constants": {
       "patterns": [
         {
@@ -290,29 +337,21 @@
           ]
         },
         {
-          "begin": "(?=shape\\()",
-          "end": "\\)",
+          "begin": "(shape\\()",
+          "end": "((,|\\.\\.\\.)?\\s*\\))",
+          "endCaptures": {
+            "1": "keyword.operator.key.php"
+          },
           "name": "storage.type.shape.php",
           "patterns": [
             {
-              "begin": "(shape\\()",
-              "end": "(=>)",
-              "endCaptures": {
-                "1": {
-                  "name": "keyword.operator.key.php"
-                }
-              },
-              "patterns": [
-                {
-                  "include": "#strings"
-                },
-                {
-                  "include": "#constants"
-                }
-              ]
+              "include": "#type-annotation"
             },
             {
-              "include": "#type-annotation"
+              "include": "#strings"
+            },
+            {
+              "include": "#constants"
             }
           ]
         },
@@ -327,6 +366,9 @@
         },
         {
           "include": "#class-name"
+        },
+        {
+          "include": "#comments"
         }
       ]
     },
@@ -334,6 +376,9 @@
       "patterns": [
         {
           "include": "#comments"
+        },
+        {
+          "include": "#attributes"
         },
         {
           "include": "#type-annotation"
@@ -581,6 +626,15 @@
           "include": "#comments"
         },
         {
+          "begin": "(?=^\\s*<<)",
+          "end": "(?<=>>)",
+          "patterns": [
+            {
+              "include": "#attributes"
+            }
+          ]
+        },
+        {
           "include": "#xhp"
         },
         {
@@ -613,6 +667,9 @@
             {
               "match": "(=)",
               "name": "keyword.operator.assignment.php"
+            },
+            {
+              "include": "#type-annotation"
             }
           ]
         },
@@ -829,28 +886,51 @@
           ]
         },
         {
-          "begin": "\\b(catch)\\b\\s*\\(\\s*",
+          "begin": "\\b(catch)\\s*(\\()",
           "beginCaptures": {
             "1": {
               "name": "keyword.control.exception.catch.php"
-            }
-          },
-          "end": "([A-Za-z_][A-Za-z_0-9]*)\\s*((\\$+)[a-zA-Z_\\x{7f}-\\x{ff}][a-zA-Z0-9_\\x{7f}-\\x{ff}]*)\\s*\\)",
-          "endCaptures": {
-            "1": {
-              "name": "support.class.exception.php"
             },
             "2": {
-              "name": "variable.other.php"
-            },
-            "3": {
-              "name": "punctuation.definition.variable.php"
+              "name": "punctuation.definition.parameters.begin.bracket.round.php"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.parameters.end.bracket.round.php"
             }
           },
           "name": "meta.catch.php",
           "patterns": [
             {
               "include": "#namespace"
+            },
+            {
+              "match": "(?xi)\n([a-z_\\x{7f}-\\x{7fffffff}][a-z0-9_\\x{7f}-\\x{7fffffff}]*)                 # Exception class\n((?:\\s*\\|\\s*[a-z_\\x{7f}-\\x{7fffffff}][a-z0-9_\\x{7f}-\\x{7fffffff}]*)*) # Optional additional exception classes\n\\s*\n((\\$+)[a-z_\\x{7f}-\\x{7fffffff}][a-z0-9_\\x{7f}-\\x{7fffffff}]*)           # Variable",
+              "captures": {
+                "1": {
+                  "name": "support.class.exception.php"
+                },
+                "2": {
+                  "patterns": [
+                    {
+                      "match": "(?i)[a-z_\\x{7f}-\\x{7fffffff}][a-z0-9_\\x{7f}-\\x{7fffffff}]*",
+                      "name": "support.class.exception.php"
+                    },
+                    {
+                      "match": "\\|",
+                      "name": "punctuation.separator.delimiter.php"
+                    }
+                  ]
+                },
+                "3": {
+                  "name": "variable.other.php"
+                },
+                "4": {
+                  "name": "punctuation.definition.variable.php"
+                }
+              }
             }
           ]
         },
@@ -1152,8 +1232,12 @@
           "name": "keyword.operator.arithmetic.php"
         },
         {
-          "match": "(?i)(!|&&|\\|\\|)|\\b(and|or|xor|as)\\b",
+          "match": "(?i)(!|&&|\\|\\|)|\\b(and|or|xor)\\b",
           "name": "keyword.operator.logical.php"
+        },
+        {
+          "match": "(?i)\\b(is|as)\\b",
+          "name": "keyword.operator.type.php"
         },
         {
           "include": "#function-call"
@@ -1254,18 +1338,22 @@
       ]
     },
     "namespace": {
-      "begin": "(?i)(?:(namespace)|[a-z0-9_]+)?(\\\\)(?=.*?[^a-z_0-9\\\\])",
+      "begin": "(?i)((namespace)|[a-z0-9_]+)?(\\\\)(?=.*?[^a-z_0-9\\\\])",
       "beginCaptures": {
         "1": {
-          "name": "variable.language.namespace.php"
+          "name": "entity.name.type.namespace.php"
         },
-        "2": {
+        "3": {
           "name": "punctuation.separator.inheritance.php"
         }
       },
       "end": "(?i)(?=[a-z0-9_]*[^a-z0-9_\\\\])",
       "name": "support.other.namespace.php",
       "patterns": [
+        {
+          "name": "entity.name.type.namespace.php",
+          "match": "(?i)[a-z0-9_]+(?=\\\\)"
+        },
         {
           "captures": {
             "1": {
@@ -1576,6 +1664,11 @@
       "name": "string.quoted.double.sql.php",
       "patterns": [
         {
+          "comment": "Open parens cause the next escaped character to not be captured as an\nescape character. Example: $x = \"SELECT (\")\";",
+          "match": "\\(",
+          "name": "punctuation.definition.parameters.begin.bracket.round.php"
+        },
+        {
           "match": "#(\\\\\"|[^\"])*(?=\"|$\\n?)",
           "name": "comment.line.number-sign.sql"
         },
@@ -1641,6 +1734,11 @@
       },
       "name": "string.quoted.single.sql.php",
       "patterns": [
+        {
+          "comment": "Open parens cause the next escaped character to not be captured as an\nescape character. Example: $x = 'SELECT (')';",
+          "match": "\\(",
+          "name": "punctuation.definition.parameters.begin.bracket.round.php"
+        },
         {
           "match": "#(\\\\'|[^'])*(?='|$\\n?)",
           "name": "comment.line.number-sign.sql"
@@ -2173,6 +2271,11 @@
     "user-function-call": {
       "begin": "(?i)(?=[a-z_0-9\\\\]*[a-z_][a-z0-9_]*\\s*\\()",
       "end": "(?i)[a-z_][a-z_0-9]*(?=\\s*\\()",
+      "endCaptures": {
+        "0": {
+          "name": "entity.name.function.php"
+        }
+      },
       "name": "meta.function-call.php",
       "patterns": [
         {
@@ -2353,6 +2456,9 @@
               "include": "#xhp-tag-termination"
             },
             {
+              "include": "#xhp-html-comments"
+            },
+            {
               "include": "#xhp-tag-attributes"
             }
           ]
@@ -2363,7 +2469,7 @@
       "patterns": [
         {
           "comment": "uses non consuming search for </ in </tag>",
-          "begin": "(>)",
+          "begin": "(?<!--)(>)",
           "end": "(</)",
           "beginCaptures": {
             "0": {
