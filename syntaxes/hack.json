@@ -340,7 +340,9 @@
           "begin": "(shape\\()",
           "end": "((,|\\.\\.\\.)?\\s*\\))",
           "endCaptures": {
-            "1": "keyword.operator.key.php"
+            "1": {
+              "name": "keyword.operator.key.php"
+            }
           },
           "name": "storage.type.shape.php",
           "patterns": [
