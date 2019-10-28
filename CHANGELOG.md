@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.7.1 - 2019-10-28
+- Syntax highlighting fixes. Thanks [lildude](https://github.com/lildude)!
+
 ## v2.7.0 - 2019-10-17
 - Lots of syntax highlighting updates. Thanks [tspence](https://github.com/tspence)!
 
