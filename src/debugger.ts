@@ -39,6 +39,12 @@ interface HhvmLaunchRequestArguments extends DebugProtocol.LaunchRequestArgument
     cwd?: string;
     deferLaunch?: boolean;
     sandboxUser?: string;
+    socket?: string;
+    localWorkspaceRoot?: string;
+    remoteEnabled?: boolean;
+    remoteType?: string;
+    remoteWorkspacePath?: string;
+    dockerContainerName?: string;
 }
 
 class HHVMDebuggerWrapper {
@@ -98,7 +104,7 @@ class HHVMDebuggerWrapper {
             args.sandboxUser = os.userInfo().username;
         }
 
-        const socketArgs = args.socket ? { path: args.socket } : { port: attachPort};
+        const socketArgs = args.socket ? { path: args.socket } : { port: attachPort };
         const socket = net.createConnection(socketArgs);
 
         socket.on('data', chunk => {
@@ -171,8 +177,24 @@ class HHVMDebuggerWrapper {
         }
 
         const hhvmArgs = args.hhvmArgs || [];
-        const scriptArgs = args.script ? args.script.split(' ') : [];
-        const allArgs = ['--mode', 'vsdebug', ...hhvmArgs, ...scriptArgs];
+        let scriptArgs = args.script ? args.script.split(' ') : [];
+        const dockerArgs: string[] = [];
+        if (args.remoteEnabled && args.remoteType === 'docker' && args.dockerContainerName) {
+            hhvmPath = 'docker';
+            dockerArgs.push('exec', '-i', args.dockerContainerName, 'hhvm');
+            scriptArgs = scriptArgs.map(value => value.replace(args.localWorkspaceRoot || "", args.remoteWorkspacePath || ""));
+
+            this.remoteSiteRoot = args.remoteWorkspacePath;
+            this.remoteSiteRootPattern = args.remoteWorkspacePath ? new RegExp(this.escapeRegExp(args.remoteWorkspacePath), 'g') : undefined;
+            this.localWorkspaceRoot = args.localWorkspaceRoot;
+            this.localWorkspaceRootPattern = args.localWorkspaceRoot ? new RegExp(this.escapeRegExp(args.localWorkspaceRoot), 'g') : undefined;
+        }
+
+        if (args.socket) {
+            hhvmArgs.push('--vsDebugDomainSocketPath', '/tmp/vsdebug.sock');
+        }
+
+        const allArgs = [...dockerArgs, '--mode', 'vsdebug', ...hhvmArgs, ...scriptArgs];
         const options = {
             cwd: args.cwd || process.cwd(),
             // FD[3] is used for communicating with the debugger extension.
@@ -189,33 +211,43 @@ class HHVMDebuggerWrapper {
 
         const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
 
-        // Exit with the same error code the target exits with.
-        targetProcess.on('exit', code => process.exit(code));
-        targetProcess.on('error', error => process.stderr.write(`${error.toString()}\n`));
+        if (args.socket) {
+            const debugStream = net.createConnection({ path: args.socket });
+        } else {
+            // Exit with the same error code the target exits with.
+            targetProcess.on('exit', code => process.exit(code));
+            targetProcess.on('error', error => process.stderr.write(`${error.toString()}\n`));
 
-        // Wrap any stdout from the target into a VS Code stdout event.
-        targetProcess.stdout.on('data', chunk => {
-            const block: string = chunk.toString();
-            this.writeOutputEvent('stdout', block);
-        });
-        targetProcess.stdout.on('error', () => { });
+            // Wrap any stdout from the target into a VS Code stdout event.
+            targetProcess.stdout.on('data', chunk => {
+                const block: string = chunk.toString();
+                this.writeOutputEvent('stdout', block);
+            });
+            targetProcess.stdout.on('error', () => { });
 
-        // Wrap any stderr from the target into a VS Code stderr event.
-        targetProcess.stderr.on('data', chunk => {
-            const block: string = chunk.toString();
-            this.writeOutputEvent('stderr', block);
-        });
-        targetProcess.stderr.on('error', () => { });
+            // Wrap any stderr from the target into a VS Code stderr event.
+            targetProcess.stderr.on('data', chunk => {
+                const block: string = chunk.toString();
+                this.writeOutputEvent('stderr', block);
+            });
+            targetProcess.stderr.on('error', () => { });
 
-        targetProcess.stdio[3].on('data', chunk => {
-            this.processDebuggerMessage(chunk);
-        });
-        targetProcess.stdio[3].on('error', () => { });
+            targetProcess.stdio[3].on('data', chunk => {
+                this.processDebuggerMessage(chunk);
+            });
+            targetProcess.stdio[3].on('error', () => { });
+        }
 
         // Read data from the debugger client on stdin and forward to the
         // debugger engine in the target.
         const callback = (data: string) => {
-            (<Writable>targetProcess.stdio[3]).write(`${data}\0`, 'utf8');
+            // Map local workspace file paths to server root, if needed
+            let mappedData = data;
+            if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
+                mappedData = mappedData.replace(this.localWorkspaceRootPattern, this.remoteSiteRoot);
+            }
+
+            (<Writable>targetProcess.stdio[3]).write(`${mappedData}\0`, 'utf8');
         };
 
         callback(JSON.stringify(launchMessage));

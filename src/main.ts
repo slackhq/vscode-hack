@@ -8,6 +8,7 @@ import { LegacyHackTypeChecker } from './LegacyHackTypeChecker';
 import { LSPHackTypeChecker } from './LSPHackTypeChecker';
 import { LSPHHASTLint } from './LSPHHASTLint';
 import * as hh_client from './proxy';
+import { HhvmDebugConfigurationProvider } from './HhvmDebugConfigurationProvider';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -28,6 +29,8 @@ export async function activate(context: vscode.ExtensionContext) {
     } else {
         services.push((new LegacyHackTypeChecker(context)).run());
     }
+
+    vscode.debug.registerDebugConfigurationProvider("hhvm", new HhvmDebugConfigurationProvider());
 
     await Promise.all(services);
 }
