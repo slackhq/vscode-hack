@@ -39,7 +39,6 @@ interface HhvmLaunchRequestArguments extends DebugProtocol.LaunchRequestArgument
     cwd?: string;
     deferLaunch?: boolean;
     sandboxUser?: string;
-    socket?: string;
     localWorkspaceRoot?: string;
     remoteEnabled?: boolean;
     remoteType?: string;
@@ -190,10 +189,6 @@ class HHVMDebuggerWrapper {
             this.localWorkspaceRootPattern = args.localWorkspaceRoot ? new RegExp(this.escapeRegExp(args.localWorkspaceRoot), 'g') : undefined;
         }
 
-        if (args.socket) {
-            hhvmArgs.push('--vsDebugDomainSocketPath', '/tmp/vsdebug.sock');
-        }
-
         const allArgs = [...dockerArgs, '--mode', 'vsdebug', ...hhvmArgs, ...scriptArgs];
         const options = {
             cwd: args.cwd || process.cwd(),
@@ -211,32 +206,29 @@ class HHVMDebuggerWrapper {
 
         const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
 
-        if (args.socket) {
-            const debugStream = net.createConnection({ path: args.socket });
-        } else {
-            // Exit with the same error code the target exits with.
-            targetProcess.on('exit', code => process.exit(code));
-            targetProcess.on('error', error => process.stderr.write(`${error.toString()}\n`));
+        // Exit with the same error code the target exits with.
+        targetProcess.on('exit', code => process.exit(code));
+        targetProcess.on('error', error => process.stderr.write(`${error.toString()}\n`));
 
-            // Wrap any stdout from the target into a VS Code stdout event.
-            targetProcess.stdout.on('data', chunk => {
-                const block: string = chunk.toString();
-                this.writeOutputEvent('stdout', block);
-            });
-            targetProcess.stdout.on('error', () => { });
+        // Wrap any stdout from the target into a VS Code stdout event.
+        targetProcess.stdout.on('data', chunk => {
+            const block: string = chunk.toString();
+            this.writeOutputEvent('stdout', block);
+        });
+        targetProcess.stdout.on('error', () => { });
 
-            // Wrap any stderr from the target into a VS Code stderr event.
-            targetProcess.stderr.on('data', chunk => {
-                const block: string = chunk.toString();
-                this.writeOutputEvent('stderr', block);
-            });
-            targetProcess.stderr.on('error', () => { });
+        // Wrap any stderr from the target into a VS Code stderr event.
+        targetProcess.stderr.on('data', chunk => {
+            const block: string = chunk.toString();
+            this.writeOutputEvent('stderr', block);
+        });
+        targetProcess.stderr.on('error', () => { });
 
-            targetProcess.stdio[3].on('data', chunk => {
-                this.processDebuggerMessage(chunk);
-            });
-            targetProcess.stdio[3].on('error', () => { });
-        }
+        targetProcess.stdio[3].on('data', chunk => {
+            this.processDebuggerMessage(chunk);
+        });
+        targetProcess.stdio[3].on('error', () => { });
+
 
         // Read data from the debugger client on stdin and forward to the
         // debugger engine in the target.
