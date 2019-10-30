@@ -297,7 +297,8 @@
     ]
   },
   "activationEvents": [
-    "workspaceContains:.hhconfig"
+    "workspaceContains:.hhconfig",
+    "onDebug"
   ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
