@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.8.0 - 2019-10-30
+- If the IDE session is connected to a remote typechecker of type `docker`, scripts run via the launch debug target now automatically start in the Docker container instead of the host machine. Stopping on breakpoints isn’t yet supported in this mode.
+
 ## v2.7.1 - 2019-10-28
 - Syntax highlighting fixes. Thanks [lildude](https://github.com/lildude)!
 
