@@ -171,6 +171,55 @@
         }
       ]
     },
+    "implements": {
+      "patterns": [
+        {
+	  "begin": "(?i)(implements)\\s+",
+	  "beginCaptures": {
+	    "1": {
+	      "name": "storage.modifier.implements.php"
+	    }
+	  },
+	  "end": "(?i)(?=[;{])",
+	  "patterns": [
+	    {
+	      "include": "#comments"
+	    },
+	    {
+	      "begin": "(?i)(?=[a-z0-9_\\\\]+)",
+	      "contentName": "meta.other.inherited-class.php",
+	      "end": "(?i)(?:\\s*(?:,|(?=[^a-z0-9_\\\\\\s]))\\s*)",
+	      "patterns": [
+		{
+		  "begin": "(?i)(?=\\\\?[a-z_0-9]+\\\\)",
+		  "end": "(?i)([a-z_][a-z_0-9]*)?(?=[^a-z0-9_\\\\])",
+		  "endCaptures": {
+		    "1": {
+		      "name": "entity.other.inherited-class.php"
+		    }
+		  },
+		  "patterns": [
+		    {
+		      "include": "#namespace"
+		    }
+		  ]
+		},
+		{
+		  "include": "#class-builtin"
+		},
+		{
+		  "include": "#namespace"
+		},
+		{
+		  "match": "(?i)[a-z_][a-z_0-9]*",
+		  "name": "entity.other.inherited-class.php"
+		}
+	      ]
+	    }
+	  ]
+	}
+      ]
+    },
     "attributes": {
       "patterns": [
         {
@@ -693,6 +742,9 @@
             },
             {
               "include": "#generics"
+            },
+            {
+              "include": "#implements"
             }
           ]
         },
@@ -782,6 +834,9 @@
               "include": "#generics"
             },
             {
+              "include": "#implements"
+            },
+            {
               "begin": "(?i)(extends)\\s+",
               "beginCaptures": {
                 "1": {
@@ -814,51 +869,6 @@
                 {
                   "match": "(?i)[a-z_][a-z_0-9]*",
                   "name": "entity.other.inherited-class.php"
-                }
-              ]
-            },
-            {
-              "begin": "(?i)(implements)\\s+",
-              "beginCaptures": {
-                "1": {
-                  "name": "storage.modifier.implements.php"
-                }
-              },
-              "end": "(?i)(?=[;{])",
-              "patterns": [
-                {
-                  "include": "#comments"
-                },
-                {
-                  "begin": "(?i)(?=[a-z0-9_\\\\]+)",
-                  "contentName": "meta.other.inherited-class.php",
-                  "end": "(?i)(?:\\s*(?:,|(?=[^a-z0-9_\\\\\\s]))\\s*)",
-                  "patterns": [
-                    {
-                      "begin": "(?i)(?=\\\\?[a-z_0-9]+\\\\)",
-                      "end": "(?i)([a-z_][a-z_0-9]*)?(?=[^a-z0-9_\\\\])",
-                      "endCaptures": {
-                        "1": {
-                          "name": "entity.other.inherited-class.php"
-                        }
-                      },
-                      "patterns": [
-                        {
-                          "include": "#namespace"
-                        }
-                      ]
-                    },
-                    {
-                      "include": "#class-builtin"
-                    },
-                    {
-                      "include": "#namespace"
-                    },
-                    {
-                      "match": "(?i)[a-z_][a-z_0-9]*",
-                      "name": "entity.other.inherited-class.php"
-                    }
-                  ]
                 }
               ]
             }
