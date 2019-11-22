@@ -8,6 +8,9 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 
 ## Latest releases
 
+## v2.9.0
+- New `launchUrl` option in debugger attach config automatically invokes a web request once the debugger is attached, and detaches when the request is complete.
+
 ## v2.8.0
 - If the IDE session is connected to a remote typechecker of type `docker`, scripts run via the launch debug target now automatically start in the Docker container instead of the host machine. Stopping on breakpoints isn’t yet supported in this mode.
 

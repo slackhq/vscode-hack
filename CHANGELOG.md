@@ -2,7 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
-## v2.8.0 - 2019-11-10
+## v2.9.0 - 2019-11-22
+- New `launchUrl` option in debugger attach config automatically invokes a web request once the debugger is attached, and detaches when the request is complete.
+
+## v2.8.1 - 2019-11-10
 - Syntax highlighting improvements. Thanks [scotchval](https://github.com/scotchval)!
 
 ## v2.8.0 - 2019-10-30
