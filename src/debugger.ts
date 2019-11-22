@@ -10,6 +10,7 @@
  */
 
 import * as child_process from 'child_process';
+import * as http from 'http';
 import * as net from 'net';
 import * as os from 'os';
 import { Writable } from 'stream';
@@ -30,6 +31,7 @@ interface HhvmAttachRequestArguments extends DebugProtocol.AttachRequestArgument
     remoteSiteRoot?: string;
     localWorkspaceRoot?: string;
     sandboxUser?: string;
+    launchUrl?: string;
 }
 
 interface HhvmLaunchRequestArguments extends DebugProtocol.LaunchRequestArguments {
@@ -156,6 +158,20 @@ class HHVMDebuggerWrapper {
                 setTimeout(() => this.attachTarget(attachMessage, retries + 1), 2000);
             }
         });
+
+        if (args.launchUrl) {
+            http.get(args.launchUrl, res => {
+                res.on('data', data => {
+                    this.writeOutputEvent('stdout', data.toString());
+                });
+                res.on('end', () => {
+                    process.exit();
+                });
+            }).on('error', (e) => {
+                this.writeOutputEvent('stdout', e.message);
+                process.exit();
+            });
+        }
     }
 
     private launchTarget(launchMessage: DebugProtocol.LaunchRequest) {
