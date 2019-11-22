@@ -119,6 +119,10 @@
                 "type": "string",
                 "description": "Absolute path to local workspace root, to map to remote server",
                 "default": "${workspaceFolder}"
+              },
+              "launchUrl": {
+                "type": "string",
+                "description": "Make an HTTP GET request to this URL once the debugger is attached, and automatically detach when the request is complete"
               }
             }
           },
