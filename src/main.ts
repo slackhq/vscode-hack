@@ -15,7 +15,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // check if a compatible verison of hh_client is installed, or show an error message and deactivate extension typecheck & intellisense features
     const version = await hh_client.version();
     if (!version) {
-        var errMsg = `Invalid hh_client executable: '${config.clientPath}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`;
+        let errMsg = `Invalid hh_client executable: '${config.clientPath}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`;
 
         if (config.remoteEnabled && config.remoteType === 'ssh') {
             errMsg = `Unable to connect to remote Hack server, please ensure it is running, and restart VSCode.`;
