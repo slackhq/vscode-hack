@@ -17,18 +17,6 @@ It is published in the Visual Studio Marketplace [here](https://marketplace.visu
 ## v2.7.0
 - Lots of syntax highlighting updates. Thanks [tspence](https://github.com/tspence)!
 
-## v2.5.0
-- New connection indicator in the editor status bar which shows HHVM version & LSP status/errors. This should make it easier to debug problems in IDE functionality related to hh_server crashes or restarts.
-
-## v2.4.0
-- Debugger now supports attaching to a Unix socket instead of TCP port.
-
-## v2.3.0
-- Extension will ask to reload the workspace on changes to remote configuration settings.
-
-## v2.2.0
-- **Syntax Highlighting Updates** — The editor now recognizes several Hack-specific storage types and some other keywords & methods. Thanks [azjezz](https://github.com/azjezz)!
-
 See the full list of releases and features added on the [Github releases page](https://github.com/slackhq/vscode-hack/releases) as well as the project [changelog](https://github.com/slackhq/vscode-hack/blob/master/CHANGELOG.md).
 
 ## Features

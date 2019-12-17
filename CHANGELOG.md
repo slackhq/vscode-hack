@@ -2,6 +2,9 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.9.1 - 2019-12-16
+- Better error messages when `hh_client` connection fails and extension is running in remote mode (using either SSH or Docker). Thanks [icechen1](https://github.com/icechen1)!
+
 ## v2.9.0 - 2019-11-22
 - New `launchUrl` option in debugger attach config automatically invokes a web request once the debugger is attached, and detaches when the request is complete.
 
