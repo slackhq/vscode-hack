@@ -24,6 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         vscode.window.showErrorMessage(errMsg);
+        return;
     }
 
     const services: Promise<void>[] = [];
