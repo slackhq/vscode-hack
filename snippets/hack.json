@@ -4,10 +4,6 @@
       "prefix": "globals",
       "body": "$GLOBALS['${1:variable}']${2: = }${3:something}${4:;}$0"
     },
-    "?>…<?php": {
-      "prefix": "php",
-      "body": "?>$0<?php"
-    },
     "function __construct": {
       "prefix": "con",
       "body": "function __construct(${1:$${2:foo} ${3:= ${4:null}}}) {\n\t${2:$this->$0 = $$0;}$0\n}"
@@ -69,7 +65,7 @@
       "body": "foreach ($${1:variable} as $${2:key} ${3:=> $${4:value}}) {\n\t${0:# code...}\n}"
     },
     "function …": {
-      "prefix": "fun",
+      "prefix": "func",
       "body": "${1:public }function ${2:FunctionName}(${3:$${4:value}${5:=''}})\n{\n\t${0:# code...}\n}"
     },
     "if … else …": {
@@ -84,14 +80,6 @@
       "prefix": "if?",
       "body": "$${1:retVal} = (${2:condition}) ? ${3:a} : ${4:b} ;"
     },
-    "include …": {
-      "prefix": "incl",
-      "body": "include '${1:file}';$0"
-    },
-    "include_once …": {
-      "prefix": "incl1",
-      "body": "include_once '${1:file}';$0"
-    },
     "$… = array (…)": {
       "prefix": "array",
       "body": "$${1:arrayName} = array('$2' => $3${4:,} $0);"
@@ -103,10 +91,6 @@
     "… => …": {
       "prefix": "keyval",
       "body": "'$1' => $2${3:,} $0"
-    },
-    "require …": {
-      "prefix": "req",
-      "body": "require '${1:file}';$0"
     },
     "require_once …": {
       "prefix": "req1",
