@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.9.3 - 2020-01-30
+- Syntax highlighting fixes
+- Remove deprecated PHP snippets
+
 ## v2.9.2 - 2019-12-17
 - Fix `NOTICE.md` file, which was accidentally left blank in the last release.
 
