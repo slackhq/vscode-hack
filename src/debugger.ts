@@ -273,19 +273,19 @@ class HHVMDebuggerWrapper {
       const block: string = chunk.toString();
       this.writeOutputEvent("stdout", block);
     });
-    targetProcess.stdout.on("error", () => {});
+    targetProcess.stdout.on("error", () => { });
 
     // Wrap any stderr from the target into a VS Code stderr event.
     targetProcess.stderr.on("data", chunk => {
       const block: string = chunk.toString();
       this.writeOutputEvent("stderr", block);
     });
-    targetProcess.stderr.on("error", () => {});
+    targetProcess.stderr.on("error", () => { });
 
     targetProcess.stdio[3].on("data", chunk => {
       this.processDebuggerMessage(chunk);
     });
-    targetProcess.stdio[3].on("error", () => {});
+    targetProcess.stdio[3].on("error", () => { });
 
     // Read data from the debugger client on stdin and forward to the
     // debugger engine in the target.
@@ -591,6 +591,14 @@ class HHVMDebuggerWrapper {
           });
           break;
         }
+        case "variables": {
+          message.body.variables.forEach(variable => {
+            if (!("variablesReference" in variable)) {
+              variable.variablesReference = 0;
+            }
+          });
+          break;
+        }
         default:
         // No fixes needed.
       }
@@ -629,8 +637,8 @@ class HHVMDebuggerWrapper {
             message.body.threadCausedFocus != null
               ? message.body.threadCausedFocus
               : reason === "step" ||
-                reason === "breakpoint" ||
-                reason === "exception";
+              reason === "breakpoint" ||
+              reason === "exception";
 
           if (message.body.preserveFocusHint == null) {
             message.body.preserveFocusHint = !focusThread;
