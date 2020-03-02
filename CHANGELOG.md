@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.9.4 - 2020-03-02
+
+- Fix for "Invalid variable attributes" error in debugger panel when stopped on a breakpoint.
+
 ## v2.9.3 - 2020-01-30
 
 - Syntax highlighting fixes
