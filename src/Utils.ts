@@ -12,12 +12,11 @@ import * as config from "./Config";
  * @param includeScheme Whether to include the file:// scheme in the response or not
  */
 export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
-  if (!config.remoteEnabled || !config.remoteWorkspacePath) {
-    return file.toString();
+  let workspaceRoot = file.toString()
+  if (config.remoteEnabled && config.remoteWorkspacePath) {
+    workspaceRoot = workspaceRoot.replace(config.localWorkspacePath, config.remoteWorkspacePath);
   }
-  return file
-    .toString()
-    .replace(config.localWorkspacePath, config.remoteWorkspacePath);
+  return workspaceRoot + "/" + config.workspaceRelativeRootPath;
 };
 
 /**

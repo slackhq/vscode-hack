@@ -10,6 +10,7 @@ const hackConfig = vscode.workspace.getConfiguration("hack");
 // tslint:disable-next-line:no-non-null-assertion
 export const localWorkspacePath = vscode.workspace.workspaceFolders![0].uri
   .fsPath;
+export const workspaceRelativeRootPath = hackConfig.get<string>("rootPath") || "";
 
 export let clientPath = hackConfig.get<string>("clientPath") || "hh_client";
 clientPath = clientPath.replace("${workspaceFolder}", localWorkspacePath);

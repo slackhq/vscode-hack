@@ -196,6 +196,11 @@
           "default": "hh_client",
           "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
         },
+        "hack.rootPath": {
+          "type": "string",
+          "default": "",
+          "description": "Relative path to the directory containing .hhconfig"
+        },
         "hack.workspaceRootPath": {
           "type": "string",
           "default": null,
@@ -311,7 +316,7 @@
     ]
   },
   "activationEvents": [
-    "workspaceContains:.hhconfig",
+    "workspaceContains:**/.hhconfig",
     "onDebug"
   ],
   "scripts": {
