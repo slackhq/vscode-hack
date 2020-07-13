@@ -2,8 +2,8 @@
  * Utility functions to help with file path parsing and others
  */
 
-import * as vscode from 'vscode';
-import * as config from './Config';
+import * as vscode from "vscode";
+import * as config from "./Config";
 
 /**
  * Converts a local workspace URI to a file path string (with or without scheme) to pass to
@@ -12,10 +12,12 @@ import * as config from './Config';
  * @param includeScheme Whether to include the file:// scheme in the response or not
  */
 export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
-    if (!config.remoteEnabled || !config.remoteWorkspacePath) {
-        return file.toString();
-    }
-    return file.toString().replace(config.localWorkspacePath, config.remoteWorkspacePath);
+  if (!config.remoteEnabled || !config.remoteWorkspacePath) {
+    return file.toString();
+  }
+  return file
+    .toString()
+    .replace(config.localWorkspacePath, config.remoteWorkspacePath);
 };
 
 /**
@@ -24,13 +26,16 @@ export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
  * @param file The file path to convert
  */
 export const mapToWorkspaceUri = (file: string): vscode.Uri => {
-    let filePath = file;
-    if (config.remoteEnabled && config.remoteWorkspacePath) {
-        filePath = filePath.replace(config.remoteWorkspacePath, config.localWorkspacePath);
-    }
-    if (filePath.startsWith('file://')) {
-        return vscode.Uri.parse(filePath);
-    } else {
-        return vscode.Uri.file(filePath);
-    }
+  let filePath = file;
+  if (config.remoteEnabled && config.remoteWorkspacePath) {
+    filePath = filePath.replace(
+      config.remoteWorkspacePath,
+      config.localWorkspacePath
+    );
+  }
+  if (filePath.startsWith("file://")) {
+    return vscode.Uri.parse(filePath);
+  } else {
+    return vscode.Uri.file(filePath);
+  }
 };

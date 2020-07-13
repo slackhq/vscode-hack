@@ -30,10 +30,10 @@ You can also use the `--mode vsdebug`, `--vsDebugPort` and `--vsDebugDomainSocke
 Add a new HHVM `attach` config to `.vscode/launch.json` and configure as needed:
 
 `host`: [Optional] The remote HHVM host (default: `localhost`)  
-`port`: [Optional] The server debugging port, if changed in HHVM config (default: `8999`) 
+`port`: [Optional] The server debugging port, if changed in HHVM config (default: `8999`)
 `socket`: [Optional] Path to a Unix domain socket path. If specified, the debugger will attach to this socket rather than a TCP port.
 
-If the site root on the server is different from your local workspace, set the following to automatically map them: 
+If the site root on the server is different from your local workspace, set the following to automatically map them:
 
 `remoteSiteRoot`: [Optional] Absolute path to site root on the HHVM server  
 `localWorkspaceRoot`: [Optional] Absolute path to local workspace root. Set to `${workspaceFolder}` to use the current VS Code workspace.
@@ -60,7 +60,7 @@ This will foward connections to exposed port 8998 to port 8999 in your container
 
 ![Common debugging setups](images/debugger-setups.png)
 
-1. Single PHP/Hack script launched by VS Code 
+1. Single PHP/Hack script launched by VS Code
 2. Everything running locally on the same network
 3. Connected to debugging port on a remote server through a SSH tunnel
 4. Running HHVM in a Docker container and forwarding debugger port via [socat](http://www.dest-unreach.org/socat/doc/socat.html)

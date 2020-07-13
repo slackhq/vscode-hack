@@ -16,7 +16,7 @@ Attn: Open Source Requests
 San Francisco, CA 94105
 
 ---
-**[minimist@0.0.8](https://github.com/substack/minimist)**
+**[minimist@1.2.5](https://github.com/substack/minimist)**
 ```
 This software is released under the MIT license:
 
@@ -38,7 +38,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-**[mkdirp@0.5.1](https://github.com/substack/node-mkdirp)**
+**[mkdirp@0.5.5](https://github.com/substack/node-mkdirp)**
 ```
 Copyright 2010 James Halliday (mail@substack.net)
 

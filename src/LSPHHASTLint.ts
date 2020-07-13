@@ -2,16 +2,19 @@
  * @file Integration with The HHAST Linter via the LSP
  */
 
-import * as fs from 'fs';
-import * as vscode from 'vscode';
-import { HandleDiagnosticsSignature, LanguageClient } from 'vscode-languageclient';
-import * as config from './Config';
-import * as remote from './remote';
-import * as utils from './Utils';
+import * as fs from "fs";
+import * as vscode from "vscode";
+import {
+  HandleDiagnosticsSignature,
+  LanguageClient
+} from "vscode-languageclient";
+import * as config from "./Config";
+import * as remote from "./remote";
+import * as utils from "./Utils";
 
-type LintMode = 'whole-project' | 'open-files';
+type LintMode = "whole-project" | "open-files";
 type InitializationOptions = {
-  'lintMode'?: LintMode;
+  lintMode?: LintMode;
 };
 
 export class LSPHHASTLint {
@@ -20,63 +23,74 @@ export class LSPHHASTLint {
 
   constructor(context: vscode.ExtensionContext, hhastPath: string) {
     this.context = context;
-    this.hhastPath = (config.remoteEnabled && config.remoteWorkspacePath)
-      ? hhastPath.replace(config.localWorkspacePath, config.remoteWorkspacePath)
-      : hhastPath;
+    this.hhastPath =
+      config.remoteEnabled && config.remoteWorkspacePath
+        ? hhastPath.replace(
+            config.localWorkspacePath,
+            config.remoteWorkspacePath
+          )
+        : hhastPath;
   }
 
   /** Start if HHAST support is enabled, the project uses HHAST, and the user
    * enables HHAST support for this project.
    */
-  public static async START_IF_CONFIGURED_AND_ENABLED(context: vscode.ExtensionContext): Promise<void> {
+  public static async START_IF_CONFIGURED_AND_ENABLED(
+    context: vscode.ExtensionContext
+  ): Promise<void> {
     if (!config.useHhast) {
       return;
     }
     const workspace = config.localWorkspacePath;
-    const usesLint: boolean = await new Promise<boolean>((resolve, _) => fs.access(`${workspace}/hhast-lint.json`, err => resolve(!err)));
+    const usesLint: boolean = await new Promise<boolean>((resolve, _) =>
+      fs.access(`${workspace}/hhast-lint.json`, err => resolve(!err))
+    );
     if (!usesLint) {
       return;
     }
 
     const rawHhastPath = config.hhastPath;
-    const hhastPath = rawHhastPath && rawHhastPath[0] !== '/'
-      ? `${workspace}/${rawHhastPath}`
-      : rawHhastPath;
+    const hhastPath =
+      rawHhastPath && rawHhastPath[0] !== "/"
+        ? `${workspace}/${rawHhastPath}`
+        : rawHhastPath;
     if (!hhastPath) {
       return;
     }
-    const hhastExists: boolean = await new Promise<boolean>((resolve, _) => fs.access(hhastPath, err => resolve(!err)));
+    const hhastExists: boolean = await new Promise<boolean>((resolve, _) =>
+      fs.access(hhastPath, err => resolve(!err))
+    );
     if (!hhastExists) {
       return;
     }
 
     const remembered = config.hhastRememberedWorkspaces[workspace];
-    if (remembered === 'trusted') {
-      await (new LSPHHASTLint(context, hhastPath)).run();
+    if (remembered === "trusted") {
+      await new LSPHHASTLint(context, hhastPath).run();
       return;
-    } else if (remembered === 'untrusted') {
+    } else if (remembered === "untrusted") {
       return;
     }
 
     const result = await vscode.window.showWarningMessage(
       `Do you want to use ${hhastPath} to lint? This has the same security risks as executing any other code in the repository.`,
       {},
-      'Yes',
-      'Always',
-      'No',
-      'Never'
+      "Yes",
+      "Always",
+      "No",
+      "Never"
     );
     switch (result) {
       // @ts-ignore: Fallthrough case in switch
-      case 'Always':
-        await config.rememberHhastWorkspace(workspace, 'trusted');
-      case 'Yes':
-        await (new LSPHHASTLint(context, hhastPath)).run();
+      case "Always":
+        await config.rememberHhastWorkspace(workspace, "trusted");
+      case "Yes":
+        await new LSPHHASTLint(context, hhastPath).run();
         break;
       // @ts-ignore: Fallthrough case in switch
-      case 'Never':
-        await config.rememberHhastWorkspace(workspace, 'untrusted');
-      case 'No':
+      case "Never":
+        await config.rememberHhastWorkspace(workspace, "untrusted");
+      case "No":
         return;
       default:
         return;
@@ -91,16 +105,25 @@ export class LSPHHASTLint {
     }
 
     const hhast = new LanguageClient(
-      'hack',
-      'HHAST',
+      "hack",
+      "HHAST",
       {
         command: remote.getCommand(this.hhastPath),
-        args: remote.getArgs(this.hhastPath, [...config.hhastArgs, '--mode', 'lsp', '--from', 'vscode-hack'])
+        args: remote.getArgs(this.hhastPath, [
+          ...config.hhastArgs,
+          "--mode",
+          "lsp",
+          "--from",
+          "vscode-hack"
+        ])
       },
       {
-        documentSelector: [{ language: 'hack', scheme: 'file' }],
+        documentSelector: [{ language: "hack", scheme: "file" }],
         initializationOptions: initializationOptions,
-        uriConverters: { code2Protocol: utils.mapFromWorkspaceUri, protocol2Code: utils.mapToWorkspaceUri },
+        uriConverters: {
+          code2Protocol: utils.mapFromWorkspaceUri,
+          protocol2Code: utils.mapToWorkspaceUri
+        },
         middleware: {
           handleDiagnostics: this.handleDiagnostics
         }
@@ -109,10 +132,17 @@ export class LSPHHASTLint {
     this.context.subscriptions.push(hhast.start());
   }
 
-  private handleDiagnostics(uri: vscode.Uri, diagnostics: vscode.Diagnostic[], next: HandleDiagnosticsSignature) {
-    next(uri, diagnostics.map(d => {
-      d.message = `${d.code}: ${d.message}`;
-      return d;
-    }));
+  private handleDiagnostics(
+    uri: vscode.Uri,
+    diagnostics: vscode.Diagnostic[],
+    next: HandleDiagnosticsSignature
+  ) {
+    next(
+      uri,
+      diagnostics.map(d => {
+        d.message = `${d.code}: ${d.message}`;
+        return d;
+      })
+    );
   }
 }
