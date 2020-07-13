@@ -72,16 +72,16 @@
         "scopeName": "source.hack",
         "path": "./syntaxes/hack.json"
       },
-			{
-				"scopeName": "markdown.hack.codeblock",
-				"path": "./syntaxes/codeblock.json",
-				"injectTo": [
-					"text.html.markdown"
-				],
-				"embeddedLanguages": {
-					"meta.embedded.block.hack": "hack"
-				}
-			}
+      {
+        "scopeName": "markdown.hack.codeblock",
+        "path": "./syntaxes/codeblock.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.hack": "hack"
+        }
+      }
     ],
     "snippets": [
       {
