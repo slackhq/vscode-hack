@@ -1288,9 +1288,6 @@
           "match": "(?i)^\\s*([a-z_][a-z_0-9]*)\\s*:"
         },
         {
-          "include": "#string-backtick"
-        },
-        {
           "begin": "\\[",
           "beginCaptures": {
             "0": {
@@ -1417,9 +1414,6 @@
         },
         {
           "include": "#numbers"
-        },
-        {
-          "include": "#string-backtick"
         },
         {
           "include": "#variables"
@@ -1762,30 +1756,6 @@
         },
         {
           "include": "source.sql"
-        }
-      ]
-    },
-    "string-backtick": {
-      "begin": "`",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.begin.php"
-        }
-      },
-      "end": "`",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.end.php"
-        }
-      },
-      "name": "string.interpolated.php",
-      "patterns": [
-        {
-          "match": "\\\\.",
-          "name": "constant.character.escape.php"
-        },
-        {
-          "include": "#interpolation"
         }
       ]
     },
