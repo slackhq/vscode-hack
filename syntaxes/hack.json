@@ -459,7 +459,7 @@
     "literal-collections": {
       "patterns": [
         {
-          "begin": "([A-Za-z_0-9]+)\\s*({)",
+          "begin": "(Vector|ImmVector|Set|ImmSet|Map|ImmMap)\\s*({)",
           "end": "(})",
           "beginCaptures": {
             "1": {
