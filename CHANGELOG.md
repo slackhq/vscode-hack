@@ -2,6 +2,10 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.9.7 - 2020-08-18
+
+- Syntax highlighting fix (adding missed `Pair` literal).
+
 ## v2.9.6 - 2020-08-15
 
 - Syntax highlighting improvements. Thanks [Wilfred](https://github.com/Wilfred)!
