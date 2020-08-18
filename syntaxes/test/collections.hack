@@ -8,4 +8,6 @@ function create_collections(): void {
 
   $m = Set {};
   $m2 = ImmSet {};
+
+  $p = Pair { 1, 2 };
 }
