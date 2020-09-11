@@ -2,6 +2,11 @@
 
 See the full list of recent releases and features added on the [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.10.0 - 2020-08-18
+
+- Auto-start Hack typechecker on workspace load. Thanks [antoniodejesusochoasolano](https://github.com/antoniodejesusochoasolano)!
+- Syntax highlighting improvements
+
 ## v2.9.7 - 2020-08-18
 
 - Syntax highlighting fix (adding missed `Pair` literal).
