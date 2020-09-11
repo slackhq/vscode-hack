@@ -11,6 +11,13 @@ export async function version(): Promise<hack.Version | undefined> {
   return run(["--version"]);
 }
 
+/**
+ * Hack client hangs if executed in lsp mode before running it standalone.
+ */
+export async function start(): Promise<hack.Version | undefined> {
+  return run([]);
+}
+
 export async function check(): Promise<hack.CheckResponse> {
   return run(["check"]);
 }
