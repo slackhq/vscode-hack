@@ -26,9 +26,12 @@ export async function activate(context: vscode.ExtensionContext) {
     return;
   }
 
-  console.log("Starting hh_client...");
-  await hh_client.start();
-  console.log("Done starting hh_client.");
+  await vscode.window.withProgress({
+    location: vscode.ProgressLocation.Window,
+    title: `Running Hack typechecker`
+  }, async () => {
+    return hh_client.start();
+  });
 
   const services: Promise<void>[] = [];
   services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
