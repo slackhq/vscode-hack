@@ -1235,18 +1235,7 @@
           "name": "keyword.operator.logical.php"
         },
         {
-          "match": "(?i)\\b(is|as)\\b",
-          "name": "keyword.operator.type.php"
-        },
-        {
-          "include": "#function-call"
-        },
-        {
-          "match": "<<|>>|~|\\^|&|\\|",
-          "name": "keyword.operator.bitwise.php"
-        },
-        {
-          "begin": "(?i)\\b(instanceof)\\b\\s+(?=[\\\\$a-z_])",
+          "begin": "(?i)\\b(as|is)\\b\\s+(?=[\\\\$a-z_])",
           "beginCaptures": {
             "1": {
               "name": "keyword.operator.type.php"
@@ -1261,6 +1250,17 @@
               "include": "#variable-name"
             }
           ]
+        },
+        {
+          "match": "(?i)\\b(is|as)\\b",
+          "name": "keyword.operator.type.php"
+        },
+        {
+          "include": "#function-call"
+        },
+        {
+          "match": "<<|>>|~|\\^|&|\\|",
+          "name": "keyword.operator.bitwise.php"
         },
         {
           "include": "#numbers"
