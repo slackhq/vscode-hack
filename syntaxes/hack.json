@@ -1193,20 +1193,6 @@
           "name": "keyword.operator.pipe.php"
         },
         {
-          "captures": {
-            "1": {
-              "name": "keyword.operator.assignment.php"
-            },
-            "2": {
-              "name": "storage.modifier.reference.php"
-            },
-            "3": {
-              "name": "storage.modifier.reference.php"
-            }
-          },
-          "match": "(?:(\\=)(&))|(&(?=[$A-Za-z_]))"
-        },
-        {
           "match": "(@)",
           "name": "keyword.operator.error-control.php"
         },
@@ -1219,7 +1205,7 @@
           "name": "keyword.operator.assignment.php"
         },
         {
-          "match": "(<=|>=|<>|<|>)",
+          "match": "(<=|>=|<|>)",
           "name": "keyword.operator.comparison.php"
         },
         {
@@ -1267,25 +1253,6 @@
         },
         {
           "include": "#instantiation"
-        },
-        {
-          "captures": {
-            "1": {
-              "name": "keyword.control.goto.php"
-            },
-            "2": {
-              "name": "support.other.php"
-            }
-          },
-          "match": "(?i)(goto)\\s+([a-z_][a-z_0-9]*)"
-        },
-        {
-          "captures": {
-            "1": {
-              "name": "entity.name.goto-label.php"
-            }
-          },
-          "match": "(?i)^\\s*([a-z_][a-z_0-9]*)\\s*:"
         },
         {
           "begin": "\\[",
