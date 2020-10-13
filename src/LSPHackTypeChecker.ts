@@ -15,6 +15,8 @@ import { HackCoverageChecker } from "./coveragechecker";
 import * as remote from "./remote";
 import * as hack from "./types/hack";
 import * as utils from "./Utils";
+import * as providers from "./providers";
+import * as suppressions from "./suppressions";
 import { ShowStatusRequest } from "./types/lsp";
 
 export class LSPHackTypeChecker {
@@ -29,6 +31,24 @@ export class LSPHackTypeChecker {
       vscode.StatusBarAlignment.Left
     );
     context.subscriptions.push(this.status);
+
+    // add command and provider to add an error suppression comment
+    context.subscriptions.push(
+      vscode.languages.registerCodeActionsProvider(
+        {
+          language: "hack",
+          scheme: "file"
+        },
+        new providers.HackCodeActionProvider()
+      )
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "hack.suppressError",
+        suppressions.suppressError
+      )
+    );
   }
 
   public static IS_SUPPORTED(version: hack.Version): boolean {

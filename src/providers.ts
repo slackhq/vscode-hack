@@ -349,7 +349,7 @@ export class HackCodeActionProvider implements vscode.CodeActionProvider {
       const commands: vscode.Command[] = [];
       for (const error of filteredErrors) {
         commands.push({
-          title: `Suppress: ${error.code}`,
+          title: `Suppress Hack Error: ${error.code}`,
           command: "hack.suppressError",
           arguments: [document, error.range.start.line, [error.code]]
         });
@@ -357,7 +357,7 @@ export class HackCodeActionProvider implements vscode.CodeActionProvider {
       if (commands.length > 1) {
         const allCodes = filteredErrors.map(f => f.code);
         commands.push({
-          title: "Suppress All",
+          title: "Suppress All Hack Errors",
           command: "hack.suppressError",
           arguments: [document, filteredErrors[0].range.start.line, allCodes]
         });
