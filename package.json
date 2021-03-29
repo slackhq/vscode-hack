@@ -196,10 +196,10 @@
           "default": "hh_client",
           "description": "Absolute path to the hh_client executable. This can be left empty if hh_client is already in your environment $PATH."
         },
-        "hack.rootPath": {
+        "hack.hhconfigPath": {
           "type": "string",
-          "default": "",
-          "description": "Relative path to the directory containing .hhconfig"
+          "default": ".hhconfig",
+          "description": "Workspace-relative path to .hhconfig file, the containing directory becomes the Hack Langauge Server root"
         },
         "hack.workspaceRootPath": {
           "type": "string",

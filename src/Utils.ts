@@ -16,7 +16,8 @@ export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
   if (config.remoteEnabled && config.remoteWorkspacePath) {
     workspaceRoot = workspaceRoot.replace(config.localWorkspacePath, config.remoteWorkspacePath);
   }
-  return workspaceRoot + "/" + config.workspaceRelativeRootPath;
+  const workspaceRelativeRoot = config.hhconfigPath.replace(/\.hhconfig$/, "")
+  return workspaceRoot + "/" + workspaceRelativeRoot.replace(".hhconfig", "");
 };
 
 /**
