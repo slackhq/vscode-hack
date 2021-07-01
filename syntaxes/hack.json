@@ -804,15 +804,18 @@
           ]
         },
         {
-          "begin": "(?i)^\\s*(abstract|final)?\\s*(class)\\s+([a-z0-9_]+)\\s*",
+          "begin": "(?i)^\\s*(abstract|final)?\\s*(abstract|final)?\\s*(class)\\s+([a-z0-9_]+)\\s*",
           "beginCaptures": {
             "1": {
-              "name": "storage.modifier.abstract.php"
+              "name": "storage.modifier.php"
             },
             "2": {
-              "name": "storage.type.class.php"
+              "name": "storage.modifier.php"
             },
             "3": {
+              "name": "storage.type.class.php"
+            },
+            "4": {
               "name": "entity.name.type.class.php"
             }
           },
