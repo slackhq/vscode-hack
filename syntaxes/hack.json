@@ -468,9 +468,11 @@
                   "name": "keyword.operator.assignment.php"
                 }
               },
-              "patterns": [{
-                "include": "#language"
-              }]
+              "patterns": [
+                {
+                  "include": "#language"
+                }
+              ]
             }
           ]
         }
