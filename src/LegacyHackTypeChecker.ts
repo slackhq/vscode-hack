@@ -6,7 +6,6 @@
 import * as vscode from "vscode";
 import * as providers from "./providers";
 import * as hh_client from "./proxy";
-import * as suppressions from "./suppressions";
 import * as utils from "./Utils";
 
 export class LegacyHackTypeChecker {
@@ -67,20 +66,6 @@ export class LegacyHackTypeChecker {
       vscode.languages.registerDefinitionProvider(
         HACK_MODE,
         new providers.HackDefinitionProvider()
-      )
-    );
-    context.subscriptions.push(
-      vscode.languages.registerCodeActionsProvider(
-        HACK_MODE,
-        new providers.HackCodeActionProvider()
-      )
-    );
-
-    // add command to add an error suppression comment
-    context.subscriptions.push(
-      vscode.commands.registerCommand(
-        "hack.suppressError",
-        suppressions.suppressError
       )
     );
 
