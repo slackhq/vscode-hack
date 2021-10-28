@@ -3,6 +3,11 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.12.0 - 2021-10-28
+
+- Reverted expression-trees syntax highlighting rule due to performance issues.
+- Removed error suppression code action.
+
 ## v2.11.0 - 2021-09-30
 
 - Syntax highlighting improvements. Thanks
