@@ -335,35 +335,3 @@ export class HackDefinitionProvider implements vscode.DefinitionProvider {
       });
   }
 }
-
-export class HackCodeActionProvider implements vscode.CodeActionProvider {
-  public provideCodeActions(
-    document: vscode.TextDocument,
-    _: vscode.Range,
-    context: vscode.CodeActionContext
-  ): vscode.ProviderResult<vscode.Command[]> {
-    const filteredErrors = context.diagnostics.filter(
-      d => d.source === "Hack" && d.code !== 0
-    );
-    if (filteredErrors.length > 0) {
-      const commands: vscode.Command[] = [];
-      for (const error of filteredErrors) {
-        commands.push({
-          title: `Suppress Hack Error: ${error.code}`,
-          command: "hack.suppressError",
-          arguments: [document, error.range.start.line, [error.code]]
-        });
-      }
-      if (commands.length > 1) {
-        const allCodes = filteredErrors.map(f => f.code);
-        commands.push({
-          title: "Suppress All Hack Errors",
-          command: "hack.suppressError",
-          arguments: [document, filteredErrors[0].range.start.line, allCodes]
-        });
-      }
-      return commands;
-    }
-    return undefined;
-  }
-}
