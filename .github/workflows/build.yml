@@ -30,9 +30,3 @@ jobs:
       #  run: npm run deploy
       #  env:
       #    VSCE_PAT: ${{ secrets.VSCE_PAT }}
-
-  compile-grammar:
-    name: Compile Language Grammar
-    runs-on: ubuntu-latest
-    steps:
-      - uses: docker://linguist/grammar-compiler:latest
