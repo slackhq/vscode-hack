@@ -111,7 +111,7 @@ async function run(extraArgs: string[], stdin?: string): Promise<any> {
       "--json",
       "--from",
       "vscode-hack",
-      workspacePath
+      workspacePath,
     ]);
     const p = ps.execFile(
       command,
@@ -121,7 +121,7 @@ async function run(extraArgs: string[], stdin?: string): Promise<any> {
         if (err !== null && err.code !== 0 && err.code !== 2) {
           // any hh_client failure other than typecheck errors
           console.error(`Hack: hh_client execution error: ${err}`);
-          resolve();
+          resolve(null);
         }
         if (!stdout) {
           // all hh_client --check output goes to stderr by default
@@ -132,11 +132,11 @@ async function run(extraArgs: string[], stdin?: string): Promise<any> {
           resolve(output);
         } catch (parseErr) {
           console.error(`Hack: hh_client output error: ${parseErr}`);
-          resolve();
+          resolve(null);
         }
       }
     );
-    if (stdin) {
+    if (stdin && p && p.stdin) {
       p.stdin.write(stdin);
       p.stdin.end();
     }

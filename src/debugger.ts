@@ -10,6 +10,7 @@
  */
 
 import * as child_process from "child_process";
+import { SpawnOptionsWithoutStdio } from "child_process";
 import * as http from "http";
 import * as net from "net";
 import * as os from "os";
@@ -81,7 +82,7 @@ class HHVMDebuggerWrapper {
   }
 
   public debug() {
-    process.stdin.on("data", chunk => {
+    process.stdin.on("data", (chunk) => {
       this.processClientMessage(chunk);
     });
 
@@ -121,7 +122,7 @@ class HHVMDebuggerWrapper {
       : { port: attachPort };
     const socket = net.createConnection(socketArgs);
 
-    socket.on("data", chunk => {
+    socket.on("data", (chunk) => {
       this.processDebuggerMessage(chunk);
     });
 
@@ -129,7 +130,7 @@ class HHVMDebuggerWrapper {
       this.writeOutputWithHeader({
         seq: ++this.sequenceNumber,
         type: "event",
-        event: "hhvmConnectionDied"
+        event: "hhvmConnectionDied",
       });
       process.stderr.write(
         "The connection to the debug target has been closed."
@@ -158,11 +159,11 @@ class HHVMDebuggerWrapper {
     const attachResponse = {
       request_seq: attachMessage.seq,
       success: true,
-      command: attachMessage.command
+      command: attachMessage.command,
     };
     this.writeResponseMessage(attachResponse);
 
-    socket.on("error", error => {
+    socket.on("error", (error) => {
       if (retries >= 5) {
         process.stderr.write(
           `Error communicating with debugger target: ${error.toString()}\n`
@@ -180,15 +181,15 @@ class HHVMDebuggerWrapper {
 
     if (args.launchUrl) {
       http
-        .get(args.launchUrl, res => {
-          res.on("data", data => {
+        .get(args.launchUrl, (res) => {
+          res.on("data", (data) => {
             this.writeOutputEvent("stdout", data.toString());
           });
           res.on("end", () => {
             process.exit();
           });
         })
-        .on("error", e => {
+        .on("error", (e) => {
           this.writeOutputEvent("stdout", e.message);
           process.exit();
         });
@@ -222,7 +223,7 @@ class HHVMDebuggerWrapper {
     ) {
       hhvmPath = "docker";
       dockerArgs.push("exec", "-i", args.dockerContainerName, "hhvm");
-      scriptArgs = scriptArgs.map(value =>
+      scriptArgs = scriptArgs.map((value) =>
         value.replace(
           args.localWorkspaceRoot || "",
           args.remoteWorkspacePath || ""
@@ -244,9 +245,9 @@ class HHVMDebuggerWrapper {
       "--mode",
       "vsdebug",
       ...hhvmArgs,
-      ...scriptArgs
+      ...scriptArgs,
     ];
-    const options = {
+    const options: SpawnOptionsWithoutStdio = {
       cwd: args.cwd || process.cwd(),
       // FD[3] is used for communicating with the debugger extension.
       // STDIN, STDOUT and STDERR are the actual PHP streams.
@@ -257,35 +258,37 @@ class HHVMDebuggerWrapper {
         : ["pipe", "pipe", "pipe", "pipe"],
       // When the wrapper exits, so does the target.
       detached: false,
-      env: process.env
+      env: process.env,
     };
 
     const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
 
     // Exit with the same error code the target exits with.
-    targetProcess.on("exit", code => process.exit(code));
-    targetProcess.on("error", error =>
+    targetProcess.on("exit", (code) => process.exit(code || undefined));
+    targetProcess.on("error", (error) =>
       process.stderr.write(`${error.toString()}\n`)
     );
 
     // Wrap any stdout from the target into a VS Code stdout event.
-    targetProcess.stdout.on("data", chunk => {
+    targetProcess.stdout.on("data", (chunk) => {
       const block: string = chunk.toString();
       this.writeOutputEvent("stdout", block);
     });
-    targetProcess.stdout.on("error", () => { });
+    targetProcess.stdout.on("error", () => {});
 
     // Wrap any stderr from the target into a VS Code stderr event.
-    targetProcess.stderr.on("data", chunk => {
+    targetProcess.stderr.on("data", (chunk) => {
       const block: string = chunk.toString();
       this.writeOutputEvent("stderr", block);
     });
-    targetProcess.stderr.on("error", () => { });
+    targetProcess.stderr.on("error", () => {});
 
-    targetProcess.stdio[3].on("data", chunk => {
-      this.processDebuggerMessage(chunk);
-    });
-    targetProcess.stdio[3].on("error", () => { });
+    if (targetProcess.stdio[3]) {
+      targetProcess.stdio[3].on("data", (chunk) => {
+        this.processDebuggerMessage(chunk);
+      });
+      targetProcess.stdio[3].on("error", () => {});
+    }
 
     // Read data from the debugger client on stdin and forward to the
     // debugger engine in the target.
@@ -330,21 +333,21 @@ class HHVMDebuggerWrapper {
     const runInTerminalArgs: DebugProtocol.RunInTerminalRequestArguments = {
       kind: "integrated",
       cwd: __dirname,
-      args: terminalArgs
+      args: terminalArgs,
     };
 
     this.writeOutputWithHeader({
       seq: ++this.sequenceNumber,
       type: "request",
       command: "runInTerminal",
-      arguments: runInTerminalArgs
+      arguments: runInTerminalArgs,
     });
     // this.runInTerminalRequest = new Promise();
     // this.runInTerminalRequest.promise;
 
     const attachConfig: HhvmAttachRequestArguments = {
       // debugPort: startupArgs.debugPort,
-      sandboxUser: startupArgs.sandboxUser
+      sandboxUser: startupArgs.sandboxUser,
     };
     this.attachTarget({ ...requestMessage, arguments: attachConfig });
   }
@@ -417,8 +420,8 @@ class HHVMDebuggerWrapper {
                 {
                   default: false,
                   label: "Break On All Exceptions",
-                  filter: "all"
-                }
+                  filter: "all",
+                },
               ],
               supportsLoadedSourcesRequest: false,
               supportTerminateDebuggee: false,
@@ -440,15 +443,15 @@ class HHVMDebuggerWrapper {
               supportsStepInTargetsRequest: false,
 
               // Experimental support for terminate thread
-              supportsTerminateThreadsRequest: true
-            }
+              supportsTerminateThreadsRequest: true,
+            },
           });
           break;
         case "disconnect":
           this.writeResponseMessage({
             request_seq: requestMsg.seq,
             success: true,
-            command: requestMsg.command
+            command: requestMsg.command,
           });
 
           // Exit this process, which will also result in the child being killed
@@ -508,7 +511,7 @@ class HHVMDebuggerWrapper {
         const obj = JSON.parse(message);
         obj.seq = ++this.sequenceNumber;
         this.writeOutputWithHeader(obj);
-      } catch (e) {
+      } catch (e: any) {
         process.stderr.write(
           `Error parsing message from target: ${e.toString()}: ${message}\n`
         );
@@ -546,17 +549,17 @@ class HHVMDebuggerWrapper {
       event: "output",
       body: {
         category: eventType,
-        output: message
-      }
+        output: message,
+      },
     };
     this.writeOutputWithHeader(outputEvent);
   }
 
-  private writeResponseMessage(message) {
+  private writeResponseMessage(message: {}) {
     this.writeOutputWithHeader({
       seq: ++this.sequenceNumber,
       type: "response",
-      ...message
+      ...message,
     });
   }
 
@@ -565,7 +568,7 @@ class HHVMDebuggerWrapper {
   // more quickly than a new HHVM release, this allows us to modify
   // behavior and fix compatibility bugs before presenting the messages
   // to the client.
-  private applyCompatabilityFixes(message) {
+  private applyCompatabilityFixes(message: any) {
     if (message.type === "response") {
       switch (message.command) {
         case "threads": {
@@ -576,7 +579,7 @@ class HHVMDebuggerWrapper {
           break;
         }
         case "stackTrace": {
-          message.body.stackFrames.forEach(stackFrame => {
+          message.body.stackFrames.forEach((stackFrame: any) => {
             if (stackFrame.source != null) {
               if (stackFrame.source.path === "<unknown>") {
                 // TODO(ericblue): Delete source when there's none known.
@@ -592,7 +595,7 @@ class HHVMDebuggerWrapper {
           break;
         }
         case "variables": {
-          message.body.variables.forEach(variable => {
+          message.body.variables.forEach((variable: any) => {
             if (!("variablesReference" in variable)) {
               variable.variablesReference = 0;
             }
@@ -637,8 +640,8 @@ class HHVMDebuggerWrapper {
             message.body.threadCausedFocus != null
               ? message.body.threadCausedFocus
               : reason === "step" ||
-              reason === "breakpoint" ||
-              reason === "exception";
+                reason === "breakpoint" ||
+                reason === "exception";
 
           if (message.body.preserveFocusHint == null) {
             message.body.preserveFocusHint = !focusThread;
@@ -652,7 +655,7 @@ class HHVMDebuggerWrapper {
     }
   }
 
-  private writeOutputWithHeader(message) {
+  private writeOutputWithHeader(message: any) {
     this.applyCompatabilityFixes(message);
 
     // TODO(ericblue): Fix breakpoint events format on the HHVM side.
