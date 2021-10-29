@@ -8,7 +8,8 @@ on:
       - master
 
 jobs:
-  build:
+  test:
+    name: Test
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
