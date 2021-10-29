@@ -1,3 +1,4 @@
+name: Build
 on:
   push:
     branches:
@@ -8,7 +9,6 @@ on:
 
 jobs:
   build:
-    name: Build
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
@@ -30,3 +30,9 @@ jobs:
       #  run: npm run deploy
       #  env:
       #    VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+  compile-grammar:
+    name: Compile Language Grammar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker://linguist/grammar-compiler:latest
