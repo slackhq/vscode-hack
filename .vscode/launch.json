@@ -3,15 +3,12 @@
   "version": "0.1.0",
   "configurations": [
     {
-      "name": "Extension",
+      "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
-      "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-      "stopOnEntry": false,
-      "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "npm: watch"
+      "preLaunchTask": "${defaultBuildTask}"
     },
     {
       "name": "Debug Server",
@@ -26,21 +23,18 @@
       "name": "Extension Tests",
       "type": "extensionHost",
       "request": "launch",
-      "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/out/test"
+        "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
       ],
-      "stopOnEntry": false,
-      "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
-      "preLaunchTask": "npm: watch"
+      "preLaunchTask": "${defaultBuildTask}"
     }
   ],
   "compounds": [
     {
       "name": "Extension + Debug Server",
-      "configurations": ["Extension", "Debug Server"]
+      "configurations": ["Run Extension", "Debug Server"]
     }
   ]
 }
