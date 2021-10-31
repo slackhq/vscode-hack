@@ -1,7 +1,7 @@
 {
   "scopeName": "source.hack",
   "name": "Hack",
-  "fileTypes": ["hh", "php", "hack"],
+  "fileTypes": ["hh, "php", "hack"],
   "foldingStartMarker": "(/\\*|\\{\\s*$|<<<HTML)",
   "foldingStopMarker": "(\\*/|^\\s*\\}|^HTML;)",
   "patterns": [
