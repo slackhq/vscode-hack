@@ -1,12 +1,9 @@
 name: Build
 on:
   push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
-
 jobs:
   test:
     name: Test
@@ -31,3 +28,18 @@ jobs:
       #  run: npm run deploy
       #  env:
       #    VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+  compile-grammar:
+    name: Compile Language Grammar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: github/linguist
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: vendor/grammars/vscode-hack
+      - name: Compile
+        run: ./script/grammar-compiler add vendor/grammars/vscode-hack
