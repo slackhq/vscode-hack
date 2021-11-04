@@ -245,18 +245,6 @@
           "default": null,
           "description": "Whether to lint the entire project or just the open files"
         },
-        "hack.rememberedWorkspaces": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string",
-            "enum": [
-              "trusted",
-              "untrusted"
-            ]
-          },
-          "default": {},
-          "description": "Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered"
-        },
         "hack.remote.enabled": {
           "type": "boolean",
           "default": false,

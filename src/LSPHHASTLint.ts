@@ -64,37 +64,7 @@ export class LSPHHASTLint {
       return;
     }
 
-    const remembered = config.hhastRememberedWorkspaces[workspace];
-    if (remembered === "trusted") {
-      await new LSPHHASTLint(context, hhastPath).run();
-      return;
-    } else if (remembered === "untrusted") {
-      return;
-    }
-
-    const result = await vscode.window.showWarningMessage(
-      `Do you want to use ${hhastPath} to lint? This has the same security risks as executing any other code in the repository.`,
-      {},
-      "Yes",
-      "Always",
-      "No",
-      "Never"
-    );
-    switch (result) {
-      // @ts-ignore: Fallthrough case in switch
-      case "Always":
-        await config.rememberHhastWorkspace(workspace, "trusted");
-      case "Yes":
-        await new LSPHHASTLint(context, hhastPath).run();
-        break;
-      // @ts-ignore: Fallthrough case in switch
-      case "Never":
-        await config.rememberHhastWorkspace(workspace, "untrusted");
-      case "No":
-        return;
-      default:
-        return;
-    }
+    await new LSPHHASTLint(context, hhastPath).run();
   }
 
   public async run(): Promise<void> {
