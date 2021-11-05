@@ -51,7 +51,6 @@ This extension adds the following Visual Studio Code settings. These can be set 
 - `hack.hhastPath`: Use an alternate `hhast-lint` path. Can be abolute or relative to workspace root (default: `vendor/bin/hhast-lint`).
 - `hack.hhastArgs`: Optional list of arguments passed to hhast-lint executable.
 - `hack.hhastLintMode`: Whether to lint the entire project (`whole-project`) or just the open files (`open-files`).
-- `hack.rememberedWorkspaces`: Workspaces where whether or not to run custom Hack executables (e.g. hhast-lint) has been remembered. **Note:** This config can only be defined in VS Code global (user) settings.
 
 ### Remote Development
 

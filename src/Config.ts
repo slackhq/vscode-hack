@@ -31,27 +31,6 @@ export const hhastPath =
   hackConfig.get<string>("hhastPath") || "/vendor/bin/hhast-lint";
 export const hhastArgs = hackConfig.get<string[]>("hhastArgs", []);
 
-// Use the global configuration so that a project can't both provide a malicious hhast-lint executable and whitelist itself in $project/.vscode/settings.json
-const hhastRemembered:
-  | { globalValue?: { [key: string]: "trusted" | "untrusted" } }
-  | undefined = hackConfig.inspect("rememberedWorkspaces");
-export const hhastRememberedWorkspaces: {
-  [key: string]: "trusted" | "untrusted";
-} = hhastRemembered ? hhastRemembered.globalValue || {} : {};
-
-export async function rememberHhastWorkspace(
-  newWorkspace: string,
-  trust: "trusted" | "untrusted"
-) {
-  const remembered = hhastRememberedWorkspaces;
-  remembered[newWorkspace] = trust;
-  await hackConfig.update(
-    "rememberedWorkspaces",
-    remembered,
-    vscode.ConfigurationTarget.Global
-  );
-}
-
 export const remoteEnabled = hackConfig.get<boolean>("remote.enabled", false);
 export const remoteType: "ssh" | "docker" | undefined = hackConfig.get(
   "remote.type",
