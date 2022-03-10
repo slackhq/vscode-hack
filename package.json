@@ -309,7 +309,7 @@
     "postinstall": "node ./build/notice-file-generate.js",
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js",
-    "deploy": "vsce publish"
+    "package": "vsce package"
   },
   "dependencies": {
     "vscode-debugadapter": "^1.35.0",

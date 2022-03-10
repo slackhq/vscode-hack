@@ -3,16 +3,17 @@ on:
   push:
     branches:
       - master
+    tags:
+      - v*
   pull_request:
     branches:
       - master
 
 jobs:
-  test:
-    name: Test
+  build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -26,6 +27,17 @@ jobs:
         if: runner.os == 'Linux'
       - run: npm test
         if: runner.os != 'Linux'
+      - run: vsce package
+      - uses: svenstaro/upload-release-action
+        if: |
+          matrix.os == 'ubuntu-latest' &&
+          startsWith(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: "*.vsix"
+          file_glob: true
+          tag: ${{ github.ref }}
+
       #- name: Publish
       #  if: success() && startsWith( github.ref, 'refs/tags/releases/') && matrix.os == 'ubuntu-latest'
       #  run: npm run deploy
