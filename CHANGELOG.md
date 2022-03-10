@@ -3,6 +3,12 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.13.0 - 2022-03-09
+
+- Removed custom workspace trust mechanism, since VS Code now has it built-in (thanks
+  [@fredemmott](https://github.com/fredemmott))!
+- Automated publishing of extension package as a release asset.
+
 ## v2.12.0 - 2021-10-28
 
 - Reverted expression-trees syntax highlighting rule due to performance issues.
