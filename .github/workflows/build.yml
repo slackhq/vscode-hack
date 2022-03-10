@@ -27,7 +27,7 @@ jobs:
         if: runner.os == 'Linux'
       - run: npm test
         if: runner.os != 'Linux'
-      - run: vsce package
+      - run: npm run package
       - uses: svenstaro/upload-release-action@2.2.1
         if: |
           matrix.os == 'ubuntu-latest' &&
