@@ -698,6 +698,31 @@
           ]
         },
         {
+          "begin": "(?i)^\\s*(enum)\\s*(class)\\s+([a-z0-9_]+)\\s*:?",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.php"
+            },
+            "2": {
+              "name": "storage.type.class.enum.php"
+            },
+            "3": {
+              "name": "entity.name.type.class.enum.php"
+            }
+          },
+          "end": "(?=[{])",
+          "name": "meta.class.enum.php",
+          "patterns": [
+            {
+              "match": "\\b(extends)\\b",
+              "name": "storage.modifier.extends.php"
+            },
+            {
+              "include": "#type-annotation"
+            }
+          ]
+        },
+        {
           "begin": "(?i)^\\s*(enum)\\s*([a-z0-9_]+)\\s*:?",
           "beginCaptures": {
             "1": {
