@@ -698,6 +698,27 @@
           ]
         },
         {
+          "begin": "(?i)^\\s*(enum)\\s*([a-z0-9_]+)\\s*:?",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.enum.php"
+            },
+            "2": {
+              "name": "entity.name.type.enum.php"
+            }
+          },
+          "end": "\\{",
+          "name": "meta.enum.php",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#type-annotation"
+            }
+          ]
+        },
+        {
           "begin": "(?i)^\\s*(trait)\\s+([a-z0-9_]+)\\s*",
           "beginCaptures": {
             "1": {
