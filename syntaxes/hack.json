@@ -109,27 +109,6 @@
               "name": "comment.line.double-slash.php"
             }
           ]
-        },
-        {
-          "begin": "(^[ \\t]+)?(?=#)",
-          "beginCaptures": {
-            "1": {
-              "name": "punctuation.whitespace.comment.leading.php"
-            }
-          },
-          "end": "(?!\\G)",
-          "patterns": [
-            {
-              "begin": "#",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.definition.comment.php"
-                }
-              },
-              "end": "\\n|(?=\\?>)",
-              "name": "comment.line.number-sign.php"
-            }
-          ]
         }
       ]
     },
