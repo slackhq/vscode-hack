@@ -5,6 +5,13 @@
 import * as vscode from "vscode";
 import * as config from "./Config";
 
+const localPath = getUriFilePath(config.localWorkspacePath);
+const remotePath = getUriFilePath(config.remoteWorkspacePath);
+
+function getUriFilePath(path: string|undefined): string {
+  return path ? vscode.Uri.file(path).toString() : '';
+}
+
 /**
  * Converts a local workspace URI to a file path string (with or without scheme) to pass to
  * the typechecker. Path is mapped to an alternate workspace root if configured.
@@ -17,7 +24,7 @@ export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
   }
   return file
     .toString()
-    .replace(config.localWorkspacePath, config.remoteWorkspacePath);
+    .replace(localPath, remotePath);
 };
 
 /**
@@ -29,8 +36,8 @@ export const mapToWorkspaceUri = (file: string): vscode.Uri => {
   let filePath = file;
   if (config.remoteEnabled && config.remoteWorkspacePath) {
     filePath = filePath.replace(
-      config.remoteWorkspacePath,
-      config.localWorkspacePath
+      remotePath,
+      localPath
     );
   }
   if (filePath.startsWith("file://")) {
