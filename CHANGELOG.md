@@ -3,6 +3,11 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.14.0 - 2022-08-25
+
+- Lots of syntax highlighting fixes. Thanks [Wilfred](https://github.com/Wilfred)!
+- Fix file path mappings on Windows. Thanks [skoro](https://github.com/skoro)! 
+
 ## v2.13.0 - 2022-03-09
 
 - Removed custom workspace trust mechanism, since VS Code now has it built-in (thanks

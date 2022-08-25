@@ -16,7 +16,7 @@ Attn: Open Source Requests
 San Francisco, CA 94105
 
 ---
-**[minimist@1.2.5](https://github.com/substack/minimist)**
+**[minimist@1.2.6](https://github.com/substack/minimist)**
 ```
 This software is released under the MIT license:
 
