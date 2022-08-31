@@ -895,7 +895,7 @@
               "name": "keyword.control.php"
             }
           },
-          "match": "\\s*\\b(break|c(ase|ontinue)|default|do|else|for(each)?|if|return|switch|use|while)\\b"
+          "match": "\\s*\\b(await|break|c(ase|ontinue)|concurrent|default|do|else|for(each)?|if|return|switch|use|while)\\b"
         },
         {
           "begin": "(?i)\\b((?:require|include)(?:_once)?)\\b\\s*",
