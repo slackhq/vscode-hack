@@ -664,7 +664,7 @@
           "begin": "(?xi)\n^\\s*\n(?:(module)\\s*)?(type|newtype)\n\\s+\n([a-z0-9_]+)",
           "beginCaptures": {
             "1": {
-              "name": "storage.type.typedecl.php"
+              "name": "storage.modifier.php"
             },
             "2": {
               "name": "storage.type.typedecl.php"
