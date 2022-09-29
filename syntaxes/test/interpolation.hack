@@ -31,3 +31,13 @@ function single_quoted(): void {
   // No interpolation here.
   $x = 'foo $x';
 }
+
+function regex(): void {
+  // In a regular expression, we want to highlight metacharacters.
+  $x = re"/* foo */";
+  $x = re'/* foo */';
+
+  // Don't treat plain strings with / as regexps.
+  $x = "/* foo */";
+  $x = '/* foo */';
+}
