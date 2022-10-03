@@ -3,6 +3,10 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.16.0 - 2022-10-03
+
+- Syntax highlighting fixes. Thanks [Wilfred](https://github.com/Wilfred) & [panopticoncentral](https://github.com/panopticoncentral)!
+
 ## v2.15.0 - 2022-09-27
 
 - Syntax highlighting for await and concurrent. Thanks [Wilfred](https://github.com/Wilfred)! 
