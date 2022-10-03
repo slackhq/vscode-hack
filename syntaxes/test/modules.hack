@@ -11,16 +11,25 @@ internal interface foo {
 public interface foo {
 }
 
+interface foo {
+}
+
 internal enum foo {
 }
 
 public enum foo {
 }
 
+enum foo {
+}
+
 internal enum class foo {
 }
 
 public enum class foo {
+}
+
+enum class foo {
 }
 
 internal trait foo {
@@ -32,6 +41,9 @@ internal trait foo {
 public trait foo {
 }
 
+trait foo {
+}
+
 internal class foo {
     internal int $x;
     internal function y(): void {
@@ -39,4 +51,16 @@ internal class foo {
 }
 
 public class foo {
+}
+
+class foo {
+}
+
+internal function foo(): void {
+}
+
+public function foo(): void {
+}
+
+function foo(): void {
 }
