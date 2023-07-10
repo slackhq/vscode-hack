@@ -320,7 +320,7 @@
     "@types/glob": "^7.1.4",
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.18.53",
-    "@types/vscode": "^1.80.0",
+    "@types/vscode": "^1.61.0",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "@vscode/test-electron": "^1.6.2",
