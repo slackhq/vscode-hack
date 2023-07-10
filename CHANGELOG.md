@@ -3,6 +3,13 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.17.1 - 2023-07-10
+
+- Automated and manual security fixes for dependencies.
+- Minor project housekeeping:
+  - Updated some package paths (`vscode-debugadapter`, `vscode-debugprotocol` and `vsce` all moved under the `@vscode` npm org).
+  - Added some required OSS notices to the repo.
+
 ## v2.16.0 - 2022-10-03
 
 - Syntax highlighting fixes. Thanks [Wilfred](https://github.com/Wilfred) & [panopticoncentral](https://github.com/panopticoncentral)!
