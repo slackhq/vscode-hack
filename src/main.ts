@@ -26,12 +26,15 @@ export async function activate(context: vscode.ExtensionContext) {
     return;
   }
 
-  await vscode.window.withProgress({
-    location: vscode.ProgressLocation.Window,
-    title: `Running Hack typechecker`
-  }, async () => {
-    return hh_client.start();
-  });
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Window,
+      title: `Running Hack typechecker`,
+    },
+    async () => {
+      return hh_client.start();
+    },
+  );
 
   const services: Promise<void>[] = [];
   services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
@@ -44,7 +47,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   vscode.debug.registerDebugConfigurationProvider(
     "hhvm",
-    new HhvmDebugConfigurationProvider()
+    new HhvmDebugConfigurationProvider(),
   );
 
   await Promise.all(services);

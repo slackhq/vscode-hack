@@ -4,15 +4,16 @@ import {
   DebugConfigurationProvider,
   DebugConfiguration,
   CancellationToken,
-  ProviderResult
+  ProviderResult,
 } from "vscode";
 
 export class HhvmDebugConfigurationProvider
-  implements DebugConfigurationProvider {
+  implements DebugConfigurationProvider
+{
   resolveDebugConfiguration(
     folder: WorkspaceFolder | undefined,
     debugConfig: DebugConfiguration,
-    _token?: CancellationToken
+    _token?: CancellationToken,
   ): ProviderResult<DebugConfiguration> {
     // if launch.json is missing or empty
     if (

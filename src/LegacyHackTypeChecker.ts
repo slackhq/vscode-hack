@@ -15,30 +15,30 @@ export class LegacyHackTypeChecker {
     // register language functionality providers
     const HACK_MODE: vscode.DocumentFilter = {
       language: "hack",
-      scheme: "file"
+      scheme: "file",
     };
     context.subscriptions.push(
       vscode.languages.registerHoverProvider(
         HACK_MODE,
-        new providers.HackHoverProvider()
-      )
+        new providers.HackHoverProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerDocumentSymbolProvider(
         HACK_MODE,
-        new providers.HackDocumentSymbolProvider()
-      )
+        new providers.HackDocumentSymbolProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerWorkspaceSymbolProvider(
-        new providers.HackWorkspaceSymbolProvider()
-      )
+        new providers.HackWorkspaceSymbolProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerDocumentHighlightProvider(
         HACK_MODE,
-        new providers.HackDocumentHighlightProvider()
-      )
+        new providers.HackDocumentHighlightProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerCompletionItemProvider(
@@ -47,37 +47,36 @@ export class LegacyHackTypeChecker {
         "$",
         ">",
         ":",
-        "\\"
-      )
+        "\\",
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerDocumentFormattingEditProvider(
         HACK_MODE,
-        new providers.HackDocumentFormattingEditProvider()
-      )
+        new providers.HackDocumentFormattingEditProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerReferenceProvider(
         HACK_MODE,
-        new providers.HackReferenceProvider()
-      )
+        new providers.HackReferenceProvider(),
+      ),
     );
     context.subscriptions.push(
       vscode.languages.registerDefinitionProvider(
         HACK_MODE,
-        new providers.HackDefinitionProvider()
-      )
+        new providers.HackDefinitionProvider(),
+      ),
     );
 
     // create typechecker and run when workspace is first loaded and on every file save
-    const hhvmTypeDiag: vscode.DiagnosticCollection = vscode.languages.createDiagnosticCollection(
-      "hack_typecheck"
-    );
+    const hhvmTypeDiag: vscode.DiagnosticCollection =
+      vscode.languages.createDiagnosticCollection("hack_typecheck");
     this.hhvmTypeDiag = hhvmTypeDiag;
     context.subscriptions.push(
       vscode.workspace.onDidSaveTextDocument(() => {
         this.run();
-      })
+      }),
     );
     context.subscriptions.push(hhvmTypeDiag);
   }
@@ -91,17 +90,17 @@ export class LegacyHackTypeChecker {
     }
 
     const diagnosticMap: Map<vscode.Uri, vscode.Diagnostic[]> = new Map();
-    typecheckResult.errors.forEach(error => {
+    typecheckResult.errors.forEach((error) => {
       const diagnostic = new vscode.Diagnostic(
         new vscode.Range(
           new vscode.Position(
             error.message[0].line - 1,
-            error.message[0].start - 1
+            error.message[0].start - 1,
           ),
-          new vscode.Position(error.message[0].line - 1, error.message[0].end)
+          new vscode.Position(error.message[0].line - 1, error.message[0].end),
         ),
         `${error.message[0].descr} [${error.message[0].code}]`,
-        vscode.DiagnosticSeverity.Error
+        vscode.DiagnosticSeverity.Error,
       );
 
       diagnostic.code = error.message[0].code;
@@ -116,16 +115,16 @@ export class LegacyHackTypeChecker {
               new vscode.Range(
                 new vscode.Position(
                   error.message[i].line - 1,
-                  error.message[i].start - 1
+                  error.message[i].start - 1,
                 ),
                 new vscode.Position(
                   error.message[i].line - 1,
-                  error.message[i].end
-                )
-              )
+                  error.message[i].end,
+                ),
+              ),
             ),
-            error.message[i].descr
-          )
+            error.message[i].descr,
+          ),
         );
       }
       diagnostic.relatedInformation = relatedInformation;

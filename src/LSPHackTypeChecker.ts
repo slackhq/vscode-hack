@@ -8,7 +8,7 @@ import {
   LanguageClient,
   RevealOutputChannelOn,
   LanguageClientOptions,
-  ServerOptions
+  ServerOptions,
 } from "vscode-languageclient";
 import * as config from "./Config";
 import { HackCoverageChecker } from "./coveragechecker";
@@ -26,7 +26,7 @@ export class LSPHackTypeChecker {
     this.context = context;
     this.versionText = this.getVersionText(version);
     this.status = vscode.window.createStatusBarItem(
-      vscode.StatusBarAlignment.Left
+      vscode.StatusBarAlignment.Left,
     );
     context.subscriptions.push(this.status);
   }
@@ -44,7 +44,7 @@ export class LSPHackTypeChecker {
 
     const serverOptions: ServerOptions = {
       command: remote.getCommand(config.clientPath),
-      args: remote.getArgs(config.clientPath, ["lsp", "--from", "vscode-hack"])
+      args: remote.getArgs(config.clientPath, ["lsp", "--from", "vscode-hack"]),
     };
 
     const clientOptions: LanguageClientOptions = {
@@ -52,21 +52,21 @@ export class LSPHackTypeChecker {
       initializationOptions: { useTextEditAutocomplete: true },
       uriConverters: {
         code2Protocol: utils.mapFromWorkspaceUri,
-        protocol2Code: utils.mapToWorkspaceUri
+        protocol2Code: utils.mapToWorkspaceUri,
       },
       middleware: {
-        handleDiagnostics: this.handleDiagnostics
+        handleDiagnostics: this.handleDiagnostics,
       },
       // Hack returns errors if commands fail due to syntax errors. Don't
       // automatically switch to the Output pane in this case.
-      revealOutputChannelOn: RevealOutputChannelOn.Never
+      revealOutputChannelOn: RevealOutputChannelOn.Never,
     };
 
     const languageClient = new LanguageClient(
       "hack",
       "Hack Language Server",
       serverOptions,
-      clientOptions
+      clientOptions,
     );
     languageClient.onReady().then(async () => {
       languageClient.onRequest(
@@ -85,7 +85,7 @@ export class LSPHackTypeChecker {
 
           this.status.show();
           return {};
-        }
+        },
       );
 
       if (
@@ -102,11 +102,11 @@ export class LSPHackTypeChecker {
   private handleDiagnostics(
     uri: vscode.Uri,
     diagnostics: vscode.Diagnostic[],
-    next: HandleDiagnosticsSignature
+    next: HandleDiagnosticsSignature,
   ) {
     next(
       uri,
-      diagnostics.map(d => {
+      diagnostics.map((d) => {
         // See https://github.com/facebook/hhvm/blob/028402226993d53d68e17125e0b7c8dd87ea6c17/hphp/hack/src/errors/errors.ml#L174
         let kind: string;
         switch (Math.floor(<number>d.code / 1000)) {
@@ -133,7 +133,7 @@ export class LSPHackTypeChecker {
         }
         d.message = `${kind}[${d.code}] ${d.message}`;
         return d;
-      })
+      }),
     );
   }
 

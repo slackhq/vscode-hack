@@ -16,13 +16,13 @@ See the full list of recent releases and features added on the
 
 ## v2.15.0 - 2022-09-27
 
-- Syntax highlighting for await and concurrent. Thanks [Wilfred](https://github.com/Wilfred)! 
+- Syntax highlighting for await and concurrent. Thanks [Wilfred](https://github.com/Wilfred)!
 - Syntax highlighting for modules. Thanks [panopticoncentral](https://github.com/panopticoncentral)!
 
 ## v2.14.0 - 2022-08-25
 
 - Lots of syntax highlighting fixes. Thanks [Wilfred](https://github.com/Wilfred)!
-- Fix file path mappings on Windows. Thanks [skoro](https://github.com/skoro)! 
+- Fix file path mappings on Windows. Thanks [skoro](https://github.com/skoro)!
 
 ## v2.13.0 - 2022-03-09
 

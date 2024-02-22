@@ -6,7 +6,7 @@ import * as fs from "fs";
 import * as vscode from "vscode";
 import {
   HandleDiagnosticsSignature,
-  LanguageClient
+  LanguageClient,
 } from "vscode-languageclient";
 import * as config from "./Config";
 import * as remote from "./remote";
@@ -27,7 +27,7 @@ export class LSPHHASTLint {
       config.remoteEnabled && config.remoteWorkspacePath
         ? hhastPath.replace(
             config.localWorkspacePath,
-            config.remoteWorkspacePath
+            config.remoteWorkspacePath,
           )
         : hhastPath;
   }
@@ -36,14 +36,14 @@ export class LSPHHASTLint {
    * enables HHAST support for this project.
    */
   public static async START_IF_CONFIGURED_AND_ENABLED(
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
   ): Promise<void> {
     if (!config.useHhast) {
       return;
     }
     const workspace = config.localWorkspacePath;
     const usesLint: boolean = await new Promise<boolean>((resolve, _) =>
-      fs.access(`${workspace}/hhast-lint.json`, err => resolve(!err))
+      fs.access(`${workspace}/hhast-lint.json`, (err) => resolve(!err)),
     );
     if (!usesLint) {
       return;
@@ -58,7 +58,7 @@ export class LSPHHASTLint {
       return;
     }
     const hhastExists: boolean = await new Promise<boolean>((resolve, _) =>
-      fs.access(hhastPath, err => resolve(!err))
+      fs.access(hhastPath, (err) => resolve(!err)),
     );
     if (!hhastExists) {
       return;
@@ -84,20 +84,20 @@ export class LSPHHASTLint {
           "--mode",
           "lsp",
           "--from",
-          "vscode-hack"
-        ])
+          "vscode-hack",
+        ]),
       },
       {
         documentSelector: [{ language: "hack", scheme: "file" }],
         initializationOptions: initializationOptions,
         uriConverters: {
           code2Protocol: utils.mapFromWorkspaceUri,
-          protocol2Code: utils.mapToWorkspaceUri
+          protocol2Code: utils.mapToWorkspaceUri,
         },
         middleware: {
-          handleDiagnostics: this.handleDiagnostics
-        }
-      }
+          handleDiagnostics: this.handleDiagnostics,
+        },
+      },
     );
     this.context.subscriptions.push(hhast.start());
   }
@@ -105,14 +105,14 @@ export class LSPHHASTLint {
   private handleDiagnostics(
     uri: vscode.Uri,
     diagnostics: vscode.Diagnostic[],
-    next: HandleDiagnosticsSignature
+    next: HandleDiagnosticsSignature,
   ) {
     next(
       uri,
-      diagnostics.map(d => {
+      diagnostics.map((d) => {
         d.message = `${d.code}: ${d.message}`;
         return d;
-      })
+      }),
     );
   }
 }

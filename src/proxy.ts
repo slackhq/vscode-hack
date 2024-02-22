@@ -25,7 +25,7 @@ export async function check(): Promise<hack.CheckResponse> {
 export async function typeAtPos(
   fileName: string,
   line: number,
-  character: number
+  character: number,
 ): Promise<string | undefined> {
   const arg: string = `${fileName}:${line}:${character}`;
   const args: string[] = ["--type-at-pos", arg];
@@ -54,7 +54,7 @@ export async function search(query: string): Promise<hack.SearchResponse> {
 export async function ideFindRefs(
   text: string,
   line: number,
-  character: number
+  character: number,
 ): Promise<hack.IdeFindRefsResponse> {
   return run(["--ide-find-refs", `${line}:${character}`], text);
 }
@@ -62,7 +62,7 @@ export async function ideFindRefs(
 export async function ideHighlightRefs(
   text: string,
   line: number,
-  character: number
+  character: number,
 ): Promise<hack.IdeHighlightRefsResponse> {
   return run(["--ide-highlight-refs", `${line}:${character}`], text);
 }
@@ -70,19 +70,19 @@ export async function ideHighlightRefs(
 export async function ideGetDefinition(
   text: string,
   line: number,
-  character: number
+  character: number,
 ): Promise<hack.IdeGetDefinitionResponse> {
   return run(["--ide-get-definition", `${line}:${character}`], text);
 }
 
 export async function autoComplete(
   text: string,
-  position: number
+  position: number,
 ): Promise<hack.AutoCompleteResponse> {
   // Insert hh_client autocomplete token at cursor position.
   const autoTok: string = "AUTO332";
   const input = [text.slice(0, position), autoTok, text.slice(position)].join(
-    ""
+    "",
   );
   return run(["--auto-complete"], input);
 }
@@ -90,7 +90,7 @@ export async function autoComplete(
 export async function format(
   text: string,
   startPos: number,
-  endPos: number
+  endPos: number,
 ): Promise<hack.FormatResponse> {
   // `endPos` is incremented to stop `hh_client --format` from removing the
   // final character when there is no newline at the end of the file.
@@ -134,7 +134,7 @@ async function run(extraArgs: string[], stdin?: string): Promise<any> {
           console.error(`Hack: hh_client output error: ${parseErr}`);
           resolve(null);
         }
-      }
+      },
     );
     if (stdin && p && p.stdin) {
       p.stdin.write(stdin);

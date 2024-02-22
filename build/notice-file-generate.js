@@ -14,16 +14,16 @@ checker.init(
     start: `${__dirname}/..`,
     production: true,
     customFormat: {
-      licenseText: ""
-    }
+      licenseText: "",
+    },
   },
-  function(err, packages) {
+  function (err, packages) {
     if (err) {
       console.error(`Failed to generate NOTICE.md file: ${err.stack}`);
       process.exit(1);
     } else {
       var stream = fs.createWriteStream(
-        path.resolve(__dirname, "..", "NOTICE.md")
+        path.resolve(__dirname, "..", "NOTICE.md"),
       );
       stream.write(`# Third-party notices\n\n
 This document includes licensing information relating to free, open-source, and public-source software (together, the “SOFTWARE”) included with or used while developing Slack’s \`vscode-hack\` software.  The terms of the applicable free, open-source, and public-source licenses (each an “OSS LICENSE”) govern Slack’s distribution and your use of the SOFTWARE. Slack and the third-party authors, licensors, and distributors of the SOFTWARE disclaim all warranties and liability arising from all use and distribution of the SOFTWARE. To the extent the OSS is provided under an agreement with Slack that differs from the applicable OSS LICENSE, those terms are offered by Slack alone.\n\n
@@ -44,5 +44,5 @@ San Francisco, CA 94105\n\n---\n`);
       stream.end();
       console.log(`NOTICE.md successfully written at ${stream.path}\n`);
     }
-  }
+  },
 );

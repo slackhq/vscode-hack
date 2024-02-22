@@ -15,22 +15,22 @@ const symbolArray = [
   { key: "interface", value: vscode.SymbolKind.Interface },
   { key: "enum", value: vscode.SymbolKind.Enum },
   { key: "trait", value: vscode.SymbolKind.Interface },
-  { key: "property", value: vscode.SymbolKind.Property }
+  { key: "property", value: vscode.SymbolKind.Property },
 ];
 
 const symbolMap = new Map(
-  symbolArray.map<[string, vscode.SymbolKind]>(x => [x.key, x.value])
+  symbolArray.map<[string, vscode.SymbolKind]>((x) => [x.key, x.value]),
 );
 
 const getRange = (
   lineStart: number,
   lineEnd: number,
   charStart: number,
-  charEnd: number
+  charEnd: number,
 ): vscode.Range => {
   return new vscode.Range(
     new vscode.Position(lineStart - 1, charStart - 1),
-    new vscode.Position(lineEnd - 1, charEnd - 1)
+    new vscode.Position(lineEnd - 1, charEnd - 1),
   );
 };
 
@@ -42,9 +42,9 @@ const pushSymbols = (
   outline: OutlineResponse[],
   symbols: vscode.SymbolInformation[],
   container: string,
-  indent: string
+  indent: string,
 ) => {
-  outline.forEach(element => {
+  outline.forEach((element) => {
     let name = element.name;
     const nameIndex = name.lastIndexOf("\\");
     if (nameIndex !== -1) {
@@ -68,7 +68,7 @@ const pushSymbols = (
       element.span.line_start,
       element.span.line_end,
       element.span.char_start,
-      element.span.char_end
+      element.span.char_end,
     );
     symbols.push(
       new vscode.SymbolInformation(
@@ -76,8 +76,8 @@ const pushSymbols = (
         symbolKind,
         range,
         undefined,
-        container
-      )
+        container,
+      ),
     );
 
     // Check if element has any children, and recursively fetch them as well.
@@ -91,7 +91,7 @@ const pushSymbols = (
 export class HackHoverProvider implements vscode.HoverProvider {
   public provideHover(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): vscode.ProviderResult<vscode.Hover> {
     const wordPosition = document.getWordRangeAtPosition(position);
     if (!wordPosition) {
@@ -102,7 +102,7 @@ export class HackHoverProvider implements vscode.HoverProvider {
     const character: number = startPosition.character + 1;
     return hh_client
       .typeAtPos(utils.mapFromWorkspaceUri(document.uri), line, character)
-      .then(hoverType => {
+      .then((hoverType) => {
         if (!hoverType) {
           return;
         }
@@ -111,7 +111,7 @@ export class HackHoverProvider implements vscode.HoverProvider {
         }
         const formattedMessage: vscode.MarkedString = {
           language: "hack",
-          value: hoverType
+          value: hoverType,
         };
         return new vscode.Hover(formattedMessage);
       });
@@ -119,11 +119,12 @@ export class HackHoverProvider implements vscode.HoverProvider {
 }
 
 export class HackDocumentSymbolProvider
-  implements vscode.DocumentSymbolProvider {
+  implements vscode.DocumentSymbolProvider
+{
   public provideDocumentSymbols(
-    document: vscode.TextDocument
+    document: vscode.TextDocument,
   ): vscode.ProviderResult<vscode.SymbolInformation[]> {
-    return hh_client.outline(document.getText()).then(outline => {
+    return hh_client.outline(document.getText()).then((outline) => {
       const symbols: vscode.SymbolInformation[] = [];
       pushSymbols(outline, symbols, "", "");
       return symbols;
@@ -132,13 +133,14 @@ export class HackDocumentSymbolProvider
 }
 
 export class HackWorkspaceSymbolProvider
-  implements vscode.WorkspaceSymbolProvider {
+  implements vscode.WorkspaceSymbolProvider
+{
   public provideWorkspaceSymbols(
-    query: string
+    query: string,
   ): vscode.ProviderResult<vscode.SymbolInformation[]> {
-    return hh_client.search(query).then(searchResult => {
+    return hh_client.search(query).then((searchResult) => {
       const symbols: vscode.SymbolInformation[] = [];
-      searchResult.forEach(element => {
+      searchResult.forEach((element) => {
         const name = element.name.split("\\").pop() || "";
         let desc = element.desc;
         if (desc.includes(" in ")) {
@@ -155,10 +157,10 @@ export class HackWorkspaceSymbolProvider
           element.line,
           element.line,
           element.char_start,
-          element.char_end
+          element.char_end,
         );
         symbols.push(
-          new vscode.SymbolInformation(name, kind, range, uri, container)
+          new vscode.SymbolInformation(name, kind, range, uri, container),
         );
       });
       return symbols;
@@ -167,20 +169,21 @@ export class HackWorkspaceSymbolProvider
 }
 
 export class HackDocumentHighlightProvider
-  implements vscode.DocumentHighlightProvider {
+  implements vscode.DocumentHighlightProvider
+{
   public provideDocumentHighlights(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): vscode.ProviderResult<vscode.DocumentHighlight[]> {
     return hh_client
       .ideHighlightRefs(
         document.getText(),
         position.line + 1,
-        position.character + 1
+        position.character + 1,
       )
-      .then(highlightResult => {
+      .then((highlightResult) => {
         const highlights: vscode.DocumentHighlight[] = [];
-        highlightResult.forEach(element => {
+        highlightResult.forEach((element) => {
           const line: number = element.line - 1;
           const charStart: number = element.char_start - 1;
           const charEnd: number = element.char_end;
@@ -188,10 +191,10 @@ export class HackDocumentHighlightProvider
             new vscode.DocumentHighlight(
               new vscode.Range(
                 new vscode.Position(line, charStart),
-                new vscode.Position(line, charEnd)
+                new vscode.Position(line, charEnd),
               ),
-              vscode.DocumentHighlightKind.Text
-            )
+              vscode.DocumentHighlightKind.Text,
+            ),
           );
         });
         return highlights;
@@ -200,16 +203,17 @@ export class HackDocumentHighlightProvider
 }
 
 export class HackCompletionItemProvider
-  implements vscode.CompletionItemProvider {
+  implements vscode.CompletionItemProvider
+{
   public provideCompletionItems(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): vscode.ProviderResult<vscode.CompletionItem[]> {
     return hh_client
       .autoComplete(document.getText(), document.offsetAt(position))
-      .then(completionResult => {
+      .then((completionResult) => {
         const completionItems: vscode.CompletionItem[] = [];
-        completionResult.forEach(element => {
+        completionResult.forEach((element) => {
           let label: string = element.name.split("\\").pop() || "";
           let labelType: string = element.type;
           let kind = vscode.CompletionItemKind.Class;
@@ -241,21 +245,22 @@ export class HackCompletionItemProvider
 }
 
 export class HackDocumentFormattingEditProvider
-  implements vscode.DocumentFormattingEditProvider {
+  implements vscode.DocumentFormattingEditProvider
+{
   public provideDocumentFormattingEdits(
-    document: vscode.TextDocument
+    document: vscode.TextDocument,
   ): vscode.ProviderResult<vscode.TextEdit[]> {
     const text: string = document.getText();
-    return hh_client.format(text, 0, text.length).then(formatResult => {
+    return hh_client.format(text, 0, text.length).then((formatResult) => {
       if (formatResult.internal_error || formatResult.error_message) {
         return;
       }
       const textEdit = vscode.TextEdit.replace(
         new vscode.Range(
           document.positionAt(0),
-          document.positionAt(text.length)
+          document.positionAt(text.length),
         ),
-        formatResult.result
+        formatResult.result,
       );
       return [textEdit];
     });
@@ -265,33 +270,33 @@ export class HackDocumentFormattingEditProvider
 export class HackReferenceProvider implements vscode.ReferenceProvider {
   public provideReferences(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): vscode.ProviderResult<vscode.Location[]> {
     const text = document.getText();
     return hh_client
       .ideFindRefs(text, position.line + 1, position.character + 1)
-      .then(foundRefs => {
+      .then((foundRefs) => {
         return hh_client
           .ideHighlightRefs(text, position.line + 1, position.character + 1)
-          .then(highlightRefs => {
+          .then((highlightRefs) => {
             const locations: vscode.Location[] = [];
-            foundRefs.forEach(ref => {
+            foundRefs.forEach((ref) => {
               const location = new vscode.Location(
                 utils.mapToWorkspaceUri(ref.filename),
                 new vscode.Range(
                   new vscode.Position(ref.line - 1, ref.char_start - 1),
-                  new vscode.Position(ref.line - 1, ref.char_end)
-                )
+                  new vscode.Position(ref.line - 1, ref.char_end),
+                ),
               );
               locations.push(location);
             });
-            highlightRefs.forEach(ref => {
+            highlightRefs.forEach((ref) => {
               const location = new vscode.Location(
                 vscode.Uri.file(document.fileName),
                 new vscode.Range(
                   new vscode.Position(ref.line - 1, ref.char_start - 1),
-                  new vscode.Position(ref.line - 1, ref.char_end)
-                )
+                  new vscode.Position(ref.line - 1, ref.char_end),
+                ),
               );
               locations.push(location);
             });
@@ -304,14 +309,14 @@ export class HackReferenceProvider implements vscode.ReferenceProvider {
 export class HackDefinitionProvider implements vscode.DefinitionProvider {
   public provideDefinition(
     document: vscode.TextDocument,
-    position: vscode.Position
+    position: vscode.Position,
   ): vscode.ProviderResult<vscode.Definition> {
     const text = document.getText();
     return hh_client
       .ideGetDefinition(text, position.line + 1, position.character + 1)
-      .then(foundDefinition => {
+      .then((foundDefinition) => {
         const definition: vscode.Location[] = [];
-        foundDefinition.forEach(element => {
+        foundDefinition.forEach((element) => {
           if (element.definition_pos) {
             const location: vscode.Location = new vscode.Location(
               element.definition_pos.filename
@@ -320,13 +325,13 @@ export class HackDefinitionProvider implements vscode.DefinitionProvider {
               new vscode.Range(
                 new vscode.Position(
                   element.definition_pos.line - 1,
-                  element.definition_pos.char_start - 1
+                  element.definition_pos.char_start - 1,
                 ),
                 new vscode.Position(
                   element.definition_pos.line - 1,
-                  element.definition_pos.char_end
-                )
-              )
+                  element.definition_pos.char_end,
+                ),
+              ),
             );
             definition.push(location);
           }

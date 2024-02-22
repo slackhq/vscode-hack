@@ -93,7 +93,7 @@ class HHVMDebuggerWrapper {
 
   private attachTarget(
     attachMessage: DebugProtocol.AttachRequest,
-    retries: number = 0
+    retries: number = 0,
   ) {
     const args: HhvmAttachRequestArguments = attachMessage.arguments;
     const attachPort = args.port
@@ -133,7 +133,7 @@ class HHVMDebuggerWrapper {
         event: "hhvmConnectionDied",
       });
       process.stderr.write(
-        "The connection to the debug target has been closed."
+        "The connection to the debug target has been closed.",
       );
       process.exit(0);
     });
@@ -144,7 +144,7 @@ class HHVMDebuggerWrapper {
       if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
         mappedData = mappedData.replace(
           this.localWorkspaceRootPattern,
-          this.remoteSiteRoot
+          this.remoteSiteRoot,
         );
       }
 
@@ -166,7 +166,7 @@ class HHVMDebuggerWrapper {
     socket.on("error", (error) => {
       if (retries >= 5) {
         process.stderr.write(
-          `Error communicating with debugger target: ${error.toString()}\n`
+          `Error communicating with debugger target: ${error.toString()}\n`,
         );
         process.exit((<any>error).code);
       } else {
@@ -226,8 +226,8 @@ class HHVMDebuggerWrapper {
       scriptArgs = scriptArgs.map((value) =>
         value.replace(
           args.localWorkspaceRoot || "",
-          args.remoteWorkspacePath || ""
-        )
+          args.remoteWorkspacePath || "",
+        ),
       );
 
       this.remoteSiteRoot = args.remoteWorkspacePath;
@@ -266,7 +266,7 @@ class HHVMDebuggerWrapper {
     // Exit with the same error code the target exits with.
     targetProcess.on("exit", (code) => process.exit(code || undefined));
     targetProcess.on("error", (error) =>
-      process.stderr.write(`${error.toString()}\n`)
+      process.stderr.write(`${error.toString()}\n`),
     );
 
     // Wrap any stdout from the target into a VS Code stdout event.
@@ -298,7 +298,7 @@ class HHVMDebuggerWrapper {
       if (this.localWorkspaceRootPattern && this.remoteSiteRoot) {
         mappedData = mappedData.replace(
           this.localWorkspaceRootPattern,
-          this.remoteSiteRoot
+          this.remoteSiteRoot,
         );
       }
 
@@ -513,7 +513,7 @@ class HHVMDebuggerWrapper {
         this.writeOutputWithHeader(obj);
       } catch (e: any) {
         process.stderr.write(
-          `Error parsing message from target: ${e.toString()}: ${message}\n`
+          `Error parsing message from target: ${e.toString()}: ${message}\n`,
         );
       }
 
@@ -704,7 +704,7 @@ class HHVMDebuggerWrapper {
     if (this.remoteSiteRootPattern && this.localWorkspaceRoot) {
       output = output.replace(
         this.remoteSiteRootPattern,
-        this.localWorkspaceRoot
+        this.localWorkspaceRoot,
       );
     }
 

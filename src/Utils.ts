@@ -8,8 +8,8 @@ import * as config from "./Config";
 const localPath = getUriFilePath(config.localWorkspacePath);
 const remotePath = getUriFilePath(config.remoteWorkspacePath);
 
-function getUriFilePath(path: string|undefined): string {
-  return path ? vscode.Uri.file(path).toString() : '';
+function getUriFilePath(path: string | undefined): string {
+  return path ? vscode.Uri.file(path).toString() : "";
 }
 
 /**
@@ -22,9 +22,7 @@ export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
   if (!config.remoteEnabled || !config.remoteWorkspacePath) {
     return file.toString();
   }
-  return file
-    .toString()
-    .replace(localPath, remotePath);
+  return file.toString().replace(localPath, remotePath);
 };
 
 /**
@@ -35,10 +33,7 @@ export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
 export const mapToWorkspaceUri = (file: string): vscode.Uri => {
   let filePath = file;
   if (config.remoteEnabled && config.remoteWorkspacePath) {
-    filePath = filePath.replace(
-      remotePath,
-      localPath
-    );
+    filePath = filePath.replace(remotePath, localPath);
   }
   if (filePath.startsWith("file://")) {
     return vscode.Uri.parse(filePath);
