@@ -3,6 +3,11 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.18.0 - 2024-02-29
+
+- New autocomplete helpers for JSDoc comment blocks (`/** ... */`).
+- Removed `onDebug` as an activation event to prevent unnecessary extension activations.
+
 ## v2.17.1 - 2023-07-10
 
 - Automated and manual security fixes for dependencies.
