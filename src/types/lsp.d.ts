@@ -3,7 +3,6 @@
  */
 
 import { Range } from "vscode";
-import { TextDocumentIdentifier } from "vscode-languageclient/lib/main";
 
 type TypeCoverageResponse = {
   coveredPercent: number;
