@@ -3,6 +3,10 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.19.0 - 2024-03-05
+
+- New status bar indicator for LSP -> hh_server connectivity issues.
+
 ## v2.18.0 - 2024-02-29
 
 - New autocomplete helpers for JSDoc comment blocks (`/** ... */`).
