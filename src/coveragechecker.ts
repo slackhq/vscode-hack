@@ -3,7 +3,7 @@
  */
 
 import * as vscode from "vscode";
-import { LanguageClient } from "vscode-languageclient";
+import { LanguageClient } from "vscode-languageclient/node";
 import { TypeCoverageResponse } from "./types/lsp";
 
 export class HackCoverageChecker {
@@ -21,7 +21,7 @@ export class HackCoverageChecker {
 
   constructor(languageClient: LanguageClient) {
     this.coverageStatus = vscode.window.createStatusBarItem(
-      vscode.StatusBarAlignment.Left,
+      vscode.StatusBarAlignment.Left
     );
     this.hhvmCoverDiag =
       vscode.languages.createDiagnosticCollection("hack_coverage");
@@ -30,7 +30,7 @@ export class HackCoverageChecker {
 
   public async start(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-      vscode.workspace.onDidSaveTextDocument(async (doc) => this.check(doc)),
+      vscode.workspace.onDidSaveTextDocument(async (doc) => this.check(doc))
     );
     context.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor(async (editor) => {
@@ -40,13 +40,13 @@ export class HackCoverageChecker {
           this.hhvmCoverDiag.clear();
           this.coverageStatus.hide();
         }
-      }),
+      })
     );
     context.subscriptions.push(
       vscode.commands.registerCommand(
         "hack.toggleCoverageHighlight",
-        async () => this.toggle(),
-      ),
+        async () => this.toggle()
+      )
     );
     context.subscriptions.push(this.hhvmCoverDiag, this.coverageStatus);
 
@@ -84,9 +84,9 @@ export class HackCoverageChecker {
           {
             textDocument:
               this.languageClient.code2ProtocolConverter.asTextDocumentIdentifier(
-                document,
+                document
               ),
-          },
+          }
         );
     } catch (e) {
       this.coverageStatus.hide();
@@ -104,7 +104,7 @@ export class HackCoverageChecker {
         const diagnostic = new vscode.Diagnostic(
           uncoveredRange.range,
           uncoveredRange.message || coverageResponse.defaultMessage,
-          vscode.DiagnosticSeverity.Information,
+          vscode.DiagnosticSeverity.Information
         );
         diagnostic.source = "Type Coverage";
         diagnostics.push(diagnostic);
