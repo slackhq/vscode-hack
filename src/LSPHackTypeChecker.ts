@@ -9,7 +9,6 @@ import {
   RevealOutputChannelOn,
   LanguageClientOptions,
   ServerOptions,
-  Command,
 } from "vscode-languageclient/node";
 import * as config from "./Config";
 import { HackCoverageChecker } from "./coveragechecker";
@@ -18,6 +17,7 @@ import * as hack from "./types/hack";
 import * as utils from "./Utils";
 import { ShowStatusRequest } from "./types/lsp";
 import * as hh_client from "./proxy";
+import { HackLSPErrorHandler } from "./LSPErrorHandler";
 
 export class LSPHackTypeChecker {
   private context: vscode.ExtensionContext;
@@ -63,6 +63,7 @@ export class LSPHackTypeChecker {
         code2Protocol: utils.mapFromWorkspaceUri,
         protocol2Code: utils.mapToWorkspaceUri,
       },
+      errorHandler: new HackLSPErrorHandler(),
       middleware: {
         handleDiagnostics: (uri, diagnostics, next) => {
           LSPHackTypeChecker.handleDiagnostics(
@@ -129,14 +130,7 @@ export class LSPHackTypeChecker {
       diagnostics[0].source === "hh_server" &&
       diagnostics[0].message.startsWith("hh_server isn't running")
     ) {
-      status.backgroundColor = new vscode.ThemeColor(
-        "statusBarItem.errorBackground"
-      );
-      status.text = "$(error) Hack LSP";
-      status.tooltip =
-        "Hack Language Server disconnected. Language features will be unavailable. Click to restart.";
-      status.command = "hack.restartLSP";
-      status.show();
+      LSPHackTypeChecker.showErrorStatus(status);
     } else {
       // Handle regular errors
       status.hide();
@@ -183,5 +177,16 @@ export class LSPHackTypeChecker {
       statusText += " (Docker)";
     }
     return statusText;
+  }
+
+  private static showErrorStatus(status: vscode.StatusBarItem): void {
+    status.backgroundColor = new vscode.ThemeColor(
+      "statusBarItem.errorBackground"
+    );
+    status.text = "$(error) Hack LSP";
+    status.tooltip =
+      "Hack Language Server disconnected. Language features will be unavailable. Click to restart.";
+    status.command = "hack.restartLSP";
+    status.show();
   }
 }
