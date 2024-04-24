@@ -3,6 +3,10 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## v2.20.0 - 2024-04-24
+
+- Update comment syntax (from `#` to `//`) in snippets. Thanks [Glitched](https://github.com/Glitched)!
+
 ## v2.19.0 - 2024-03-05
 
 - New status bar indicator for LSP -> hh_server connectivity issues.
