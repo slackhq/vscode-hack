@@ -10,6 +10,7 @@ Add a new HHVM `launch` config to `.vscode/launch.json`. The default template sh
 `hhvmPath`: [Optional] Absolute path to the HHVM executable (default `hhvm`)  
 `hhvmArgs`: [Optional] Extra arguments to pass to HHVM when launching the script, if needed  
 `cwd`: [Optional] Working directory for the HHVM process
+`env`: [Optional] Extra environment variables for the HHVM process
 
 Debug -> Start Debugging (F5) with this configuration selected will launch the currently open PHP/Hack script (or the custom configured file) in a new HHVM process and pipe input/output to the editor OUTPUT tab.
 
