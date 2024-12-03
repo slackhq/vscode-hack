@@ -156,6 +156,13 @@
                 "type": "string",
                 "description": "Working directory for the launched HHVM process",
                 "default": "${workspaceFolder}"
+              },
+              "env": {
+                "type": "object",
+                "description": "Extra environment variables for the HHVM command",
+                "additionalProperties": {
+                  "type": "string"
+                },
               }
             }
           }
