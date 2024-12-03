@@ -49,6 +49,7 @@ interface HhvmLaunchRequestArguments
   remoteType?: string;
   remoteWorkspacePath?: string;
   dockerContainerName?: string;
+  env?: Record<string, string>;
 }
 
 class HHVMDebuggerWrapper {
@@ -258,7 +259,7 @@ class HHVMDebuggerWrapper {
         : ["pipe", "pipe", "pipe", "pipe"],
       // When the wrapper exits, so does the target.
       detached: false,
-      env: process.env,
+      env: { ...process.env, ...(args.env ?? {}) }
     };
 
     const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
@@ -334,6 +335,7 @@ class HHVMDebuggerWrapper {
       kind: "integrated",
       cwd: __dirname,
       args: terminalArgs,
+      env: { ...process.env, ...(args.env ?? {}) }
     };
 
     this.writeOutputWithHeader({
