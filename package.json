@@ -327,7 +327,7 @@
     "eslint": "^8.57.0",
     "glob": "^7.2.3",
     "license-checker": "^25.0.1",
-    "mocha": "^10.3.0",
+    "mocha": "^10.8.2",
     "typescript": "^5.3.3"
   }
 }
