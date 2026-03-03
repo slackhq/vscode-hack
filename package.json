@@ -3,7 +3,7 @@
   "version": "2.20.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.109.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -312,23 +312,22 @@
     "publish": "vsce publish"
   },
   "dependencies": {
-    "@vscode/debugadapter": "^1.65.0",
-    "@vscode/debugprotocol": "^1.65.0",
+    "@vscode/debugadapter": "^1.68.0",
+    "@vscode/debugprotocol": "^1.68.0",
     "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.24",
-    "@types/vscode": "^1.74.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
-    "@vscode/test-electron": "^2.3.9",
-    "@vscode/vsce": "^2.24.0",
-    "eslint": "^8.57.0",
-    "glob": "^7.2.3",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.1.0",
+    "@types/vscode": "^1.109.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.7.1",
+    "eslint": "^10.0.2",
+    "glob": "^13.0.6",
     "license-checker": "^25.0.1",
-    "mocha": "^10.8.2",
-    "typescript": "^5.3.3"
+    "mocha": "^11.7.5",
+    "typescript": "^5.9.3"
   }
 }
