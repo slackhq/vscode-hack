@@ -321,14 +321,14 @@
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.24",
     "@types/vscode": "^1.74.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vscode/test-electron": "^2.3.9",
     "@vscode/vsce": "^2.24.0",
     "eslint": "^8.57.0",
     "glob": "^7.2.3",
     "license-checker": "^25.0.1",
-    "mocha": "^10.3.0",
+    "mocha": "^10.8.2",
     "typescript": "^5.3.3"
   }
 }
