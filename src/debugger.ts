@@ -42,6 +42,7 @@ interface HhvmLaunchRequestArguments
   hhvmArgs?: string[];
   script?: string;
   cwd?: string;
+  env?: Record<string, string>;
   deferLaunch?: boolean;
   sandboxUser?: string;
   localWorkspaceRoot?: string;
@@ -258,7 +259,7 @@ class HHVMDebuggerWrapper {
         : ["pipe", "pipe", "pipe", "pipe"],
       // When the wrapper exits, so does the target.
       detached: false,
-      env: process.env,
+      env: { ...process.env, ...(args.env ?? {}) }
     };
 
     const targetProcess = child_process.spawn(hhvmPath, allArgs, options);
@@ -334,6 +335,7 @@ class HHVMDebuggerWrapper {
       kind: "integrated",
       cwd: __dirname,
       args: terminalArgs,
+      env: { ...process.env, ...(startupArgs.env ?? {}) }
     };
 
     this.writeOutputWithHeader({
