@@ -16,7 +16,7 @@ Attn: Open Source Requests
 San Francisco, CA 94105
 
 ---
-**[@vscode/debugadapter@1.65.0](https://github.com/microsoft/vscode-debugadapter-node)**
+**[@vscode/debugadapter@1.68.0](https://github.com/microsoft/vscode-debugadapter-node)**
 ```
 Copyright (c) Microsoft Corporation
 
@@ -31,7 +31,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-**[@vscode/debugprotocol@1.65.0](https://github.com/microsoft/vscode-debugadapter-node)**
+**[@vscode/debugprotocol@1.68.0](https://github.com/microsoft/vscode-debugadapter-node)**
 ```
 Copyright (c) Microsoft Corporation
 
@@ -71,7 +71,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-**[brace-expansion@2.0.1](https://github.com/juliangruber/brace-expansion)**
+**[brace-expansion@2.0.2](https://github.com/juliangruber/brace-expansion)**
 ```
 MIT License
 
@@ -115,7 +115,7 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ```
 
-**[minimatch@5.1.6](https://github.com/isaacs/minimatch)**
+**[minimatch@5.1.9](https://github.com/isaacs/minimatch)**
 ```
 The ISC License
 

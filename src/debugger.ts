@@ -83,7 +83,7 @@ class HHVMDebuggerWrapper {
 
   public debug() {
     process.stdin.on("data", (chunk) => {
-      this.processClientMessage(chunk);
+      this.processClientMessage(chunk as Buffer);
     });
 
     process.on("disconnect", () => {
@@ -123,7 +123,7 @@ class HHVMDebuggerWrapper {
     const socket = net.createConnection(socketArgs);
 
     socket.on("data", (chunk) => {
-      this.processDebuggerMessage(chunk);
+      this.processDebuggerMessage(chunk as Buffer);
     });
 
     socket.on("close", () => {
@@ -285,7 +285,7 @@ class HHVMDebuggerWrapper {
 
     if (targetProcess.stdio[3]) {
       targetProcess.stdio[3].on("data", (chunk) => {
-        this.processDebuggerMessage(chunk);
+        this.processDebuggerMessage(chunk as Buffer);
       });
       targetProcess.stdio[3].on("error", () => {});
     }
