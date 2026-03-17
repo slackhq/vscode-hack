@@ -18,10 +18,6 @@ export const enableCoverageCheck = hackConfig.get<boolean>(
   "enableCoverageCheck",
   true,
 );
-export const useLanguageServer = hackConfig.get<boolean>(
-  "useLanguageServer",
-  true,
-);
 export const useHhast = hackConfig.get<boolean>("useHhast", true);
 export const hhastLintMode: "whole-project" | "open-files" = hackConfig.get(
   "hhastLintMode",

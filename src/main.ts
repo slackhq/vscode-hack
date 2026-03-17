@@ -4,7 +4,6 @@
 
 import * as vscode from "vscode";
 import * as config from "./Config";
-import { LegacyHackTypeChecker } from "./LegacyHackTypeChecker";
 import { LSPHackTypeChecker } from "./LSPHackTypeChecker";
 import { LSPHHASTLint } from "./LSPHHASTLint";
 import * as hh_client from "./proxy";
@@ -36,14 +35,16 @@ export async function activate(context: vscode.ExtensionContext) {
     },
   );
 
+  if (!LSPHackTypeChecker.IS_SUPPORTED(version)) {
+    vscode.window.showErrorMessage(
+      "The installed version of hh_client is too old and does not support LSP. Please upgrade HHVM to at least version 3.23.",
+    );
+    return;
+  }
+
   const services: Promise<void>[] = [];
   services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
-
-  if (LSPHackTypeChecker.IS_SUPPORTED(version) && config.useLanguageServer) {
-    services.push(new LSPHackTypeChecker(context, version).run());
-  } else {
-    services.push(new LegacyHackTypeChecker(context).run());
-  }
+  services.push(new LSPHackTypeChecker(context, version).run());
 
   vscode.debug.registerDebugConfigurationProvider(
     "hhvm",
