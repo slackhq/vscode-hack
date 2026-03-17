@@ -207,12 +207,7 @@
           "default": false,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
         },
-        "hack.useLanguageServer": {
-          "type": "boolean",
-          "default": true,
-          "description": "Start hh_client in Language Server mode. Only works for HHVM version 3.23 and above."
-        },
-        "hack.useHhast": {
+"hack.useHhast": {
           "type": "boolean",
           "default": true,
           "description": "Enable linting (needs HHAST library set up and configured in project)",
