@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - master
-    tags:
-      - v*
   pull_request:
     branches:
       - master
@@ -28,18 +26,3 @@ jobs:
       - run: npm test
         if: runner.os != 'Linux'
       - run: npm run package
-      - uses: svenstaro/upload-release-action@2.11.4
-        if: |
-          matrix.os == 'ubuntu-latest' &&
-          startsWith(github.ref, 'refs/tags/v')
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "*.vsix"
-          file_glob: true
-          tag: ${{ github.ref }}
-
-      - name: Publish
-        if: success() && startsWith( github.ref, 'refs/tags/v') && matrix.os == 'ubuntu-latest'
-        run: npm run publish
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}

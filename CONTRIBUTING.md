@@ -42,6 +42,7 @@ For your contribution to be accepted:
 - [x] The test suite must be complete and pass.
 - [x] The changes must be approved by code review.
 - [x] Commits should be atomic and messages must be descriptive. Related issues should be mentioned by Issue number.
+- [x] PR commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/) format (e.g. `feat: add new feature`, `fix: resolve crash on startup`, `chore: update dependencies`). This is enforced by CI and used for automated changelog generation.
 
 If the contribution doesn't meet the above criteria, you may fail our automated checks or a maintainer will discuss it with you. You can continue to improve a Pull Request by adding commits to the branch from which the PR was created.
 
