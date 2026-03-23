@@ -319,7 +319,7 @@
     "@typescript-eslint/parser": "^8.56.1",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
-    "eslint": "^10.0.2",
+    "eslint": "^10.1.0",
     "glob": "^13.0.6",
     "license-checker": "^25.0.1",
     "@commitlint/cli": "^19.8.1",
