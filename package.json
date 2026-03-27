@@ -1,6 +1,6 @@
 {
   "name": "vscode-hack",
-  "version": "2.20.0",
+  "version": "3.0.0",
   "publisher": "pranayagarwal",
   "engines": {
     "vscode": "^1.109.0"
@@ -207,7 +207,7 @@
           "default": false,
           "description": "Enable calculation of Hack type coverage percentage for every file and display in status bar."
         },
-"hack.useHhast": {
+        "hack.useHhast": {
           "type": "boolean",
           "default": true,
           "description": "Enable linting (needs HHAST library set up and configured in project)",

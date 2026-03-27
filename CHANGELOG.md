@@ -3,6 +3,18 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.0.0](https://github.com/slackhq/vscode-hack/compare/v2.22.0...v3.0.0) (2026-03-27)
+
+
+### Features
+
+* implement automatic recovery for `hh_client` ([#197](https://github.com/slackhq/vscode-hack/issues/197)) ([1a227a8](https://github.com/slackhq/vscode-hack/commit/1a227a88c03b32253c7a42859fbdcdf035514a60))
+
+
+### Miscellaneous Chores
+
+* create release automation ([#182](https://github.com/slackhq/vscode-hack/issues/182)) ([22ad0ca](https://github.com/slackhq/vscode-hack/commit/22ad0ca66531e4f1d5ab12440fcb4ef1f2214cac))
+
 ## v2.20.0 - 2024-04-24
 
 - Update comment syntax (from `#` to `//`) in snippets. Thanks [Glitched](https://github.com/Glitched)!
