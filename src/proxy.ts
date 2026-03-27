@@ -33,7 +33,7 @@ async function run(extraArgs: string[]): Promise<string> {
       "vscode-hack",
       workspacePath,
     ]);
-    const p = ps.execFile(
+    ps.execFile(
       command,
       args,
       { maxBuffer: 1024 * 1024 },

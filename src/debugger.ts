@@ -253,7 +253,7 @@ class HHVMDebuggerWrapper {
       // STDIN, STDOUT and STDERR are the actual PHP streams.
       // If launchMessage.noDebug is specified, start the child but don't
       // connect the debugger fd pipe.
-      stdio: Boolean(args.noDebug)
+      stdio: args.noDebug
         ? ["pipe", "pipe", "pipe"]
         : ["pipe", "pipe", "pipe", "pipe"],
       // When the wrapper exits, so does the target.
@@ -555,7 +555,7 @@ class HHVMDebuggerWrapper {
     this.writeOutputWithHeader(outputEvent);
   }
 
-  private writeResponseMessage(message: {}) {
+  private writeResponseMessage(message: object) {
     this.writeOutputWithHeader({
       seq: ++this.sequenceNumber,
       type: "response",
@@ -580,17 +580,15 @@ class HHVMDebuggerWrapper {
         }
         case "stackTrace": {
           message.body.stackFrames.forEach((stackFrame: any) => {
-            if (stackFrame.source != null) {
-              if (stackFrame.source.path === "<unknown>") {
-                // TODO(ericblue): Delete source when there's none known.
-                delete stackFrame.source;
-              } /*else if (nuclideUri.isAbsolute(stackFrame.source.name)) {
-                                // TODO(ericblue): source names shouldn't be absolute paths.
-                                stackFrame.source.name = nuclideUri.basename(
-                                    stackFrame.source.name,
-                                );
-                            }*/
-            }
+            if (stackFrame.source?.path === "<unknown>") {
+              // TODO(ericblue): Delete source when there's none known.
+              delete stackFrame.source;
+            } /*else if (nuclideUri.isAbsolute(stackFrame.source.name)) {
+                              // TODO(ericblue): source names shouldn't be absolute paths.
+                              stackFrame.source.name = nuclideUri.basename(
+                                  stackFrame.source.name,
+                              );
+                          }*/
           });
           break;
         }
@@ -610,7 +608,7 @@ class HHVMDebuggerWrapper {
         case "output": {
           // Nuclide console requires all output messages to end with a newline
           // to work properly.
-          if (message.body != null && !message.body.output.endsWith("\n")) {
+          if (message.body && !message.body?.output.endsWith("\n")) {
             message.body.output += "\n";
           }
 
@@ -636,16 +634,11 @@ class HHVMDebuggerWrapper {
           const reason = (message.body.reason || "")
             .toLowerCase()
             .split(" ")[0];
-          const focusThread =
-            message.body.threadCausedFocus != null
-              ? message.body.threadCausedFocus
-              : reason === "step" ||
+          const focusThread = message.body.threadCausedFocus ?? ( reason === "step" ||
                 reason === "breakpoint" ||
-                reason === "exception";
+                reason === "exception");
 
-          if (message.body.preserveFocusHint == null) {
-            message.body.preserveFocusHint = !focusThread;
-          }
+          message.body.preserveFocusHint ??= !focusThread;
 
           break;
         }
@@ -670,10 +663,7 @@ class HHVMDebuggerWrapper {
 
     if (message.type === "event" && message.event === "stopped") {
       if (!this.nonLoaderBreakSeen) {
-        if (
-          message.body != null &&
-          message.body.description !== "execution paused"
-        ) {
+        if (message.body?.description !== "execution paused") {
           // This is the first real (non-loader-break) stopped event.
           this.nonLoaderBreakSeen = true;
         } else if (!this.asyncBreakPending) {
