@@ -297,7 +297,7 @@
     "workspaceContains:.hhconfig"
   ],
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run build-base -- --minify",
     "build-base": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=node20",
     "compile": "npm run build-base -- --sourcemap",
     "watch": "npm run build-base -- --sourcemap --watch",
