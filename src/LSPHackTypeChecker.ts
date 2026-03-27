@@ -1,7 +1,7 @@
 /**
  * @file Integration with the Hack type checker via the LSP
  */
-
+import { setInterval } from 'node:timers/promises';
 import * as vscode from "vscode";
 import {
   HandleDiagnosticsSignature,
@@ -26,8 +26,7 @@ export class LSPHackTypeChecker {
   private versionText: string;
   private status: vscode.StatusBarItem;
   private languageClient: LanguageClient | undefined;
-  private restartIntervalId: NodeJS.Timeout | undefined;
-  private restartAttempts: number = 0;
+  private isRestarting: boolean = false;
   private static readonly MAX_RESTART_ATTEMPTS = 30;
 
   constructor(context: vscode.ExtensionContext, version: hack.Version) {
@@ -49,8 +48,8 @@ export class LSPHackTypeChecker {
     const context = this.context;
 
     context.subscriptions.push(
-      vscode.commands.registerCommand("hack.restartLSP", () => {
-        this.restart();
+      vscode.commands.registerCommand("hack.restartLSP", async () => {
+        await this.restart();
       })
     );
 
@@ -92,7 +91,8 @@ export class LSPHackTypeChecker {
       errorHandler: {
         error: () => ({ action: ErrorAction.Continue }),
         closed: async () => {
-          this.restart();
+          // NB.: we intentionally don't await our restart attempts here so that we can return from the closed() handler.
+          this.restart().catch((e) => console.error('Failed to restart Hack language server', e));
           return { action: CloseAction.DoNotRestart, message: 'Hack language server exited unexpectedly. It will be automatically restarted.' };
         },
       },
@@ -152,43 +152,42 @@ export class LSPHackTypeChecker {
     this.status.show();
   }
 
-  /** Attempt to automatically restart the Hack language server and client every 10 seconds. */
-  private restart(): void {
+  /** Attempt to automatically restart the Hack language server and client periodically. */
+  private async restart(): Promise<void> {
     this.showRestartingStatus();
 
-    if (this.restartIntervalId) {
+    if (this.isRestarting) {
       return;
     }
 
-    this.restartAttempts = 0;
-    this.restartIntervalId = setInterval(
-      async () => {
-        this.restartAttempts++;
-        try {
-          await hh_client.start();
-          await this.languageClient?.restart();
-          clearInterval(this.restartIntervalId);
-          this.restartIntervalId = undefined;
-          this.restartAttempts = 0;
-          vscode.window.showInformationMessage('Hack language server successfully restarted.');
+    this.isRestarting = true;
 
-          this.status.text = this.versionText;
-          this.status.tooltip = undefined;
-        } catch (_e) {
-          if (this.restartAttempts >= LSPHackTypeChecker.MAX_RESTART_ATTEMPTS) {
-            clearInterval(this.restartIntervalId);
-            this.restartIntervalId = undefined;
-            this.status.text = "$(error) Hack LSP";
-            this.status.tooltip = "Hack language server failed to restart after multiple attempts. Click to try again.";
-            this.status.backgroundColor = new vscode.ThemeColor("statusBarItem.errorBackground");
-            this.status.command = "hack.restartLSP";
-            this.status.show();
-            vscode.window.showErrorMessage('Hack language server failed to restart after 30 attempts.');
-          }
+    let restartAttempts = 0;
+    for await (const _ of setInterval(10_000)) {
+      restartAttempts++;
+      try {
+        await hh_client.start();
+        await this.languageClient?.restart();
+
+        vscode.window.showInformationMessage('Hack language server successfully restarted.');
+
+        this.status.text = this.versionText;
+        this.status.tooltip = undefined;
+        break;
+      } catch (_e) {
+        if (restartAttempts >= LSPHackTypeChecker.MAX_RESTART_ATTEMPTS) {
+          this.status.text = "$(error) Hack LSP";
+          this.status.tooltip = "Hack language server failed to restart after multiple attempts. Click to try again.";
+          this.status.backgroundColor = new vscode.ThemeColor("statusBarItem.errorBackground");
+          this.status.command = "hack.restartLSP";
+          this.status.show();
+          vscode.window.showErrorMessage(`Hack language server failed to restart after ${LSPHackTypeChecker.MAX_RESTART_ATTEMPTS} attempts.`);
+          break;
         }
-      },
-      10_000
-    );
+      }
+    }
+
+    this.isRestarting = false;
   }
 
   private static handleDiagnostics(
