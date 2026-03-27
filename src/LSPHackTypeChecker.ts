@@ -1,7 +1,7 @@
 /**
  * @file Integration with the Hack type checker via the LSP
  */
-import { setInterval } from 'node:timers/promises';
+import { setInterval } from "node:timers/promises";
 import * as vscode from "vscode";
 import {
   HandleDiagnosticsSignature,
@@ -34,7 +34,7 @@ export class LSPHackTypeChecker {
     this.versionText = this.getVersionText(version);
     this.status = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Right,
-      1000
+      1000,
     );
     this.status.name = "Hack Language Server";
     context.subscriptions.push(this.status);
@@ -50,7 +50,7 @@ export class LSPHackTypeChecker {
     context.subscriptions.push(
       vscode.commands.registerCommand("hack.restartLSP", async () => {
         await this.restart();
-      })
+      }),
     );
 
     await vscode.window.withProgress(
@@ -81,7 +81,7 @@ export class LSPHackTypeChecker {
             uri,
             diagnostics,
             next,
-            this.status
+            this.status,
           );
         },
       },
@@ -92,8 +92,14 @@ export class LSPHackTypeChecker {
         error: () => ({ action: ErrorAction.Continue }),
         closed: async () => {
           // NB.: we intentionally don't await our restart attempts here so that we can return from the closed() handler.
-          this.restart().catch((e) => console.error('Failed to restart Hack language server', e));
-          return { action: CloseAction.DoNotRestart, message: 'Hack language server exited unexpectedly. It will be automatically restarted.' };
+          this.restart().catch((e) =>
+            console.error("Failed to restart Hack language server", e),
+          );
+          return {
+            action: CloseAction.DoNotRestart,
+            message:
+              "Hack language server exited unexpectedly. It will be automatically restarted.",
+          };
         },
       },
     };
@@ -102,7 +108,7 @@ export class LSPHackTypeChecker {
       "hack",
       "Hack Language Server",
       serverOptions,
-      clientOptions
+      clientOptions,
     );
     this.languageClient = languageClient;
 
@@ -129,7 +135,7 @@ export class LSPHackTypeChecker {
 
         this.status.show();
         return {};
-      }
+      },
     );
 
     await languageClient.start();
@@ -169,7 +175,9 @@ export class LSPHackTypeChecker {
         await hh_client.start();
         await this.languageClient?.restart();
 
-        vscode.window.showInformationMessage('Hack language server successfully restarted.');
+        vscode.window.showInformationMessage(
+          "Hack language server successfully restarted.",
+        );
 
         this.status.text = this.versionText;
         this.status.tooltip = undefined;
@@ -177,11 +185,16 @@ export class LSPHackTypeChecker {
       } catch (_e) {
         if (restartAttempts >= LSPHackTypeChecker.MAX_RESTART_ATTEMPTS) {
           this.status.text = "$(error) Hack LSP";
-          this.status.tooltip = "Hack language server failed to restart after multiple attempts. Click to try again.";
-          this.status.backgroundColor = new vscode.ThemeColor("statusBarItem.errorBackground");
+          this.status.tooltip =
+            "Hack language server failed to restart after multiple attempts. Click to try again.";
+          this.status.backgroundColor = new vscode.ThemeColor(
+            "statusBarItem.errorBackground",
+          );
           this.status.command = "hack.restartLSP";
           this.status.show();
-          vscode.window.showErrorMessage(`Hack language server failed to restart after ${LSPHackTypeChecker.MAX_RESTART_ATTEMPTS} attempts.`);
+          vscode.window.showErrorMessage(
+            `Hack language server failed to restart after ${LSPHackTypeChecker.MAX_RESTART_ATTEMPTS} attempts.`,
+          );
           break;
         }
       }
@@ -194,7 +207,7 @@ export class LSPHackTypeChecker {
     uri: vscode.Uri,
     diagnostics: vscode.Diagnostic[],
     next: HandleDiagnosticsSignature,
-    status: vscode.StatusBarItem
+    status: vscode.StatusBarItem,
   ) {
     // If the Hack LSP loses connectivity with hh_server, it publishes a special custom diagnostic event. Rather than
     // show it as a regular error, we instead capture it and add a more prominent status bar indicator instead.
@@ -204,7 +217,7 @@ export class LSPHackTypeChecker {
       diagnostics[0].message.startsWith("hh_server isn't running")
     ) {
       status.backgroundColor = new vscode.ThemeColor(
-        "statusBarItem.errorBackground"
+        "statusBarItem.errorBackground",
       );
       status.text = "$(error) Hack LSP";
       status.tooltip =
@@ -242,7 +255,7 @@ export class LSPHackTypeChecker {
           }
           d.message = `${kind}[${d.code}] ${d.message}`;
           return d;
-        })
+        }),
       );
     }
   }
