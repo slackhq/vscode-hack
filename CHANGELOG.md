@@ -3,6 +3,14 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.0.3](https://github.com/slackhq/vscode-hack/compare/v3.0.2...v3.0.3) (2026-03-27)
+
+
+### Bug Fixes
+
+* escape snippet variable in while snippet to fix VS Code warning ([#206](https://github.com/slackhq/vscode-hack/issues/206)) ([de60599](https://github.com/slackhq/vscode-hack/commit/de605995aee6962982b8bfe895788242d56b13fc))
+* use async setInterval() for periodic restart attempts ([#204](https://github.com/slackhq/vscode-hack/issues/204)) ([89627fb](https://github.com/slackhq/vscode-hack/commit/89627fba20b72b49e67dd2220c3897700773f158))
+
 ## [3.0.2](https://github.com/slackhq/vscode-hack/compare/v3.0.1...v3.0.2) (2026-03-27)
 
 
