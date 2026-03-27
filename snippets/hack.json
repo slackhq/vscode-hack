@@ -106,7 +106,7 @@
     },
     "while …": {
       "prefix": "while",
-      "body": "while (${1:$$a <= 10}) {\n\t${0:// code...}\n}"
+      "body": "while (${1:\\$a <= 10}) {\n\t${0:// code...}\n}"
     }
   }
 }
