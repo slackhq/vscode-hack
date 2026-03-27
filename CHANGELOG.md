@@ -3,6 +3,13 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.0.1](https://github.com/slackhq/vscode-hack/compare/v3.0.0...v3.0.1) (2026-03-27)
+
+
+### Bug Fixes
+
+* bundle extension code ([#199](https://github.com/slackhq/vscode-hack/issues/199)) ([df85e59](https://github.com/slackhq/vscode-hack/commit/df85e59c1a403c76f692349b628d3dabcbbf8daf))
+
 ## [3.0.0](https://github.com/slackhq/vscode-hack/compare/v2.22.0...v3.0.0) (2026-03-27)
 
 
