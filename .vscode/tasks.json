@@ -15,6 +15,16 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "Build Extension",
+      "type": "npm",
+      "script": "compile",
+      "problemMatcher": "$tsc-watch",
+      "presentation": {
+        "reveal": "never"
+      },
+      "group": "build"
     }
   ]
 }
