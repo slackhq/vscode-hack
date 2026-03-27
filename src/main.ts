@@ -25,16 +25,6 @@ export async function activate(context: vscode.ExtensionContext) {
     return;
   }
 
-  await vscode.window.withProgress(
-    {
-      location: vscode.ProgressLocation.Window,
-      title: `Running Hack typechecker`,
-    },
-    async () => {
-      return hh_client.start();
-    },
-  );
-
   if (!LSPHackTypeChecker.IS_SUPPORTED(version)) {
     vscode.window.showErrorMessage(
       "The installed version of hh_client is too old and does not support LSP. Please upgrade HHVM to at least version 3.23.",
