@@ -88,7 +88,7 @@ export class HackCoverageChecker {
               ),
           }
         );
-    } catch (e) {
+    } catch (_e) {
       this.coverageStatus.hide();
       return;
     }

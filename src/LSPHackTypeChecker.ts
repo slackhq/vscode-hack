@@ -174,7 +174,7 @@ export class LSPHackTypeChecker {
 
           this.status.text = this.versionText;
           this.status.tooltip = undefined;
-        } catch (e) {
+        } catch (_e) {
           if (this.restartAttempts >= LSPHackTypeChecker.MAX_RESTART_ATTEMPTS) {
             clearInterval(this.restartIntervalId);
             this.restartIntervalId = undefined;
