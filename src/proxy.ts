@@ -8,18 +8,19 @@ import * as remote from "./remote";
 import * as hack from "./types/hack";
 
 export async function version(): Promise<hack.Version | undefined> {
-  return run(["--version"]);
+  try {
+    return JSON.parse(await run(["--version"]));
+  } catch {
+    return undefined;
+  }
 }
 
-/**
- * Hack client hangs if executed in lsp mode before running it standalone.
- */
-export async function start(): Promise<hack.Version | undefined> {
+export async function start(): Promise<string> {
   return run([]);
 }
 
-async function run(extraArgs: string[], stdin?: string): Promise<any> {
-  return new Promise<any>((resolve, _) => {
+async function run(extraArgs: string[]): Promise<string> {
+  return new Promise((resolve, reject) => {
     const workspacePath =
       config.remoteEnabled && config.remoteWorkspacePath
         ? config.remoteWorkspacePath
@@ -37,27 +38,21 @@ async function run(extraArgs: string[], stdin?: string): Promise<any> {
       args,
       { maxBuffer: 1024 * 1024 },
       (err: any, stdout, stderr) => {
-        if (err !== null && err.code !== 0 && err.code !== 2) {
-          // any hh_client failure other than typecheck errors
-          console.error(`Hack: hh_client execution error: ${err}`);
-          resolve(null);
-        }
         if (!stdout) {
           // all hh_client --check output goes to stderr by default
           stdout = stderr;
         }
-        try {
-          const output = JSON.parse(stdout);
-          resolve(output);
-        } catch (parseErr) {
-          console.error(`Hack: hh_client output error: ${parseErr}`);
-          resolve(null);
+
+        const wasError = err !== null && err.code !== 0 && err.code !== 2;
+        if (wasError) {
+          // any hh_client failure other than typecheck errors
+          console.error(`Hack: hh_client execution error: ${err}`);
+          reject(stdout);
+          return;
         }
+
+        resolve(stdout);
       },
     );
-    if (stdin && p && p.stdin) {
-      p.stdin.write(stdin);
-      p.stdin.end();
-    }
   });
 }
