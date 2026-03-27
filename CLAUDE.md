@@ -21,6 +21,7 @@ To debug the extension in VS Code, use the "Run Extension" launch configuration 
 The extension activates when a workspace contains a `.hhconfig` file. Entry point is `src/main.ts`.
 
 **Key modules:**
+
 - `src/LSPHackTypeChecker.ts` — Typechecker integration using `hh_client` in LSP mode via `vscode-languageclient`.
 - `src/Config.ts` — Reads all `hack.*` VS Code settings at extension startup (not dynamically reloaded except for `hack.remote.*` which prompts a window reload)
 - `src/proxy.ts` — Wraps `hh_client` CLI invocations (version check, type-at-pos, autocomplete, format, etc.), always passing `--json`

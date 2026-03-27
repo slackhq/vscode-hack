@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: 24.x
       - run: npm ci
+      - run: npx prettier . --check
       - run: npm run lint
       - run: xvfb-run -a npm test
         if: runner.os == 'Linux'
