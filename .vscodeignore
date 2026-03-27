@@ -1,6 +1,8 @@
 **
 !images/
 !out/main.js
+!syntaxes/
+!snippets/
 !hack.configuration.json
 !package.json
 !package-lock.json
