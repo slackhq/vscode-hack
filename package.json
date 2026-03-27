@@ -298,10 +298,12 @@
   ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "build-base": "esbuild ./src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=node20",
+    "compile": "npm run build-base -- --sourcemap",
+    "watch": "npm run build-base -- --sourcemap --watch",
+    "typecheck": "tsc",
     "postinstall": "node ./build/notice-file-generate.js",
-    "pretest": "npm run compile",
+    "pretest": "npm run compile && npm run typecheck",
     "test": "node ./out/test/runTest.js",
     "package": "vsce package",
     "publish": "vsce publish"
@@ -312,6 +314,8 @@
     "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.1.0",
     "@types/vscode": "^1.109.0",
@@ -319,11 +323,10 @@
     "@typescript-eslint/parser": "^8.56.1",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.27.4",
     "eslint": "^10.1.0",
     "glob": "^13.0.6",
     "license-checker": "^25.0.1",
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
     "mocha": "^11.7.5",
     "typescript": "^5.9.3"
   }

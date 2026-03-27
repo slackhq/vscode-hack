@@ -71,7 +71,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-**[brace-expansion@2.0.2](https://github.com/juliangruber/brace-expansion)**
+**[brace-expansion@2.0.3](https://github.com/juliangruber/brace-expansion)**
 ```
 MIT License
 
