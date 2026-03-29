@@ -7,9 +7,7 @@ import {
   ProviderResult,
 } from "vscode";
 
-export class HhvmDebugConfigurationProvider
-  implements DebugConfigurationProvider
-{
+export class HhvmDebugConfigurationProvider implements DebugConfigurationProvider {
   resolveDebugConfiguration(
     folder: WorkspaceFolder | undefined,
     debugConfig: DebugConfiguration,

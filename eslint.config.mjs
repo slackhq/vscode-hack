@@ -1,11 +1,12 @@
-import eslint from '@eslint/js';
-import { defineConfig } from 'eslint/config';
-import tseslint from 'typescript-eslint';
-
+import eslint from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import tseslint from "typescript-eslint";
+import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default defineConfig(
   eslint.configs.recommended,
   tseslint.configs.recommended,
+  eslintConfigPrettier,
   {
     ignores: ["out/", ".vscode-test/", "build/", "node_modules/"],
     rules: {
@@ -17,7 +18,7 @@ export default defineConfig(
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "@typescript-eslint/no-explicit-any": "warn"
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 );

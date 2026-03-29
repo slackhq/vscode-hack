@@ -634,9 +634,11 @@ class HHVMDebuggerWrapper {
           const reason = (message.body.reason || "")
             .toLowerCase()
             .split(" ")[0];
-          const focusThread = message.body.threadCausedFocus ?? ( reason === "step" ||
-                reason === "breakpoint" ||
-                reason === "exception");
+          const focusThread =
+            message.body.threadCausedFocus ??
+            (reason === "step" ||
+              reason === "breakpoint" ||
+              reason === "exception");
 
           message.body.preserveFocusHint ??= !focusThread;
 
