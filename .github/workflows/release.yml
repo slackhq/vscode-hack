@@ -36,10 +36,6 @@ jobs:
         run: gh release upload "${{ needs.release-please.outputs.tag_name }}" *.vsix
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish to VS Code Marketplace
-        run: npm run publish
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
   publish:
     needs: create-release
