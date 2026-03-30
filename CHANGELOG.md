@@ -3,6 +3,13 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.0.4](https://github.com/slackhq/vscode-hack/compare/v3.0.3...v3.0.4) (2026-03-30)
+
+
+### Bug Fixes
+
+* build debugger as separate entrypoint ([#210](https://github.com/slackhq/vscode-hack/issues/210)) ([392ad3d](https://github.com/slackhq/vscode-hack/commit/392ad3daab28e00e72b2b92124842c8c20eb8f0f))
+
 ## [3.0.3](https://github.com/slackhq/vscode-hack/compare/v3.0.2...v3.0.3) (2026-03-27)
 
 
