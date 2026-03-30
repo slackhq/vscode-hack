@@ -665,7 +665,7 @@ class HHVMDebuggerWrapper {
 
     if (message.type === "event" && message.event === "stopped") {
       if (!this.nonLoaderBreakSeen) {
-        if (message.body?.description !== "execution paused") {
+        if (message.body && message.body?.description !== "execution paused") {
           // This is the first real (non-loader-break) stopped event.
           this.nonLoaderBreakSeen = true;
         } else if (!this.asyncBreakPending) {
