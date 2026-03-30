@@ -3,10 +3,7 @@
  */
 
 import * as vscode from "vscode";
-import * as config from "./Config";
-
-const localPath = getUriFilePath(config.localWorkspacePath);
-const remotePath = getUriFilePath(config.remoteWorkspacePath);
+import { HackConfig } from "./Config";
 
 function getUriFilePath(path: string | undefined): string {
   return path ? vscode.Uri.file(path).toString() : "";
@@ -15,24 +12,35 @@ function getUriFilePath(path: string | undefined): string {
 /**
  * Converts a local workspace URI to a file path string (with or without scheme) to pass to
  * the typechecker. Path is mapped to an alternate workspace root if configured.
+ * @param config The extension configuration
  * @param file The file URI to convert
- * @param includeScheme Whether to include the file:// scheme in the response or not
  */
-export const mapFromWorkspaceUri = (file: vscode.Uri): string => {
+export const mapFromWorkspaceUri = (
+  config: HackConfig,
+  file: vscode.Uri,
+): string => {
   if (!config.remoteEnabled || !config.remoteWorkspacePath) {
     return file.toString();
   }
+  const localPath = getUriFilePath(config.localWorkspacePath);
+  const remotePath = getUriFilePath(config.remoteWorkspacePath);
   return file.toString().replace(localPath, remotePath);
 };
 
 /**
  * Converts a file path string received from the typechecker to a local workspace URI.
  * Path is mapped from an alternate workspace root if configured.
+ * @param config The extension configuration
  * @param file The file path to convert
  */
-export const mapToWorkspaceUri = (file: string): vscode.Uri => {
+export const mapToWorkspaceUri = (
+  config: HackConfig,
+  file: string,
+): vscode.Uri => {
   let filePath = file;
   if (config.remoteEnabled && config.remoteWorkspacePath) {
+    const localPath = getUriFilePath(config.localWorkspacePath);
+    const remotePath = getUriFilePath(config.remoteWorkspacePath);
     filePath = filePath.replace(remotePath, localPath);
   }
   if (filePath.startsWith("file://")) {

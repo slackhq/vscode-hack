@@ -3,30 +3,32 @@
  */
 
 import * as ps from "child_process";
-import * as config from "./Config";
+import { HackConfig } from "./Config";
 import * as remote from "./remote";
 import * as hack from "./types/hack";
 
-export async function version(): Promise<hack.Version | undefined> {
+export async function version(
+  config: HackConfig,
+): Promise<hack.Version | undefined> {
   try {
-    return JSON.parse(await run(["--version"]));
+    return JSON.parse(await run(config, ["--version"]));
   } catch {
     return undefined;
   }
 }
 
-export async function start(): Promise<string> {
-  return run([]);
+export async function start(config: HackConfig): Promise<string> {
+  return run(config, []);
 }
 
-async function run(extraArgs: string[]): Promise<string> {
+async function run(config: HackConfig, extraArgs: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
     const workspacePath =
       config.remoteEnabled && config.remoteWorkspacePath
         ? config.remoteWorkspacePath
         : config.localWorkspacePath;
-    const command = remote.getCommand(config.clientPath);
-    const args = remote.getArgs(config.clientPath, [
+    const command = remote.getCommand(config, config.clientPath);
+    const args = remote.getArgs(config, config.clientPath, [
       ...extraArgs,
       "--json",
       "--from",

@@ -2,9 +2,9 @@
  * @file Helpers for remote connections to hh_client and hhast-lint
  */
 
-import * as config from "./Config";
+import { HackConfig } from "./Config";
 
-export function getCommand(command: string): string {
+export function getCommand(config: HackConfig, command: string): string {
   if (!config.remoteEnabled) {
     return command;
   }
@@ -19,7 +19,11 @@ export function getCommand(command: string): string {
   }
 }
 
-export function getArgs(command: string, args: string[]): string[] {
+export function getArgs(
+  config: HackConfig,
+  command: string,
+  args: string[],
+): string[] {
   if (!config.remoteEnabled) {
     return args;
   }

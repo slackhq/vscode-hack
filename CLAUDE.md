@@ -11,7 +11,7 @@ VS Code extension providing Hack language and HHVM debugger support. Published t
 - **Install dependencies:** `npm install`
 - **Compile:** `npm run compile` (runs `tsc -p ./`)
 - **Watch mode:** `npm run watch` (runs `tsc -watch -p ./`)
-- **Run tests:** `npm test` (compiles first via `pretest`, then runs integration tests using `@vscode/test-electron` which downloads a VS Code instance)
+- **Run tests:** `npm test` (compiles first via `pretest`, then runs integration tests using `@vscode/test-electron` which downloads a VS Code instance). In headless environments (e.g. CI, VMs without a display), prefix with `xvfb-run`: `xvfb-run npm test`
 - **Package extension:** `npm run package` (uses `vsce package`)
 
 To debug the extension in VS Code, use the "Run Extension" launch configuration which opens a new Extension Host window.
@@ -34,6 +34,7 @@ The extension activates when a workspace contains a `.hhconfig` file. Entry poin
 
 ## TypeScript Configuration
 
-- Target: ES2020, Module: CommonJS
+- Target: ES2020, Module: NodeNext
 - Strict mode enabled
-- Source in `src/`, compiled output in `out/`
+- Uses [project references](https://www.typescriptlang.org/docs/handbook/project-references.html): root `tsconfig.json` has no `include` of its own and references `src/tsconfig.json` and `test/tsconfig.json` as composite sub-projects
+- Source in `src/`, tests in `test/`, compiled output in `out/src/` and `out/test/` respectively

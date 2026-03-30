@@ -8,7 +8,7 @@ import {
   HandleDiagnosticsSignature,
   LanguageClient,
 } from "vscode-languageclient/node";
-import * as config from "./Config";
+import { HackConfig } from "./Config";
 import * as remote from "./remote";
 import * as utils from "./Utils";
 
@@ -19,10 +19,16 @@ type InitializationOptions = {
 
 export class LSPHHASTLint {
   private context: vscode.ExtensionContext;
+  private config: HackConfig;
   private hhastPath: string;
 
-  constructor(context: vscode.ExtensionContext, hhastPath: string) {
+  constructor(
+    context: vscode.ExtensionContext,
+    config: HackConfig,
+    hhastPath: string,
+  ) {
     this.context = context;
+    this.config = config;
     this.hhastPath =
       config.remoteEnabled && config.remoteWorkspacePath
         ? hhastPath.replace(
@@ -37,6 +43,7 @@ export class LSPHHASTLint {
    */
   public static async START_IF_CONFIGURED_AND_ENABLED(
     context: vscode.ExtensionContext,
+    config: HackConfig,
   ): Promise<void> {
     if (!config.useHhast) {
       return;
@@ -64,12 +71,12 @@ export class LSPHHASTLint {
       return;
     }
 
-    await new LSPHHASTLint(context, hhastPath).run();
+    await new LSPHHASTLint(context, config, hhastPath).run();
   }
 
   public async run(): Promise<void> {
     const initializationOptions: InitializationOptions = {};
-    const lintMode = config.hhastLintMode;
+    const lintMode = this.config.hhastLintMode;
     if (lintMode) {
       initializationOptions.lintMode = lintMode;
     }
@@ -78,9 +85,9 @@ export class LSPHHASTLint {
       "hack",
       "HHAST",
       {
-        command: remote.getCommand(this.hhastPath),
-        args: remote.getArgs(this.hhastPath, [
-          ...config.hhastArgs,
+        command: remote.getCommand(this.config, this.hhastPath),
+        args: remote.getArgs(this.config, this.hhastPath, [
+          ...this.config.hhastArgs,
           "--mode",
           "lsp",
           "--from",
@@ -91,8 +98,8 @@ export class LSPHHASTLint {
         documentSelector: [{ language: "hack", scheme: "file" }],
         initializationOptions: initializationOptions,
         uriConverters: {
-          code2Protocol: utils.mapFromWorkspaceUri,
-          protocol2Code: utils.mapToWorkspaceUri,
+          code2Protocol: (uri) => utils.mapFromWorkspaceUri(this.config, uri),
+          protocol2Code: (file) => utils.mapToWorkspaceUri(this.config, file),
         },
         middleware: {
           handleDiagnostics: this.handleDiagnostics,
