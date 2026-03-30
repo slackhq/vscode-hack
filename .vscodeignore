@@ -1,6 +1,7 @@
 **
 !images/
 !out/main.js
+!out/debugger.js
 !syntaxes/
 !snippets/
 !hack.configuration.json
