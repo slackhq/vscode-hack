@@ -3,25 +3,34 @@
  */
 
 import * as ps from "child_process";
+import * as vscode from "vscode";
 import { HackConfig } from "./Config";
 import * as remote from "./remote";
 import * as hack from "./types/hack";
 
 export async function version(
   config: HackConfig,
+  log: vscode.LogOutputChannel,
 ): Promise<hack.Version | undefined> {
   try {
-    return JSON.parse(await run(config, ["--version"]));
+    return JSON.parse(await run(config, log, ["--version"]));
   } catch {
     return undefined;
   }
 }
 
-export async function start(config: HackConfig): Promise<string> {
-  return run(config, []);
+export async function start(
+  config: HackConfig,
+  log: vscode.LogOutputChannel,
+): Promise<string> {
+  return run(config, log, []);
 }
 
-async function run(config: HackConfig, extraArgs: string[]): Promise<string> {
+async function run(
+  config: HackConfig,
+  log: vscode.LogOutputChannel,
+  extraArgs: string[],
+): Promise<string> {
   return new Promise((resolve, reject) => {
     const workspacePath =
       config.remoteEnabled && config.remoteWorkspacePath
@@ -47,9 +56,10 @@ async function run(config: HackConfig, extraArgs: string[]): Promise<string> {
 
         const wasError = err !== null && err.code !== 0 && err.code !== 2;
         if (wasError) {
+          const errMsg = `hh_client execution error: ${err}, output: ${stdout}`;
           // any hh_client failure other than typecheck errors
-          console.error(`Hack: hh_client execution error: ${err}`);
-          reject(stdout);
+          log.error(errMsg);
+          reject(new Error(errMsg));
           return;
         }
 

@@ -30,8 +30,12 @@ export async function activate(context: vscode.ExtensionContext) {
     }),
   );
 
+  const log = vscode.window.createOutputChannel("Hack Extension", {
+    log: true,
+  });
+
   // check if a compatible verison of hh_client is installed, or show an error message and deactivate extension typecheck & intellisense features
-  const version = await hh_client.version(config);
+  const version = await hh_client.version(config, log);
   if (!version) {
     let errMsg = `Invalid hh_client executable: '${config.clientPath}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`;
 
@@ -62,12 +66,22 @@ export async function activate(context: vscode.ExtensionContext) {
     config.remoteType ?? "",
     version,
   );
-  const errorHandler = new HackLanguageServerErrorHandler(serverStatus, config);
+  const errorHandler = new HackLanguageServerErrorHandler(
+    serverStatus,
+    config,
+    log,
+  );
 
   const services: Promise<void>[] = [];
   services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context, config));
   services.push(
-    new LSPHackTypeChecker(context, config, serverStatus, errorHandler).run(),
+    new LSPHackTypeChecker(
+      context,
+      config,
+      serverStatus,
+      errorHandler,
+      log,
+    ).run(),
   );
 
   vscode.debug.registerDebugConfigurationProvider(
