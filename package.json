@@ -336,7 +336,7 @@
     "prettier": "^3.8.1",
     "qunit": "^2.25.0",
     "sinon": "^21.0.3",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "typescript-eslint": "^8.57.2",
     "vscode-tmgrammar-test": "^0.1.3"
   }
