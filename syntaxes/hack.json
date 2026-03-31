@@ -683,7 +683,7 @@
           "include": "#comments"
         },
         {
-          "begin": "(?=^\\s*<<)",
+          "begin": "(?=^\\s*<<[^<])",
           "end": "(?<=>>)",
           "patterns": [
             {

@@ -1,0 +1,92 @@
+>function _(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^ source.hack meta.function.php entity.name.function.php
+#          ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#           ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#            ^ source.hack meta.function.php punctuation.definition.type.php
+#             ^ source.hack meta.function.php
+#              ^^^^ source.hack meta.function.php support.class.php
+#                  ^ source.hack meta.function.php
+#                   ^ source.hack punctuation.section.scope.begin.php
+>  $not_heredoc = "<<<END";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^^^^^^^^^^ source.hack variable.other.php
+#              ^ source.hack
+#               ^ source.hack keyword.operator.assignment.php
+#                ^ source.hack
+#                 ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#                  ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                        ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                         ^ source.hack punctuation.terminator.expression.php
+>  $either = "END";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^^^^^ source.hack variable.other.php
+#         ^ source.hack
+#          ^ source.hack keyword.operator.assignment.php
+#           ^ source.hack
+#            ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#             ^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                 ^ source.hack punctuation.terminator.expression.php
+>  $unindented = Str\format(<<<END
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^^^^^^^^^ source.hack variable.other.php
+#             ^ source.hack
+#              ^ source.hack keyword.operator.assignment.php
+#               ^ source.hack
+#                ^^^ source.hack meta.function-call.php support.other.namespace.php entity.name.type.namespace.php
+#                   ^ source.hack meta.function-call.php support.other.namespace.php punctuation.separator.inheritance.php
+#                    ^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                          ^ source.hack
+#                           ^^^ source.hack string.unquoted.heredoc.php
+#                              ^^^ source.hack string.unquoted.heredoc.php keyword.operator.heredoc.php
+>END
+#^^^ source.hack string.unquoted.heredoc.php keyword.operator.heredoc.php
+>);
+#^ source.hack
+# ^ source.hack punctuation.terminator.expression.php
+>  $indented = Str\format(
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^^^^^^^ source.hack variable.other.php
+#           ^ source.hack
+#            ^ source.hack keyword.operator.assignment.php
+#             ^ source.hack
+#              ^^^ source.hack meta.function-call.php support.other.namespace.php entity.name.type.namespace.php
+#                 ^ source.hack meta.function-call.php support.other.namespace.php punctuation.separator.inheritance.php
+#                  ^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                        ^^ source.hack
+>    <<<END
+#^^^^ source.hack
+#    ^^^ source.hack string.unquoted.heredoc.php
+#       ^^^ source.hack string.unquoted.heredoc.php keyword.operator.heredoc.php
+>END
+#^^^ source.hack string.unquoted.heredoc.php keyword.operator.heredoc.php
+>);
+#^ source.hack
+# ^ source.hack punctuation.terminator.expression.php
+>  $y = '';
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#        ^ source.hack string.quoted.single.php punctuation.definition.string.end.php
+#         ^ source.hack punctuation.terminator.expression.php
+>  Cls::someMethod();
+#^^ source.hack
+#  ^^^ source.hack support.class.php
+#     ^^ source.hack keyword.operator.class.php
+#       ^^^^^^^^^^ source.hack meta.function-call.static.php
+#                 ^ source.hack
+#                  ^ source.hack
+#                   ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
