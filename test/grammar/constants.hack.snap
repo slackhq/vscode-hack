@@ -1,0 +1,103 @@
+>const vec<int> v = vec[0];
+#^^^^^ source.hack meta.const.php storage.modifier.php
+#     ^ source.hack meta.const.php
+#      ^^^ source.hack meta.const.php support.class.php
+#         ^ source.hack meta.const.php
+#          ^^^ source.hack meta.const.php support.type.php
+#             ^ source.hack meta.const.php
+#              ^ source.hack meta.const.php
+#               ^ source.hack meta.const.php constant.other.php
+#                ^ source.hack meta.const.php
+#                 ^ source.hack meta.const.php keyword.operator.assignment.php
+#                  ^ source.hack meta.const.php
+#                   ^^^ source.hack meta.const.php support.type.php
+#                      ^ source.hack meta.const.php punctuation.section.array.begin.php
+#                       ^ source.hack meta.const.php constant.numeric.php
+#                        ^ source.hack meta.const.php punctuation.section.array.end.php
+#                         ^ source.hack meta.const.php punctuation.terminator.expression.php
+>
+>class Test {
+#^^^^^ source.hack meta.class.php storage.type.class.php
+#     ^ source.hack meta.class.php
+#      ^^^^ source.hack meta.class.php entity.name.type.class.php
+#          ^ source.hack meta.class.php
+#           ^ source.hack punctuation.section.scope.begin.php
+>    const vec<int> CLASS_CONST = vec[0];
+#^^^^ source.hack
+#    ^^^^^ source.hack meta.const.php storage.modifier.php
+#         ^ source.hack meta.const.php
+#          ^^^ source.hack meta.const.php support.class.php
+#             ^ source.hack meta.const.php
+#              ^^^ source.hack meta.const.php support.type.php
+#                 ^ source.hack meta.const.php
+#                  ^ source.hack meta.const.php
+#                   ^^^^^^^^^^^ source.hack meta.const.php constant.other.php
+#                              ^ source.hack meta.const.php
+#                               ^ source.hack meta.const.php keyword.operator.assignment.php
+#                                ^ source.hack meta.const.php
+#                                 ^^^ source.hack meta.const.php support.type.php
+#                                    ^ source.hack meta.const.php punctuation.section.array.begin.php
+#                                     ^ source.hack meta.const.php constant.numeric.php
+#                                      ^ source.hack meta.const.php punctuation.section.array.end.php
+#                                       ^ source.hack meta.const.php punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>function foo(vec<int> $v = vec[0]): void {}
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#             ^^^ source.hack meta.function.php meta.function.arguments.php support.class.php
+#                ^ source.hack meta.function.php meta.function.arguments.php
+#                 ^^^ source.hack meta.function.php meta.function.arguments.php support.type.php
+#                    ^ source.hack meta.function.php meta.function.arguments.php
+#                     ^ source.hack meta.function.php meta.function.arguments.php
+#                      ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                       ^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                        ^ source.hack meta.function.php meta.function.arguments.php
+#                         ^ source.hack meta.function.php meta.function.arguments.php keyword.operator.assignment.php
+#                          ^ source.hack meta.function.php meta.function.arguments.php
+#                           ^^^ source.hack meta.function.php meta.function.arguments.php support.type.php
+#                              ^ source.hack meta.function.php meta.function.arguments.php punctuation.section.array.begin.php
+#                               ^ source.hack meta.function.php meta.function.arguments.php constant.numeric.php
+#                                ^ source.hack meta.function.php meta.function.arguments.php punctuation.section.array.end.php
+#                                 ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                  ^ source.hack meta.function.php punctuation.definition.type.php
+#                                   ^ source.hack meta.function.php
+#                                    ^^^^ source.hack meta.function.php support.class.php
+#                                        ^ source.hack meta.function.php
+#                                         ^ source.hack punctuation.section.scope.begin.php
+#                                          ^ source.hack punctuation.section.scope.end.php
+>
+>const dict<string, (function(Webserver\RequestURL): Awaitable<void>)> CONSTANT_NAME = dict[];
+#^^^^^ source.hack meta.const.php storage.modifier.php
+#     ^ source.hack meta.const.php
+#      ^^^^ source.hack meta.const.php support.class.php
+#          ^ source.hack meta.const.php
+#           ^^^^^^ source.hack meta.const.php support.type.php
+#                 ^^ source.hack meta.const.php
+#                   ^ source.hack meta.const.php
+#                    ^^^^^^^^ source.hack meta.const.php support.class.php
+#                            ^ source.hack meta.const.php
+#                             ^^^^^^^^^ source.hack meta.const.php support.other.namespace.php entity.name.type.namespace.php
+#                                      ^ source.hack meta.const.php support.other.namespace.php punctuation.separator.inheritance.php
+#                                       ^^^^^^^^^^ source.hack meta.const.php support.class.php
+#                                                 ^ source.hack meta.const.php
+#                                                  ^^ source.hack meta.const.php
+#                                                    ^^^^^^^^^ source.hack meta.const.php support.class.php
+#                                                             ^ source.hack meta.const.php
+#                                                              ^^^^ source.hack meta.const.php support.class.php
+#                                                                  ^ source.hack meta.const.php
+#                                                                   ^ source.hack meta.const.php
+#                                                                    ^ source.hack meta.const.php
+#                                                                     ^ source.hack meta.const.php
+#                                                                      ^^^^^^^^^^^^^ source.hack meta.const.php constant.other.php
+#                                                                                   ^ source.hack meta.const.php
+#                                                                                    ^ source.hack meta.const.php keyword.operator.assignment.php
+#                                                                                     ^ source.hack meta.const.php
+#                                                                                      ^^^^ source.hack meta.const.php support.type.php
+#                                                                                          ^ source.hack meta.const.php punctuation.section.array.begin.php
+#                                                                                           ^ source.hack meta.const.php punctuation.section.array.end.php
+#                                                                                            ^ source.hack meta.const.php punctuation.terminator.expression.php
+>

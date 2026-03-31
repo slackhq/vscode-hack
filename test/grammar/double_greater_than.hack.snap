@@ -21,14 +21,15 @@
 #^ source.hack meta.function.php punctuation.definition.parameters.end.php
 # ^ source.hack meta.function.php punctuation.definition.type.php
 #  ^ source.hack meta.function.php
-#   ^^^ source.hack meta.function.php support.type.php
+#   ^^^ source.hack meta.function.php support.class.php
 #      ^ source.hack meta.function.php
 #       ^^^^^^^^^^^^^^^^^ source.hack meta.function.php support.class.php
 #                        ^ source.hack meta.function.php
 #                         ^^^^^^ source.hack meta.function.php storage.type.shape.php
 #                               ^^^^ source.hack meta.function.php storage.type.shape.php keyword.operator.key.php
 #                                   ^ source.hack meta.function.php
-#                                    ^^ source.hack meta.function.php
+#                                    ^ source.hack meta.function.php
+#                                     ^ source.hack meta.function.php
 #                                      ^ source.hack punctuation.section.scope.begin.php
 >    return vec[];
 #^^^^ source.hack
