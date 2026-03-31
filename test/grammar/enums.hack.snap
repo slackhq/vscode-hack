@@ -1,0 +1,77 @@
+>enum SimpleEnum: int as arraykey {
+#^^^^ source.hack meta.enum.php storage.type.enum.php
+#    ^ source.hack meta.enum.php
+#     ^^^^^^^^^^ source.hack meta.enum.php entity.name.type.enum.php
+#               ^ source.hack meta.enum.php
+#                ^ source.hack meta.enum.php
+#                 ^^^ source.hack meta.enum.php support.type.php
+#                    ^ source.hack meta.enum.php
+#                     ^^ source.hack meta.enum.php support.class.php
+#                       ^ source.hack meta.enum.php
+#                        ^^^^^^^^ source.hack meta.enum.php support.type.php
+#                                ^ source.hack meta.enum.php
+#                                 ^ source.hack meta.enum.php
+>  X = 1;
+#^^ source.hack
+#  ^ source.hack constant.other.php
+#   ^ source.hack
+#    ^ source.hack keyword.operator.assignment.php
+#     ^ source.hack
+#      ^ source.hack constant.numeric.php
+#       ^ source.hack punctuation.terminator.expression.php
+>  Y = 2;
+#^^ source.hack
+#  ^ source.hack constant.other.php
+#   ^ source.hack
+#    ^ source.hack keyword.operator.assignment.php
+#     ^ source.hack
+#      ^ source.hack constant.numeric.php
+#       ^ source.hack punctuation.terminator.expression.php
+>  Z = 3;
+#^^ source.hack
+#  ^ source.hack constant.other.php
+#   ^ source.hack
+#    ^ source.hack keyword.operator.assignment.php
+#     ^ source.hack
+#      ^ source.hack constant.numeric.php
+#       ^ source.hack punctuation.terminator.expression.php
+>  ENUM_FOO = 1;
+#^^ source.hack
+#  ^^^^^^^^ source.hack constant.other.php
+#          ^ source.hack
+#           ^ source.hack keyword.operator.assignment.php
+#            ^ source.hack
+#             ^ source.hack constant.numeric.php
+#              ^ source.hack punctuation.terminator.expression.php
+>  ENUM_CLASS_BAR = 2;
+#^^ source.hack
+#  ^^^^^^^^^^^^^^ source.hack constant.other.php
+#                ^ source.hack
+#                 ^ source.hack keyword.operator.assignment.php
+#                  ^ source.hack
+#                   ^ source.hack constant.numeric.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>}
+#^^ source.hack
+>
+>enum ComplicatedEnum: classname<Foo> as classname<Bar> {}
+#^^^^ source.hack meta.enum.php storage.type.enum.php
+#    ^ source.hack meta.enum.php
+#     ^^^^^^^^^^^^^^^ source.hack meta.enum.php entity.name.type.enum.php
+#                    ^ source.hack meta.enum.php
+#                     ^ source.hack meta.enum.php
+#                      ^^^^^^^^^ source.hack meta.enum.php support.class.php
+#                               ^ source.hack meta.enum.php
+#                                ^^^ source.hack meta.enum.php support.class.php
+#                                   ^ source.hack meta.enum.php
+#                                    ^ source.hack meta.enum.php
+#                                     ^^ source.hack meta.enum.php support.class.php
+#                                       ^ source.hack meta.enum.php
+#                                        ^^^^^^^^^ source.hack meta.enum.php support.class.php
+#                                                 ^ source.hack meta.enum.php
+#                                                  ^^^ source.hack meta.enum.php support.class.php
+#                                                     ^ source.hack meta.enum.php
+#                                                      ^ source.hack meta.enum.php
+#                                                       ^ source.hack meta.enum.php
+#                                                        ^^ source.hack
+>

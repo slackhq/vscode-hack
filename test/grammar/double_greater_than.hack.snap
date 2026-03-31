@@ -1,0 +1,42 @@
+>// In this test, there are two >> symbols next to each other.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// They should not break the overall flow of syntax coloring.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// Everything after shape(...)>> should be colored correctly.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>protected static function initializeCoValidators(
+#^^^^^^^^^ source.hack meta.function.php storage.modifier.php
+#         ^ source.hack meta.function.php
+#          ^^^^^^ source.hack meta.function.php storage.modifier.php
+#                ^ source.hack meta.function.php
+#                 ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#                         ^ source.hack meta.function.php
+#                          ^^^^^^^^^^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                                                ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+>): vec<LoggerCoValidator<shape(...)>> {
+#^ source.hack meta.function.php punctuation.definition.parameters.end.php
+# ^ source.hack meta.function.php punctuation.definition.type.php
+#  ^ source.hack meta.function.php
+#   ^^^ source.hack meta.function.php support.type.php
+#      ^ source.hack meta.function.php
+#       ^^^^^^^^^^^^^^^^^ source.hack meta.function.php support.class.php
+#                        ^ source.hack meta.function.php
+#                         ^^^^^^ source.hack meta.function.php storage.type.shape.php
+#                               ^^^^ source.hack meta.function.php storage.type.shape.php keyword.operator.key.php
+#                                   ^ source.hack meta.function.php
+#                                    ^^ source.hack meta.function.php
+#                                      ^ source.hack punctuation.section.scope.begin.php
+>    return vec[];
+#^^^^ source.hack
+#    ^^^^^^ source.hack keyword.control.php
+#          ^ source.hack
+#           ^^^ source.hack support.type.php
+#              ^ source.hack punctuation.section.array.begin.php
+#               ^ source.hack punctuation.section.array.end.php
+#                ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php

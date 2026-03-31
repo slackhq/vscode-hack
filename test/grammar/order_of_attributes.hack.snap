@@ -1,0 +1,110 @@
+>// Syntax highlighting of attributes should be correct.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// In this example both "Lossy" and "Safe" should show
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// as the same color regardless of order.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>namespace Cast;
+#^^^^^^^^^ source.hack meta.namespace.php keyword.other.namespace.php
+#         ^ source.hack meta.namespace.php
+#          ^^^^ source.hack meta.namespace.php entity.name.type.namespace.php
+#              ^ source.hack punctuation.terminator.expression.php
+><<Lossy, Safe>>
+#^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+#  ^^^^^ source.hack meta.attributes.php entity.other.attribute-name.php
+#       ^^ source.hack meta.attributes.php
+#         ^^^^ source.hack meta.attributes.php entity.other.attribute-name.php
+#             ^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+>function num_int_round(num $num): int {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                       ^^^ source.hack meta.function.php meta.function.arguments.php support.class.php
+#                          ^ source.hack meta.function.php meta.function.arguments.php
+#                           ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                            ^^^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                               ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                ^ source.hack meta.function.php punctuation.definition.type.php
+#                                 ^ source.hack meta.function.php
+#                                  ^^^ source.hack meta.function.php support.type.php
+#                                     ^ source.hack meta.function.php
+#                                      ^ source.hack punctuation.section.scope.begin.php
+>	return $num is int ? $num : float_int_round($num as float);
+#^ source.hack
+# ^^^^^^ source.hack keyword.control.php
+#       ^ source.hack
+#        ^ source.hack variable.other.php punctuation.definition.variable.php
+#         ^^^ source.hack variable.other.php
+#            ^ source.hack
+#             ^^ source.hack keyword.operator.type.php
+#               ^ source.hack
+#                ^^^ source.hack support.class.php
+#                   ^^^ source.hack
+#                      ^ source.hack variable.other.php punctuation.definition.variable.php
+#                       ^^^ source.hack variable.other.php
+#                          ^^^ source.hack
+#                             ^^^^^^^^^^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                                            ^ source.hack
+#                                             ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                              ^^^ source.hack variable.other.php
+#                                                 ^ source.hack
+#                                                  ^^ source.hack keyword.operator.type.php
+#                                                    ^ source.hack
+#                                                     ^^^^^ source.hack support.class.php
+#                                                          ^ source.hack
+#                                                           ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+><<Safe, Lossy>>
+#^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+#  ^^^^ source.hack meta.attributes.php entity.other.attribute-name.php
+#      ^^ source.hack meta.attributes.php
+#        ^^^^^ source.hack meta.attributes.php entity.other.attribute-name.php
+#             ^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+>function num_int_round_2(num $num): int {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                        ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                         ^^^ source.hack meta.function.php meta.function.arguments.php support.class.php
+#                            ^ source.hack meta.function.php meta.function.arguments.php
+#                             ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                              ^^^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                                 ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                  ^ source.hack meta.function.php punctuation.definition.type.php
+#                                   ^ source.hack meta.function.php
+#                                    ^^^ source.hack meta.function.php support.type.php
+#                                       ^ source.hack meta.function.php
+#                                        ^ source.hack punctuation.section.scope.begin.php
+>	return $num is int ? $num : float_int_round($num as float);
+#^ source.hack
+# ^^^^^^ source.hack keyword.control.php
+#       ^ source.hack
+#        ^ source.hack variable.other.php punctuation.definition.variable.php
+#         ^^^ source.hack variable.other.php
+#            ^ source.hack
+#             ^^ source.hack keyword.operator.type.php
+#               ^ source.hack
+#                ^^^ source.hack support.class.php
+#                   ^^^ source.hack
+#                      ^ source.hack variable.other.php punctuation.definition.variable.php
+#                       ^^^ source.hack variable.other.php
+#                          ^^^ source.hack
+#                             ^^^^^^^^^^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                                            ^ source.hack
+#                                             ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                              ^^^ source.hack variable.other.php
+#                                                 ^ source.hack
+#                                                  ^^ source.hack keyword.operator.type.php
+#                                                    ^ source.hack
+#                                                     ^^^^^ source.hack support.class.php
+#                                                          ^ source.hack
+#                                                           ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php

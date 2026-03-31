@@ -13,9 +13,3 @@ function trace_shape_scalars_as_span_tags(SpanRef $span, shape(...) $shape, vec(
         }
     }
 }
-
-class MyList<T> {
-  public function compact<Tu>(): MyList<Tu> where T = ?Tu {
-    throw new Exception('unimplemented');
-  }
-}

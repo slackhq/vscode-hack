@@ -1,0 +1,290 @@
+>// See https://www.php.net/manual/en/language.types.string.php#language.types.string.parsing
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>function double_quoted(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                        ^ source.hack meta.function.php punctuation.definition.type.php
+#                         ^ source.hack meta.function.php
+#                          ^^^^ source.hack meta.function.php support.class.php
+#                              ^ source.hack meta.function.php
+#                               ^ source.hack punctuation.section.scope.begin.php
+>  // Escape characters.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = "world \n \t \\";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php constant.character.escape.php
+#                ^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                 ^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php constant.character.escape.php
+#                   ^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                    ^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php constant.character.escape.php
+#                      ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                       ^ source.hack punctuation.terminator.expression.php
+>
+>  // Octal/hex.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = "world \07 \xFF"
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php constant.numeric.octal.php
+#                 ^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                  ^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php constant.numeric.hex.php
+#                      ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+>
+>  // Simple interpolation.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $y = "hello $x";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                 ^ source.hack punctuation.terminator.expression.php
+>
+>  // We can do a single array access, but not nested.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $y = "hello $x[0]";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                   ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>  $y = "hello $x[0][1]"; // literal "[1]"
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                   ^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                      ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                       ^ source.hack punctuation.terminator.expression.php
+#                        ^ source.hack
+#                         ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#                           ^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>  // Similarly with properties, we can only access the first.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $y = "hello $x->foo";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                     ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                      ^ source.hack punctuation.terminator.expression.php
+>  $y = "hello $x->foo->bar"; // literal "->bar"
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                     ^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                          ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                           ^ source.hack punctuation.terminator.expression.php
+#                            ^ source.hack
+#                             ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#                               ^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>  // In {} we can use more complex expressions.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $y = "hello {$x->y->z[0][1] + 2}";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#              ^^^^^^^^^^^^^^^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                                  ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                                   ^ source.hack punctuation.terminator.expression.php
+>
+>  // Just accessing $x here due to the space.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $y = "hello { $x + 1}";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                ^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php variable.other.php
+#                  ^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                       ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                        ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>function single_quoted(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                        ^ source.hack meta.function.php punctuation.definition.type.php
+#                         ^ source.hack meta.function.php
+#                          ^^^^ source.hack meta.function.php support.class.php
+#                              ^ source.hack meta.function.php
+#                               ^ source.hack punctuation.section.scope.begin.php
+>  // This is a literal \ and n.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = 'foo\n bar';
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#        ^^^^^^^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+#                 ^ source.hack string.quoted.single.php punctuation.definition.string.end.php
+#                  ^ source.hack punctuation.terminator.expression.php
+>
+>  // No interpolation here.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = 'foo $x';
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#        ^^^^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+#              ^ source.hack string.quoted.single.php punctuation.definition.string.end.php
+#               ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>function regex(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^ source.hack meta.function.php entity.name.function.php
+#              ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#               ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                ^ source.hack meta.function.php punctuation.definition.type.php
+#                 ^ source.hack meta.function.php
+#                  ^^^^ source.hack meta.function.php support.class.php
+#                      ^ source.hack meta.function.php
+#                       ^ source.hack punctuation.section.scope.begin.php
+>  // In a regular expression, we want to highlight metacharacters.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = re"/* foo */";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^ source.hack constant.other.php
+#         ^^ source.hack string.regexp.double-quoted.php punctuation.definition.string.begin.php
+#           ^ source.hack string.regexp.double-quoted.php keyword.operator.regexp.php
+#            ^^^^^ source.hack string.regexp.double-quoted.php
+#                 ^ source.hack string.regexp.double-quoted.php keyword.operator.regexp.php
+#                  ^^ source.hack string.regexp.double-quoted.php punctuation.definition.string.end.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>  $x = re'/* foo */';
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^ source.hack constant.other.php
+#         ^^ source.hack string.regexp.single-quoted.php punctuation.definition.string.begin.php
+#           ^ source.hack string.regexp.single-quoted.php keyword.operator.regexp.php
+#            ^^^^^ source.hack string.regexp.single-quoted.php
+#                 ^ source.hack string.regexp.single-quoted.php keyword.operator.regexp.php
+#                  ^^ source.hack string.regexp.single-quoted.php punctuation.definition.string.end.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>
+>  // Don't treat plain strings with / as regexps.
+#^^ source.hack punctuation.whitespace.comment.leading.php
+#  ^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>  $x = "/* foo */";
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.double.php punctuation.definition.string.begin.php
+#        ^^^^^^^^^ source.hack string.quoted.double.php meta.string-contents.quoted.double.php
+#                 ^ source.hack string.quoted.double.php punctuation.definition.string.end.php
+#                  ^ source.hack punctuation.terminator.expression.php
+>  $x = '/* foo */';
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#        ^^^^^^^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+#                 ^ source.hack string.quoted.single.php punctuation.definition.string.end.php
+#                  ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php

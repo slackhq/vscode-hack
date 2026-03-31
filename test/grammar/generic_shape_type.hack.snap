@@ -1,0 +1,200 @@
+>// This function should correctly highlight elements after the "shape(...)" syntax
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>function trace_shape_scalars_as_span_tags(SpanRef $span, shape(...) $shape, vec(arraykey) $v) {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                                         ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                                          ^^^^^^^ source.hack meta.function.php meta.function.arguments.php support.class.php
+#                                                 ^ source.hack meta.function.php meta.function.arguments.php
+#                                                  ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                                                   ^^^^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                                                       ^^ source.hack meta.function.php meta.function.arguments.php
+#                                                         ^^^^^^ source.hack meta.function.php meta.function.arguments.php storage.type.shape.php
+#                                                               ^^^^ source.hack meta.function.php meta.function.arguments.php storage.type.shape.php keyword.operator.key.php
+#                                                                   ^ source.hack meta.function.php meta.function.arguments.php
+#                                                                    ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                                                                     ^^^^^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                                                                          ^^ source.hack meta.function.php meta.function.arguments.php
+#                                                                            ^^^ source.hack meta.function.php meta.function.arguments.php support.type.php
+#                                                                               ^ source.hack meta.function.php meta.function.arguments.php
+#                                                                                ^^^^^^^^ source.hack meta.function.php meta.function.arguments.php support.type.php
+#                                                                                        ^ source.hack meta.function.php meta.function.arguments.php
+#                                                                                         ^ source.hack meta.function.php meta.function.arguments.php
+#                                                                                          ^ source.hack meta.function.php meta.function.arguments.php variable.other.php punctuation.definition.variable.php
+#                                                                                           ^ source.hack meta.function.php meta.function.arguments.php variable.other.php
+#                                                                                            ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                                                                             ^ source.hack meta.function.php
+#                                                                                              ^ source.hack punctuation.section.scope.begin.php
+>    foreach (Shapes::toDict($shape) as $key => $value) {
+#^^^^ source.hack
+#    ^^^^^^^ source.hack keyword.control.php
+#           ^^ source.hack
+#             ^^^^^^ source.hack support.class.php
+#                   ^^ source.hack keyword.operator.class.php
+#                     ^^^^^^ source.hack meta.function-call.static.php
+#                           ^ source.hack
+#                            ^ source.hack variable.other.php punctuation.definition.variable.php
+#                             ^^^^^ source.hack variable.other.php
+#                                  ^^ source.hack
+#                                    ^^ source.hack keyword.operator.type.php
+#                                      ^ source.hack
+#                                       ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                        ^^^ source.hack variable.other.php
+#                                           ^ source.hack
+#                                            ^^ source.hack keyword.operator.key.php
+#                                              ^ source.hack
+#                                               ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                                ^^^^^ source.hack variable.other.php
+#                                                     ^^ source.hack
+#                                                       ^ source.hack punctuation.section.scope.begin.php
+>        if ($value is int) {
+#^^^^^^^^ source.hack
+#        ^^ source.hack keyword.control.php
+#          ^^ source.hack
+#            ^ source.hack variable.other.php punctuation.definition.variable.php
+#             ^^^^^ source.hack variable.other.php
+#                  ^ source.hack
+#                   ^^ source.hack keyword.operator.type.php
+#                     ^ source.hack
+#                      ^^^ source.hack support.class.php
+#                         ^^ source.hack
+#                           ^ source.hack punctuation.section.scope.begin.php
+>            t($span, $key_prefix.(string)$key, $value);
+#^^^^^^^^^^^^ source.hack
+#            ^ source.hack meta.function-call.php entity.name.function.php
+#             ^ source.hack
+#              ^ source.hack variable.other.php punctuation.definition.variable.php
+#               ^^^^ source.hack variable.other.php
+#                   ^^ source.hack
+#                     ^ source.hack variable.other.php punctuation.definition.variable.php
+#                      ^^^^^^^^^^ source.hack variable.other.php
+#                                ^ source.hack keyword.operator.string.php
+#                                 ^ source.hack
+#                                  ^^^^^^ source.hack support.type.php
+#                                        ^ source.hack
+#                                         ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                          ^^^ source.hack variable.other.php
+#                                             ^^ source.hack
+#                                               ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                                ^^^^^ source.hack variable.other.php
+#                                                     ^ source.hack
+#                                                      ^ source.hack punctuation.terminator.expression.php
+>        } else if ($value is float) {
+#^^^^^^^^ source.hack
+#        ^ source.hack punctuation.section.scope.end.php
+#         ^ source.hack
+#          ^^^^ source.hack keyword.control.php
+#              ^ source.hack
+#               ^^ source.hack keyword.control.php
+#                 ^^ source.hack
+#                   ^ source.hack variable.other.php punctuation.definition.variable.php
+#                    ^^^^^ source.hack variable.other.php
+#                         ^ source.hack
+#                          ^^ source.hack keyword.operator.type.php
+#                            ^ source.hack
+#                             ^^^^^ source.hack support.class.php
+#                                  ^^ source.hack
+#                                    ^ source.hack punctuation.section.scope.begin.php
+>            t($span, $key_prefix.(string)$key, $value);
+#^^^^^^^^^^^^ source.hack
+#            ^ source.hack meta.function-call.php entity.name.function.php
+#             ^ source.hack
+#              ^ source.hack variable.other.php punctuation.definition.variable.php
+#               ^^^^ source.hack variable.other.php
+#                   ^^ source.hack
+#                     ^ source.hack variable.other.php punctuation.definition.variable.php
+#                      ^^^^^^^^^^ source.hack variable.other.php
+#                                ^ source.hack keyword.operator.string.php
+#                                 ^ source.hack
+#                                  ^^^^^^ source.hack support.type.php
+#                                        ^ source.hack
+#                                         ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                          ^^^ source.hack variable.other.php
+#                                             ^^ source.hack
+#                                               ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                                ^^^^^ source.hack variable.other.php
+#                                                     ^ source.hack
+#                                                      ^ source.hack punctuation.terminator.expression.php
+>        } else if ($value is bool) {
+#^^^^^^^^ source.hack
+#        ^ source.hack punctuation.section.scope.end.php
+#         ^ source.hack
+#          ^^^^ source.hack keyword.control.php
+#              ^ source.hack
+#               ^^ source.hack keyword.control.php
+#                 ^^ source.hack
+#                   ^ source.hack variable.other.php punctuation.definition.variable.php
+#                    ^^^^^ source.hack variable.other.php
+#                         ^ source.hack
+#                          ^^ source.hack keyword.operator.type.php
+#                            ^ source.hack
+#                             ^^^^ source.hack support.class.php
+#                                 ^^ source.hack
+#                                   ^ source.hack punctuation.section.scope.begin.php
+>            t($span, $key_prefix.(string)$key, $value);
+#^^^^^^^^^^^^ source.hack
+#            ^ source.hack meta.function-call.php entity.name.function.php
+#             ^ source.hack
+#              ^ source.hack variable.other.php punctuation.definition.variable.php
+#               ^^^^ source.hack variable.other.php
+#                   ^^ source.hack
+#                     ^ source.hack variable.other.php punctuation.definition.variable.php
+#                      ^^^^^^^^^^ source.hack variable.other.php
+#                                ^ source.hack keyword.operator.string.php
+#                                 ^ source.hack
+#                                  ^^^^^^ source.hack support.type.php
+#                                        ^ source.hack
+#                                         ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                          ^^^ source.hack variable.other.php
+#                                             ^^ source.hack
+#                                               ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                                ^^^^^ source.hack variable.other.php
+#                                                     ^ source.hack
+#                                                      ^ source.hack punctuation.terminator.expression.php
+>        } else if ($value is string) {
+#^^^^^^^^ source.hack
+#        ^ source.hack punctuation.section.scope.end.php
+#         ^ source.hack
+#          ^^^^ source.hack keyword.control.php
+#              ^ source.hack
+#               ^^ source.hack keyword.control.php
+#                 ^^ source.hack
+#                   ^ source.hack variable.other.php punctuation.definition.variable.php
+#                    ^^^^^ source.hack variable.other.php
+#                         ^ source.hack
+#                          ^^ source.hack keyword.operator.type.php
+#                            ^ source.hack
+#                             ^^^^^^ source.hack support.class.php
+#                                   ^^ source.hack
+#                                     ^ source.hack punctuation.section.scope.begin.php
+>            t($span, $key_prefix.(string)$key, $value);
+#^^^^^^^^^^^^ source.hack
+#            ^ source.hack meta.function-call.php entity.name.function.php
+#             ^ source.hack
+#              ^ source.hack variable.other.php punctuation.definition.variable.php
+#               ^^^^ source.hack variable.other.php
+#                   ^^ source.hack
+#                     ^ source.hack variable.other.php punctuation.definition.variable.php
+#                      ^^^^^^^^^^ source.hack variable.other.php
+#                                ^ source.hack keyword.operator.string.php
+#                                 ^ source.hack
+#                                  ^^^^^^ source.hack support.type.php
+#                                        ^ source.hack
+#                                         ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                          ^^^ source.hack variable.other.php
+#                                             ^^ source.hack
+#                                               ^ source.hack variable.other.php punctuation.definition.variable.php
+#                                                ^^^^^ source.hack variable.other.php
+#                                                     ^ source.hack
+#                                                      ^ source.hack punctuation.terminator.expression.php
+>        }
+#^^^^^^^^ source.hack
+#        ^ source.hack punctuation.section.scope.end.php
+>    }
+#^^^^ source.hack
+#    ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php

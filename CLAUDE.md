@@ -12,6 +12,7 @@ VS Code extension providing Hack language and HHVM debugger support. Published t
 - **Compile:** `npm run compile` (runs `tsc -p ./`)
 - **Watch mode:** `npm run watch` (runs `tsc -watch -p ./`)
 - **Run tests:** `npm test` (compiles first via `pretest`, then runs integration tests using `@vscode/test-electron` which downloads a VS Code instance). In headless environments (e.g. CI, VMs without a display), prefix with `xvfb-run`: `xvfb-run npm test`
+- **Grammar snapshot tests:** `npm run test:grammar` (uses `vscode-tmgrammar-snap` to verify TextMate tokenization of `test/grammar/*.hack` files against corresponding `.hack.snap` snapshots). To update snapshots after changing the grammar (`syntaxes/hack.json`), run `npm run test:grammar:update`. Grammar tests also run as part of `npm test`.
 - **Package extension:** `npm run package` (uses `vsce package`)
 
 To debug the extension in VS Code, use the "Run Extension" launch configuration which opens a new Extension Host window.
