@@ -28,6 +28,7 @@ export class LSPHackTypeChecker {
     private config: HackConfig,
     private status: HackLanguageServerStatus,
     private errorHandler: HackLanguageServerErrorHandler,
+    private log: vscode.LogOutputChannel,
   ) {}
 
   public static IS_SUPPORTED(version: hack.Version): boolean {
@@ -51,7 +52,7 @@ export class LSPHackTypeChecker {
         title: `Running Hack typechecker`,
       },
       async () => {
-        await hh_client.start(this.config);
+        await hh_client.start(this.config, this.log);
       },
     );
 

@@ -19,6 +19,7 @@ export class HackLanguageServerErrorHandler implements ErrorHandler {
   constructor(
     private status: HackLanguageServerStatus,
     private config: HackConfig,
+    private log: vscode.LogOutputChannel,
   ) {}
 
   error(
@@ -90,7 +91,7 @@ export class HackLanguageServerErrorHandler implements ErrorHandler {
     this.status.showProgress("Restarting Hack language server...");
 
     try {
-      await hh_client.start(this.config);
+      await hh_client.start(this.config, this.log);
 
       this.status.showSuccess();
 
@@ -99,7 +100,8 @@ export class HackLanguageServerErrorHandler implements ErrorHandler {
       );
 
       return true;
-    } catch (_e) {
+    } catch (e) {
+      this.log.error(`Failed to run hh_client: `, e);
       return false;
     }
   }

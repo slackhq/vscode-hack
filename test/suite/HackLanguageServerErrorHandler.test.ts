@@ -16,11 +16,17 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
   let hhClientStart: sinon.SinonStub;
   let showErrorMessage: sinon.SinonSpy;
   let showInformationMessage: sinon.SinonSpy;
+  let logError: sinon.SinonSpy;
 
   hooks.beforeEach(() => {
+    const log = vscode.window.createOutputChannel("test", { log: true });
     clock = sandbox.useFakeTimers();
     serverStatus = sandbox.createStubInstance(HackLanguageServerStatus);
-    errorHandler = new HackLanguageServerErrorHandler(serverStatus, {} as any);
+    errorHandler = new HackLanguageServerErrorHandler(
+      serverStatus,
+      {} as any,
+      log,
+    );
 
     hhClientStart = sandbox.stub(hh_client, "start");
     showErrorMessage = sandbox.spy(vscode.window, "showErrorMessage");
@@ -28,6 +34,7 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
       vscode.window,
       "showInformationMessage",
     );
+    logError = sandbox.spy(log, "error");
   });
 
   hooks.afterEach(() => {
@@ -66,6 +73,7 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
           "Restarting Hack language server...",
         );
         sinon.assert.calledOnce(serverStatus.showSuccess);
+        sinon.assert.notCalled(logError);
       },
     );
 
@@ -88,6 +96,7 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
           showInformationMessage,
           "Hack language server successfully restarted.",
         );
+        sinon.assert.calledOnce(logError);
       },
     );
 
@@ -106,6 +115,7 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
 
       assert.deepEqual(result, { action: CloseAction.Restart });
       sinon.assert.callCount(hhClientStart, 4);
+      sinon.assert.callCount(logError, 3);
     });
 
     QUnit.test(
@@ -133,6 +143,7 @@ QUnit.module("HackLanguageServerErrorHandler", (hooks) => {
         );
         sinon.assert.callCount(hhClientStart, 31);
         sinon.assert.notCalled(showInformationMessage);
+        sinon.assert.callCount(logError, 31);
       },
     );
 
