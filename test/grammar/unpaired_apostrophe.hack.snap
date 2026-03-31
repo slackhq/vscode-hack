@@ -1,0 +1,41 @@
+>// This file has an error (unpaired quote).  Everything after line 6
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// should be colored as part of the string.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+><<__EntryPoint>>
+#^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+#  ^^^^^^^^^^^^ source.hack meta.attributes.php entity.other.attribute-name.php
+#              ^^ source.hack meta.attributes.php punctuation.definition.attributes.php
+>function foo(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#             ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#              ^ source.hack meta.function.php punctuation.definition.type.php
+#               ^ source.hack meta.function.php
+#                ^^^^ source.hack meta.function.php support.class.php
+#                    ^ source.hack meta.function.php
+#                     ^ source.hack punctuation.section.scope.begin.php
+>  $x = 'SELECT (')');
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^ source.hack string.quoted.single.sql.php punctuation.definition.string.begin.php
+#        ^^^^^^^ source.hack string.quoted.single.sql.php source.sql.embedded.php
+#               ^ source.hack string.quoted.single.sql.php source.sql.embedded.php punctuation.definition.parameters.begin.bracket.round.php
+#                ^ source.hack string.quoted.single.sql.php punctuation.definition.string.end.php
+#                 ^ source.hack
+#                  ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#                   ^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+>  echo $x;
+#^^^^^^^^^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+>}
+#^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+>

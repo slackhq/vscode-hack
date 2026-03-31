@@ -320,10 +320,38 @@
               "name": "punctuation.definition.type.php"
             }
           },
+          "end": "(?=[{;]|\\bwhere\\b)",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#type-annotation"
+            },
+            {
+              "include": "#class-name"
+            }
+          ]
+        }
+      ]
+    },
+    "where-clause": {
+      "patterns": [
+        {
+          "begin": "\\b(where)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.where.php"
+            }
+          },
           "end": "(?=[{;])",
           "patterns": [
             {
               "include": "#comments"
+            },
+            {
+              "match": "\\b(as|super)\\b",
+              "name": "storage.modifier.php"
             },
             {
               "include": "#type-annotation"
@@ -1146,6 +1174,9 @@
               "patterns": [
                 {
                   "include": "#function-return-type"
+                },
+                {
+                  "include": "#where-clause"
                 }
               ]
             }

@@ -302,10 +302,12 @@
     "compile": "npm run build-base -- --sourcemap",
     "watch": "npm run build-base -- --sourcemap --watch",
     "lint": "eslint src test",
+    "test:grammar": "vscode-tmgrammar-snap 'test/grammar/*.hack'",
+    "test:grammar:update": "vscode-tmgrammar-snap -u 'test/grammar/*.hack'",
     "typecheck": "tsc -b",
     "postinstall": "node ./build/notice-file-generate.js",
     "pretest": "npm run compile && npm run typecheck",
-    "test": "node --require ./test/esm-loader.cjs ./out/test/runTest.js",
+    "test": "node --require ./test/esm-loader.cjs ./out/test/runTest.js && npm run test:grammar",
     "package": "vsce package",
     "publish": "vsce publish"
   },
@@ -335,6 +337,7 @@
     "qunit": "^2.25.0",
     "sinon": "^21.0.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.57.2",
+    "vscode-tmgrammar-test": "^0.1.3"
   }
 }

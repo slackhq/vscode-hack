@@ -1,0 +1,287 @@
+>module foo.bar.baz;
+#^^^^^^ source.hack meta.use.module.php keyword.other.module.php
+#      ^ source.hack meta.use.module.php
+#       ^^^^^^^^^^^ source.hack meta.use.module.php entity.name.type.module.php
+#                  ^ source.hack punctuation.terminator.expression.php
+>
+>new module foo.bar.baz {
+#^^^ source.hack meta.module.php storage.type.module.php
+#   ^ source.hack meta.module.php
+#    ^^^^^^ source.hack meta.module.php storage.type.module.php
+#          ^ source.hack meta.module.php
+#           ^^^^^^^^^^^ source.hack meta.module.php entity.name.type.module.php
+#                      ^ source.hack meta.module.php
+#                       ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>module newtype x = y;
+#^^^^^^ source.hack meta.typedecl.php storage.modifier.php
+#      ^ source.hack meta.typedecl.php
+#       ^^^^^^^ source.hack meta.typedecl.php storage.type.typedecl.php
+#              ^ source.hack meta.typedecl.php
+#               ^ source.hack meta.typedecl.php entity.name.type.typedecl.php
+#                ^ source.hack meta.typedecl.php
+#                 ^ source.hack meta.typedecl.php keyword.operator.assignment.php
+#                  ^ source.hack meta.typedecl.php
+#                   ^ source.hack meta.typedecl.php support.class.php
+#                    ^ source.hack meta.typedecl.php punctuation.termination.expression.php
+>
+>internal interface foo {
+#^^^^^^^^ source.hack meta.interface.php storage.modifier.php
+#        ^ source.hack meta.interface.php
+#         ^^^^^^^^^ source.hack meta.interface.php storage.type.interface.php
+#                  ^ source.hack meta.interface.php
+#                   ^^^ source.hack meta.interface.php entity.name.type.class.php
+#                      ^ source.hack meta.interface.php
+#                       ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>public interface foo {
+#^^^^^^ source.hack meta.interface.php storage.modifier.php
+#      ^ source.hack meta.interface.php
+#       ^^^^^^^^^ source.hack meta.interface.php storage.type.interface.php
+#                ^ source.hack meta.interface.php
+#                 ^^^ source.hack meta.interface.php entity.name.type.class.php
+#                    ^ source.hack meta.interface.php
+#                     ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>interface foo {
+#^^^^^^^^^ source.hack meta.interface.php storage.type.interface.php
+#         ^ source.hack meta.interface.php
+#          ^^^ source.hack meta.interface.php entity.name.type.class.php
+#             ^ source.hack meta.interface.php
+#              ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>internal enum foo {
+#^^^^^^^^ source.hack meta.enum.php storage.modifier.php
+#        ^ source.hack meta.enum.php
+#         ^^^^ source.hack meta.enum.php storage.type.enum.php
+#             ^ source.hack meta.enum.php
+#              ^^^ source.hack meta.enum.php entity.name.type.enum.php
+#                 ^ source.hack meta.enum.php
+#                  ^ source.hack meta.enum.php
+>}
+#^^ source.hack
+>
+>public enum foo {
+#^^^^^^ source.hack meta.enum.php storage.modifier.php
+#      ^ source.hack meta.enum.php
+#       ^^^^ source.hack meta.enum.php storage.type.enum.php
+#           ^ source.hack meta.enum.php
+#            ^^^ source.hack meta.enum.php entity.name.type.enum.php
+#               ^ source.hack meta.enum.php
+#                ^ source.hack meta.enum.php
+>}
+#^^ source.hack
+>
+>enum foo {
+#^^^^ source.hack meta.enum.php storage.type.enum.php
+#    ^ source.hack meta.enum.php
+#     ^^^ source.hack meta.enum.php entity.name.type.enum.php
+#        ^ source.hack meta.enum.php
+#         ^ source.hack meta.enum.php
+>}
+#^^ source.hack
+>
+>internal enum class foo {
+#^^^^^^^^ source.hack meta.class.enum.php storage.modifier.php
+#        ^ source.hack meta.class.enum.php
+#         ^^^^ source.hack meta.class.enum.php storage.modifier.php
+#             ^ source.hack meta.class.enum.php
+#              ^^^^^ source.hack meta.class.enum.php storage.type.class.enum.php
+#                   ^ source.hack meta.class.enum.php
+#                    ^^^ source.hack meta.class.enum.php entity.name.type.class.enum.php
+#                       ^ source.hack meta.class.enum.php
+#                        ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>public enum class foo {
+#^^^^^^ source.hack meta.class.enum.php storage.modifier.php
+#      ^ source.hack meta.class.enum.php
+#       ^^^^ source.hack meta.class.enum.php storage.modifier.php
+#           ^ source.hack meta.class.enum.php
+#            ^^^^^ source.hack meta.class.enum.php storage.type.class.enum.php
+#                 ^ source.hack meta.class.enum.php
+#                  ^^^ source.hack meta.class.enum.php entity.name.type.class.enum.php
+#                     ^ source.hack meta.class.enum.php
+#                      ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>enum class foo {
+#^^^^ source.hack meta.class.enum.php storage.modifier.php
+#    ^ source.hack meta.class.enum.php
+#     ^^^^^ source.hack meta.class.enum.php storage.type.class.enum.php
+#          ^ source.hack meta.class.enum.php
+#           ^^^ source.hack meta.class.enum.php entity.name.type.class.enum.php
+#              ^ source.hack meta.class.enum.php
+#               ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>internal trait foo {
+#^^^^^^^^ source.hack meta.trait.php storage.modifier.php
+#        ^ source.hack meta.trait.php
+#         ^^^^^ source.hack meta.trait.php storage.type.trait.php
+#              ^ source.hack meta.trait.php
+#               ^^^ source.hack meta.trait.php entity.name.type.class.php
+#                  ^ source.hack meta.trait.php
+#                   ^ source.hack punctuation.section.scope.begin.php
+>    internal int $x;
+#^^^^ source.hack
+#    ^^^^^^^^ source.hack storage.modifier.php
+#            ^ source.hack
+#             ^^^ source.hack support.type.php
+#                ^ source.hack
+#                 ^ source.hack variable.other.php punctuation.definition.variable.php
+#                  ^ source.hack variable.other.php
+#                   ^ source.hack punctuation.terminator.expression.php
+>    internal function y(): void {
+#^^^^ source.hack meta.function.php
+#    ^^^^^^^^ source.hack meta.function.php storage.modifier.php
+#            ^ source.hack meta.function.php
+#             ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#                     ^ source.hack meta.function.php
+#                      ^ source.hack meta.function.php entity.name.function.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                        ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                         ^ source.hack meta.function.php punctuation.definition.type.php
+#                          ^ source.hack meta.function.php
+#                           ^^^^ source.hack meta.function.php support.class.php
+#                               ^ source.hack meta.function.php
+#                                ^ source.hack punctuation.section.scope.begin.php
+>    }
+#^^^^ source.hack
+#    ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>public trait foo {
+#^^^^^^ source.hack meta.trait.php storage.modifier.php
+#      ^ source.hack meta.trait.php
+#       ^^^^^ source.hack meta.trait.php storage.type.trait.php
+#            ^ source.hack meta.trait.php
+#             ^^^ source.hack meta.trait.php entity.name.type.class.php
+#                ^ source.hack meta.trait.php
+#                 ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>trait foo {
+#^^^^^ source.hack meta.trait.php storage.type.trait.php
+#     ^ source.hack meta.trait.php
+#      ^^^ source.hack meta.trait.php entity.name.type.class.php
+#         ^ source.hack meta.trait.php
+#          ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>internal class foo {
+#^^^^^^^^ source.hack meta.class.php storage.modifier.php
+#        ^ source.hack meta.class.php
+#         ^^^^^ source.hack meta.class.php storage.type.class.php
+#              ^ source.hack meta.class.php
+#               ^^^ source.hack meta.class.php entity.name.type.class.php
+#                  ^ source.hack meta.class.php
+#                   ^ source.hack punctuation.section.scope.begin.php
+>    internal int $x;
+#^^^^ source.hack
+#    ^^^^^^^^ source.hack storage.modifier.php
+#            ^ source.hack
+#             ^^^ source.hack support.type.php
+#                ^ source.hack
+#                 ^ source.hack variable.other.php punctuation.definition.variable.php
+#                  ^ source.hack variable.other.php
+#                   ^ source.hack punctuation.terminator.expression.php
+>    internal function y(): void {
+#^^^^ source.hack meta.function.php
+#    ^^^^^^^^ source.hack meta.function.php storage.modifier.php
+#            ^ source.hack meta.function.php
+#             ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#                     ^ source.hack meta.function.php
+#                      ^ source.hack meta.function.php entity.name.function.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                        ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                         ^ source.hack meta.function.php punctuation.definition.type.php
+#                          ^ source.hack meta.function.php
+#                           ^^^^ source.hack meta.function.php support.class.php
+#                               ^ source.hack meta.function.php
+#                                ^ source.hack punctuation.section.scope.begin.php
+>    }
+#^^^^ source.hack
+#    ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>public class foo {
+#^^^^^^ source.hack meta.class.php storage.modifier.php
+#      ^ source.hack meta.class.php
+#       ^^^^^ source.hack meta.class.php storage.type.class.php
+#            ^ source.hack meta.class.php
+#             ^^^ source.hack meta.class.php entity.name.type.class.php
+#                ^ source.hack meta.class.php
+#                 ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>class foo {
+#^^^^^ source.hack meta.class.php storage.type.class.php
+#     ^ source.hack meta.class.php
+#      ^^^ source.hack meta.class.php entity.name.type.class.php
+#         ^ source.hack meta.class.php
+#          ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>internal function foo(): void {
+#^^^^^^^^ source.hack meta.function.php storage.modifier.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#                 ^ source.hack meta.function.php
+#                  ^^^ source.hack meta.function.php entity.name.function.php
+#                     ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                       ^ source.hack meta.function.php punctuation.definition.type.php
+#                        ^ source.hack meta.function.php
+#                         ^^^^ source.hack meta.function.php support.class.php
+#                             ^ source.hack meta.function.php
+#                              ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>public function foo(): void {
+#^^^^^^ source.hack meta.function.php storage.modifier.php
+#      ^ source.hack meta.function.php
+#       ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#               ^ source.hack meta.function.php
+#                ^^^ source.hack meta.function.php entity.name.function.php
+#                   ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                    ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                     ^ source.hack meta.function.php punctuation.definition.type.php
+#                      ^ source.hack meta.function.php
+#                       ^^^^ source.hack meta.function.php support.class.php
+#                           ^ source.hack meta.function.php
+#                            ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>function foo(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#             ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#              ^ source.hack meta.function.php punctuation.definition.type.php
+#               ^ source.hack meta.function.php
+#                ^^^^ source.hack meta.function.php support.class.php
+#                    ^ source.hack meta.function.php
+#                     ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php

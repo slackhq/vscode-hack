@@ -1,0 +1,125 @@
+>
+>function create_collections(): void {
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                           ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                            ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                             ^ source.hack meta.function.php punctuation.definition.type.php
+#                              ^ source.hack meta.function.php
+#                               ^^^^ source.hack meta.function.php support.class.php
+#                                   ^ source.hack meta.function.php
+#                                    ^ source.hack punctuation.section.scope.begin.php
+>  $v = Vector {};
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^^^^^ source.hack meta.collection.literal.php support.class.php
+#             ^ source.hack meta.collection.literal.php
+#              ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#               ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                ^ source.hack punctuation.terminator.expression.php
+>  $v2 = ImmVector {};
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^ source.hack variable.other.php
+#     ^ source.hack
+#      ^ source.hack keyword.operator.assignment.php
+#       ^ source.hack
+#        ^^^^^^^^^ source.hack meta.collection.literal.php support.class.php
+#                 ^ source.hack meta.collection.literal.php
+#                  ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#                   ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>
+>  $m = Map { 'x' => 1 };
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^^ source.hack meta.collection.literal.php support.class.php
+#          ^ source.hack meta.collection.literal.php
+#           ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#            ^ source.hack meta.collection.literal.php
+#             ^ source.hack meta.collection.literal.php string.quoted.single.php punctuation.definition.string.begin.php
+#              ^ source.hack meta.collection.literal.php string.quoted.single.php meta.string-contents.quoted.single.php
+#               ^ source.hack meta.collection.literal.php string.quoted.single.php punctuation.definition.string.end.php
+#                ^ source.hack meta.collection.literal.php
+#                 ^^ source.hack meta.collection.literal.php keyword.operator.key.php
+#                   ^ source.hack meta.collection.literal.php
+#                    ^ source.hack meta.collection.literal.php constant.numeric.php
+#                     ^ source.hack meta.collection.literal.php
+#                      ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                       ^ source.hack punctuation.terminator.expression.php
+>  $m2 = ImmMap { 'x' => 1 };
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^ source.hack variable.other.php
+#     ^ source.hack
+#      ^ source.hack keyword.operator.assignment.php
+#       ^ source.hack
+#        ^^^^^^ source.hack meta.collection.literal.php support.class.php
+#              ^ source.hack meta.collection.literal.php
+#               ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#                ^ source.hack meta.collection.literal.php
+#                 ^ source.hack meta.collection.literal.php string.quoted.single.php punctuation.definition.string.begin.php
+#                  ^ source.hack meta.collection.literal.php string.quoted.single.php meta.string-contents.quoted.single.php
+#                   ^ source.hack meta.collection.literal.php string.quoted.single.php punctuation.definition.string.end.php
+#                    ^ source.hack meta.collection.literal.php
+#                     ^^ source.hack meta.collection.literal.php keyword.operator.key.php
+#                       ^ source.hack meta.collection.literal.php
+#                        ^ source.hack meta.collection.literal.php constant.numeric.php
+#                         ^ source.hack meta.collection.literal.php
+#                          ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                           ^ source.hack punctuation.terminator.expression.php
+>
+>  $m = Set {};
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^^ source.hack meta.collection.literal.php support.class.php
+#          ^ source.hack meta.collection.literal.php
+#           ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#            ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#             ^ source.hack punctuation.terminator.expression.php
+>  $m2 = ImmSet {};
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^^ source.hack variable.other.php
+#     ^ source.hack
+#      ^ source.hack keyword.operator.assignment.php
+#       ^ source.hack
+#        ^^^^^^ source.hack meta.collection.literal.php support.class.php
+#              ^ source.hack meta.collection.literal.php
+#               ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#                ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                 ^ source.hack punctuation.terminator.expression.php
+>
+>  $p = Pair { 1, 2 };
+#^^ source.hack
+#  ^ source.hack variable.other.php punctuation.definition.variable.php
+#   ^ source.hack variable.other.php
+#    ^ source.hack
+#     ^ source.hack keyword.operator.assignment.php
+#      ^ source.hack
+#       ^^^^ source.hack meta.collection.literal.php support.class.php
+#           ^ source.hack meta.collection.literal.php
+#            ^ source.hack meta.collection.literal.php punctuation.section.array.begin.php
+#             ^ source.hack meta.collection.literal.php
+#              ^ source.hack meta.collection.literal.php constant.numeric.php
+#               ^^ source.hack meta.collection.literal.php
+#                 ^ source.hack meta.collection.literal.php constant.numeric.php
+#                  ^ source.hack meta.collection.literal.php
+#                   ^ source.hack meta.collection.literal.php punctuation.section.array.end.php
+#                    ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>

@@ -1,0 +1,79 @@
+>async function gen_foo(): Awaitable<int> {
+#^^^^^ source.hack meta.function.php storage.modifier.php
+#     ^ source.hack meta.function.php
+#      ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#              ^ source.hack meta.function.php
+#               ^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                        ^ source.hack meta.function.php punctuation.definition.type.php
+#                         ^ source.hack meta.function.php
+#                          ^^^^^^^^^ source.hack meta.function.php support.class.php
+#                                   ^ source.hack meta.function.php
+#                                    ^^^ source.hack meta.function.php support.type.php
+#                                       ^ source.hack meta.function.php
+#                                        ^ source.hack meta.function.php
+#                                         ^ source.hack punctuation.section.scope.begin.php
+>  return 1;
+#^^ source.hack
+#  ^^^^^^ source.hack keyword.control.php
+#        ^ source.hack
+#         ^ source.hack constant.numeric.php
+#          ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>async function gen_bar(): Awaitable<void> {
+#^^^^^ source.hack meta.function.php storage.modifier.php
+#     ^ source.hack meta.function.php
+#      ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#              ^ source.hack meta.function.php
+#               ^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                      ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                       ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                        ^ source.hack meta.function.php punctuation.definition.type.php
+#                         ^ source.hack meta.function.php
+#                          ^^^^^^^^^ source.hack meta.function.php support.class.php
+#                                   ^ source.hack meta.function.php
+#                                    ^^^^ source.hack meta.function.php support.class.php
+#                                        ^ source.hack meta.function.php
+#                                         ^ source.hack meta.function.php
+#                                          ^ source.hack punctuation.section.scope.begin.php
+>  concurrent {
+#^^ source.hack
+#  ^^^^^^^^^^ source.hack keyword.control.php
+#            ^ source.hack
+#             ^ source.hack punctuation.section.scope.begin.php
+>    $x = await gen_foo(1);
+#^^^^ source.hack
+#    ^ source.hack variable.other.php punctuation.definition.variable.php
+#     ^ source.hack variable.other.php
+#      ^ source.hack
+#       ^ source.hack keyword.operator.assignment.php
+#        ^ source.hack
+#         ^^^^^ source.hack keyword.control.php
+#              ^ source.hack
+#               ^^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                      ^ source.hack
+#                       ^ source.hack constant.numeric.php
+#                        ^ source.hack
+#                         ^ source.hack punctuation.terminator.expression.php
+>    $y = await gen_foo(2);
+#^^^^ source.hack
+#    ^ source.hack variable.other.php punctuation.definition.variable.php
+#     ^ source.hack variable.other.php
+#      ^ source.hack
+#       ^ source.hack keyword.operator.assignment.php
+#        ^ source.hack
+#         ^^^^^ source.hack keyword.control.php
+#              ^ source.hack
+#               ^^^^^^^ source.hack meta.function-call.php entity.name.function.php
+#                      ^ source.hack
+#                       ^ source.hack constant.numeric.php
+#                        ^ source.hack
+#                         ^ source.hack punctuation.terminator.expression.php
+>  }
+#^^ source.hack
+#  ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php

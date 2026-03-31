@@ -1,0 +1,81 @@
+>// The `where` keyword in generic constraints should be highlighted as a keyword.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>function foo<T>(): T where T super string {}
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#             ^ source.hack meta.function.php meta.generics.php support.type.php
+#              ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#               ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                 ^ source.hack meta.function.php punctuation.definition.type.php
+#                  ^ source.hack meta.function.php
+#                   ^ source.hack meta.function.php support.class.php
+#                    ^ source.hack meta.function.php
+#                     ^^^^^ source.hack meta.function.php storage.modifier.where.php
+#                          ^ source.hack meta.function.php
+#                           ^ source.hack meta.function.php support.class.php
+#                            ^ source.hack meta.function.php
+#                             ^^^^^ source.hack meta.function.php storage.modifier.php
+#                                  ^ source.hack meta.function.php
+#                                   ^^^^^^ source.hack meta.function.php support.type.php
+#                                         ^ source.hack meta.function.php
+#                                          ^ source.hack punctuation.section.scope.begin.php
+#                                           ^ source.hack punctuation.section.scope.end.php
+>function bar<T>(): T where T as arraykey {}
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#             ^ source.hack meta.function.php meta.generics.php support.type.php
+#              ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#               ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                 ^ source.hack meta.function.php punctuation.definition.type.php
+#                  ^ source.hack meta.function.php
+#                   ^ source.hack meta.function.php support.class.php
+#                    ^ source.hack meta.function.php
+#                     ^^^^^ source.hack meta.function.php storage.modifier.where.php
+#                          ^ source.hack meta.function.php
+#                           ^ source.hack meta.function.php support.class.php
+#                            ^ source.hack meta.function.php
+#                             ^^ source.hack meta.function.php storage.modifier.php
+#                               ^ source.hack meta.function.php
+#                                ^^^^^^^^ source.hack meta.function.php support.type.php
+#                                        ^ source.hack meta.function.php
+#                                         ^ source.hack punctuation.section.scope.begin.php
+#                                          ^ source.hack punctuation.section.scope.end.php
+>function baz<T1, T2>(): void where T1 as T2, T2 super int {}
+#^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#        ^ source.hack meta.function.php
+#         ^^^ source.hack meta.function.php entity.name.function.php
+#            ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#             ^^ source.hack meta.function.php meta.generics.php support.type.php
+#               ^^ source.hack meta.function.php meta.generics.php
+#                 ^^ source.hack meta.function.php meta.generics.php support.type.php
+#                   ^ source.hack meta.function.php meta.generics.php punctuation.definition.generics.php
+#                    ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                     ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                      ^ source.hack meta.function.php punctuation.definition.type.php
+#                       ^ source.hack meta.function.php
+#                        ^^^^ source.hack meta.function.php support.class.php
+#                            ^ source.hack meta.function.php
+#                             ^^^^^ source.hack meta.function.php storage.modifier.where.php
+#                                  ^ source.hack meta.function.php
+#                                   ^^ source.hack meta.function.php support.class.php
+#                                     ^ source.hack meta.function.php
+#                                      ^^ source.hack meta.function.php storage.modifier.php
+#                                        ^ source.hack meta.function.php
+#                                         ^^ source.hack meta.function.php support.class.php
+#                                           ^^ source.hack meta.function.php
+#                                             ^^ source.hack meta.function.php support.class.php
+#                                               ^ source.hack meta.function.php
+#                                                ^^^^^ source.hack meta.function.php storage.modifier.php
+#                                                     ^ source.hack meta.function.php
+#                                                      ^^^ source.hack meta.function.php support.type.php
+#                                                         ^ source.hack meta.function.php
+#                                                          ^ source.hack punctuation.section.scope.begin.php
+#                                                           ^ source.hack punctuation.section.scope.end.php
+>

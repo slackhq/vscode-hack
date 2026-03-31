@@ -1,0 +1,20 @@
+>abstract final class MyFoo {}
+#^^^^^^^^ source.hack meta.class.php storage.modifier.php
+#        ^ source.hack meta.class.php
+#         ^^^^^ source.hack meta.class.php storage.modifier.php
+#              ^ source.hack meta.class.php
+#               ^^^^^ source.hack meta.class.php storage.type.class.php
+#                    ^ source.hack meta.class.php
+#                     ^^^^^ source.hack meta.class.php entity.name.type.class.php
+#                          ^ source.hack meta.class.php
+#                           ^ source.hack punctuation.section.scope.begin.php
+#                            ^ source.hack punctuation.section.scope.end.php
+>
+>class MyBar {}
+#^^^^^ source.hack meta.class.php storage.type.class.php
+#     ^ source.hack meta.class.php
+#      ^^^^^ source.hack meta.class.php entity.name.type.class.php
+#           ^ source.hack meta.class.php
+#            ^ source.hack punctuation.section.scope.begin.php
+#             ^ source.hack punctuation.section.scope.end.php
+>

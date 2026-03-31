@@ -1,0 +1,42 @@
+>namespace foo {
+#^^^^^^^^^ source.hack meta.namespace.php keyword.other.namespace.php
+#         ^ source.hack meta.namespace.php
+#          ^^^ source.hack meta.namespace.php entity.name.type.namespace.php
+#             ^ source.hack
+#              ^ source.hack punctuation.section.scope.begin.php
+>  function one(): void {}
+#^^ source.hack meta.function.php
+#  ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#          ^ source.hack meta.function.php
+#           ^^^ source.hack meta.function.php entity.name.function.php
+#              ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#               ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                ^ source.hack meta.function.php punctuation.definition.type.php
+#                 ^ source.hack meta.function.php
+#                  ^^^^ source.hack meta.function.php support.class.php
+#                      ^ source.hack meta.function.php
+#                       ^ source.hack punctuation.section.scope.begin.php
+#                        ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>namespace {
+#^^^^^^^^^ source.hack meta.namespace.php keyword.other.namespace.php
+#         ^ source.hack meta.namespace.php
+#          ^ source.hack punctuation.section.scope.begin.php
+>  function two(): void {}
+#^^ source.hack meta.function.php
+#  ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#          ^ source.hack meta.function.php
+#           ^^^ source.hack meta.function.php entity.name.function.php
+#              ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#               ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                ^ source.hack meta.function.php punctuation.definition.type.php
+#                 ^ source.hack meta.function.php
+#                  ^^^^ source.hack meta.function.php support.class.php
+#                      ^ source.hack meta.function.php
+#                       ^ source.hack punctuation.section.scope.begin.php
+#                        ^ source.hack punctuation.section.scope.end.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>

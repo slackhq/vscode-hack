@@ -1,0 +1,56 @@
+>enum class SimpleEnumClass: mixed {
+#^^^^ source.hack meta.class.enum.php storage.modifier.php
+#    ^ source.hack meta.class.enum.php
+#     ^^^^^ source.hack meta.class.enum.php storage.type.class.enum.php
+#          ^ source.hack meta.class.enum.php
+#           ^^^^^^^^^^^^^^^ source.hack meta.class.enum.php entity.name.type.class.enum.php
+#                          ^ source.hack meta.class.enum.php
+#                           ^ source.hack meta.class.enum.php
+#                            ^^^^^ source.hack meta.class.enum.php support.type.php
+#                                 ^ source.hack meta.class.enum.php
+#                                  ^ source.hack punctuation.section.scope.begin.php
+>  int X = 42;
+#^^ source.hack
+#  ^^^ source.hack support.type.php
+#     ^ source.hack
+#      ^ source.hack constant.other.php
+#       ^ source.hack
+#        ^ source.hack keyword.operator.assignment.php
+#         ^ source.hack
+#          ^^ source.hack constant.numeric.php
+#            ^ source.hack punctuation.terminator.expression.php
+>  string S = 'foo';
+#^^ source.hack
+#  ^^^^^^ source.hack support.type.php
+#        ^ source.hack
+#         ^ source.hack constant.other.php
+#          ^ source.hack
+#           ^ source.hack keyword.operator.assignment.php
+#            ^ source.hack
+#             ^ source.hack string.quoted.single.php punctuation.definition.string.begin.php
+#              ^^^ source.hack string.quoted.single.php meta.string-contents.quoted.single.php
+#                 ^ source.hack string.quoted.single.php punctuation.definition.string.end.php
+#                  ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>enum class WithInheritance: IFoo extends BaseFoo {
+#^^^^ source.hack meta.class.enum.php storage.modifier.php
+#    ^ source.hack meta.class.enum.php
+#     ^^^^^ source.hack meta.class.enum.php storage.type.class.enum.php
+#          ^ source.hack meta.class.enum.php
+#           ^^^^^^^^^^^^^^^ source.hack meta.class.enum.php entity.name.type.class.enum.php
+#                          ^ source.hack meta.class.enum.php
+#                           ^ source.hack meta.class.enum.php
+#                            ^^^^ source.hack meta.class.enum.php support.class.php
+#                                ^ source.hack meta.class.enum.php
+#                                 ^^^^^^^ source.hack meta.class.enum.php storage.modifier.extends.php
+#                                        ^ source.hack meta.class.enum.php
+#                                         ^^^^^^^ source.hack meta.class.enum.php support.class.php
+#                                                ^ source.hack meta.class.enum.php
+#                                                 ^ source.hack punctuation.section.scope.begin.php
+>}
+#^ source.hack punctuation.section.scope.end.php
+>
+>
+>

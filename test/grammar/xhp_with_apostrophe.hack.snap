@@ -1,0 +1,89 @@
+>// This function returns an XHP snippet with embedded text
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>// that has some unpaired symbols.
+#^^ source.hack comment.line.double-slash.php punctuation.definition.comment.php
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.line.double-slash.php
+>
+>  public static function getMetric(): :foo {
+#^^ source.hack meta.function.php
+#  ^^^^^^ source.hack meta.function.php storage.modifier.php
+#        ^ source.hack meta.function.php
+#         ^^^^^^ source.hack meta.function.php storage.modifier.php
+#               ^ source.hack meta.function.php
+#                ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#                        ^ source.hack meta.function.php
+#                         ^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                                  ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                                   ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                    ^ source.hack meta.function.php punctuation.definition.type.php
+#                                     ^^ source.hack meta.function.php
+#                                       ^^^ source.hack meta.function.php support.class.php
+#                                          ^ source.hack meta.function.php
+#                                           ^ source.hack punctuation.section.scope.begin.php
+>    return
+#^^^^ source.hack
+#    ^^^^^^ source.hack keyword.control.php
+>    /* The text within this XHP snippet should be colored white */
+#^^^^ source.hack
+#    ^^ source.hack comment.block.php punctuation.definition.comment.php
+#      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.block.php
+#                                                                ^^ source.hack comment.block.php punctuation.definition.comment.php
+>      <foo >
+#^^^^^^ source.hack
+#      ^ source.hack source.xhp punctuation.definition.tag.xhp
+#       ^^^ source.hack source.xhp entity.name.tag.open.xhp
+#          ^ source.hack source.xhp
+#           ^ source.hack source.xhp punctuation.definition.tag.xhp XHPStartTagEnd
+>        Testing embedded text with unpaired symbols that can cause breaks:
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack source.xhp
+>        (
+#^^^^^^^^^^ source.hack source.xhp
+>        '
+#^^^^^^^^^^ source.hack source.xhp
+>        "
+#^^^^^^^^^^ source.hack source.xhp
+>        \
+#^^^^^^^^^^ source.hack source.xhp
+>        }
+#^^^^^^^^^^ source.hack source.xhp
+>        <
+#^^^^^^^^^^ source.hack source.xhp
+>        >
+#^^^^^^^^^^ source.hack source.xhp
+>      </foo>;
+#^^^^^^ source.hack source.xhp
+#      ^^ source.hack source.xhp punctuation.definition.tag.xhp XHPEndTagStart
+#        ^^^ source.hack source.xhp entity.name.tag.close.xhp
+#           ^ source.hack source.xhp punctuation.definition.tag.xhp
+#            ^ source.hack punctuation.terminator.expression.php
+>    /* After the text, normal syntax highlighting resumes */
+#^^^^ source.hack
+#    ^^ source.hack comment.block.php punctuation.definition.comment.php
+#      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hack comment.block.php
+#                                                          ^^ source.hack comment.block.php punctuation.definition.comment.php
+>  }
+#^^ source.hack
+#  ^ source.hack punctuation.section.scope.end.php
+>
+>public function anotherFunction(): int {
+#^^^^^^ source.hack meta.function.php storage.modifier.php
+#      ^ source.hack meta.function.php
+#       ^^^^^^^^ source.hack meta.function.php storage.type.function.php
+#               ^ source.hack meta.function.php
+#                ^^^^^^^^^^^^^^^ source.hack meta.function.php entity.name.function.php
+#                               ^ source.hack meta.function.php punctuation.definition.parameters.begin.php
+#                                ^ source.hack meta.function.php punctuation.definition.parameters.end.php
+#                                 ^ source.hack meta.function.php punctuation.definition.type.php
+#                                  ^ source.hack meta.function.php
+#                                   ^^^ source.hack meta.function.php support.type.php
+#                                      ^ source.hack meta.function.php
+#                                       ^ source.hack punctuation.section.scope.begin.php
+>    return 42;
+#^^^^ source.hack
+#    ^^^^^^ source.hack keyword.control.php
+#          ^ source.hack
+#           ^^ source.hack constant.numeric.php
+#             ^ source.hack punctuation.terminator.expression.php
+>}
+#^ source.hack punctuation.section.scope.end.php
