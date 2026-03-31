@@ -455,6 +455,15 @@
               },
               "patterns": [
                 {
+                  "begin": "\\(",
+                  "end": "\\)",
+                  "patterns": [
+                    {
+                      "include": "#language"
+                    }
+                  ]
+                },
+                {
                   "include": "#language"
                 }
               ]
