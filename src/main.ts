@@ -3,15 +3,35 @@
  */
 
 import * as vscode from "vscode";
-import * as config from "./Config";
+import { createHackConfig } from "./Config";
 import { LSPHackTypeChecker } from "./LSPHackTypeChecker";
 import { LSPHHASTLint } from "./LSPHHASTLint";
 import * as hh_client from "./proxy";
 import { HhvmDebugConfigurationProvider } from "./HhvmDebugConfigurationProvider";
+import { HackLanguageServerErrorHandler } from "./HackLanguageServerErrorHandler";
+import { HackLanguageServerStatus } from "./HackLanguageServerStatus";
 
 export async function activate(context: vscode.ExtensionContext) {
+  const config = createHackConfig();
+
+  // Prompt to reload workspace on certain configuration updates
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration(async (event) => {
+      if (event.affectsConfiguration("hack.remote")) {
+        const selection = await vscode.window.showInformationMessage(
+          "Please reload your workspace to apply the latest Hack configuration changes.",
+          { modal: true },
+          "Reload",
+        );
+        if (selection === "Reload") {
+          vscode.commands.executeCommand("workbench.action.reloadWindow");
+        }
+      }
+    }),
+  );
+
   // check if a compatible verison of hh_client is installed, or show an error message and deactivate extension typecheck & intellisense features
-  const version = await hh_client.version();
+  const version = await hh_client.version(config);
   if (!version) {
     let errMsg = `Invalid hh_client executable: '${config.clientPath}'. Please ensure that HHVM is correctly installed or configure an alternate hh_client path in workspace settings.`;
 
@@ -32,13 +52,27 @@ export async function activate(context: vscode.ExtensionContext) {
     return;
   }
 
+  const statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right,
+    1000,
+  );
+  context.subscriptions.push(statusBarItem);
+  const serverStatus = new HackLanguageServerStatus(
+    statusBarItem,
+    config.remoteType ?? "",
+    version,
+  );
+  const errorHandler = new HackLanguageServerErrorHandler(serverStatus, config);
+
   const services: Promise<void>[] = [];
-  services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context));
-  services.push(new LSPHackTypeChecker(context, version).run());
+  services.push(LSPHHASTLint.START_IF_CONFIGURED_AND_ENABLED(context, config));
+  services.push(
+    new LSPHackTypeChecker(context, config, serverStatus, errorHandler).run(),
+  );
 
   vscode.debug.registerDebugConfigurationProvider(
     "hhvm",
-    new HhvmDebugConfigurationProvider(),
+    new HhvmDebugConfigurationProvider(config),
   );
 
   await Promise.all(services);

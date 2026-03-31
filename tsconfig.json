@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "target": "ES2020",
     "outDir": "out",
     "lib": ["ES2020"],
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
-    "rootDir": "src",
     "strict": true /* enable all strict type-checking options */,
     "skipLibCheck": true
     /* Additional Checks */
@@ -13,5 +14,6 @@
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     // "noUnusedParameters": true,  /* Report errors on unused parameters. */
   },
-  "exclude": ["node_modules", ".vscode-test"]
+  "include": [],
+  "references": [{ "path": "./src" }, { "path": "./test" }]
 }

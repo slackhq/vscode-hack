@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*"],
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../out/test"
+  },
+  "references": [{ "path": "../src" }]
+}

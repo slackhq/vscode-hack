@@ -5,53 +5,58 @@
 
 import * as vscode from "vscode";
 
-const hackConfig = vscode.workspace.getConfiguration("hack");
+export class HackConfig {
+  readonly clientPath: string;
+  readonly enableCoverageCheck: boolean;
+  readonly useHhast: boolean;
+  readonly hhastLintMode: "whole-project" | "open-files";
+  readonly hhastPath: string;
+  readonly hhastArgs: string[];
+  readonly localWorkspacePath: string;
+  readonly remoteEnabled: boolean;
+  readonly remoteType: "ssh" | "docker" | undefined;
+  readonly remoteWorkspacePath: string | undefined;
+  readonly sshHost: string;
+  readonly sshArgs: string[];
+  readonly dockerContainerName: string;
 
-// tslint:disable-next-line:no-non-null-assertion
-export const localWorkspacePath =
-  vscode.workspace.workspaceFolders![0].uri.fsPath;
-
-export let clientPath = hackConfig.get<string>("clientPath") || "hh_client";
-clientPath = clientPath.replace("${workspaceFolder}", localWorkspacePath);
-
-export const enableCoverageCheck = hackConfig.get<boolean>(
-  "enableCoverageCheck",
-  true,
-);
-export const useHhast = hackConfig.get<boolean>("useHhast", true);
-export const hhastLintMode: "whole-project" | "open-files" = hackConfig.get(
-  "hhastLintMode",
-  "whole-project",
-);
-export const hhastPath =
-  hackConfig.get<string>("hhastPath") || "/vendor/bin/hhast-lint";
-export const hhastArgs = hackConfig.get<string[]>("hhastArgs", []);
-
-export const remoteEnabled = hackConfig.get<boolean>("remote.enabled", false);
-export const remoteType: "ssh" | "docker" | undefined = hackConfig.get(
-  "remote.type",
-  undefined,
-);
-export const remoteWorkspacePath = hackConfig.get<string>(
-  "remote.workspacePath",
-);
-export const sshHost = hackConfig.get<string>("remote.ssh.host", "");
-export const sshArgs = hackConfig.get<string[]>("remote.ssh.args", []);
-export const dockerContainerName = hackConfig.get<string>(
-  "remote.docker.containerName",
-  "",
-);
-
-// Prompt to reload workspace on certain configuration updates
-vscode.workspace.onDidChangeConfiguration(async (event) => {
-  if (event.affectsConfiguration("hack.remote")) {
-    const selection = await vscode.window.showInformationMessage(
-      "Please reload your workspace to apply the latest Hack configuration changes.",
-      { modal: true },
-      "Reload",
+  constructor(
+    hackConfig: vscode.WorkspaceConfiguration,
+    workspaceFolderPath: string,
+  ) {
+    const clientPath = hackConfig.get<string>("clientPath") || "hh_client";
+    this.clientPath = clientPath.replace(
+      "${workspaceFolder}",
+      workspaceFolderPath,
     );
-    if (selection === "Reload") {
-      vscode.commands.executeCommand("workbench.action.reloadWindow");
-    }
+    this.localWorkspacePath = workspaceFolderPath;
+
+    this.enableCoverageCheck = hackConfig.get<boolean>(
+      "enableCoverageCheck",
+      true,
+    );
+    this.useHhast = hackConfig.get<boolean>("useHhast", true);
+    this.hhastLintMode = hackConfig.get("hhastLintMode", "whole-project");
+    this.hhastPath =
+      hackConfig.get<string>("hhastPath") || "/vendor/bin/hhast-lint";
+    this.hhastArgs = hackConfig.get<string[]>("hhastArgs", []);
+
+    this.remoteEnabled = hackConfig.get<boolean>("remote.enabled", false);
+    this.remoteType = hackConfig.get("remote.type", undefined);
+    this.remoteWorkspacePath = hackConfig.get<string>("remote.workspacePath");
+    this.sshHost = hackConfig.get<string>("remote.ssh.host", "");
+    this.sshArgs = hackConfig.get<string[]>("remote.ssh.args", []);
+    this.dockerContainerName = hackConfig.get<string>(
+      "remote.docker.containerName",
+      "",
+    );
   }
-});
+}
+
+/** Factory for production use */
+export function createHackConfig(): HackConfig {
+  return new HackConfig(
+    vscode.workspace.getConfiguration("hack"),
+    vscode.workspace.workspaceFolders![0].uri.fsPath,
+  );
+}

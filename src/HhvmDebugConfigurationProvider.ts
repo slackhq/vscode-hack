@@ -1,4 +1,4 @@
-import * as config from "./Config";
+import { HackConfig } from "./Config";
 import {
   WorkspaceFolder,
   DebugConfigurationProvider,
@@ -8,6 +8,8 @@ import {
 } from "vscode";
 
 export class HhvmDebugConfigurationProvider implements DebugConfigurationProvider {
+  constructor(private config: HackConfig) {}
+
   resolveDebugConfiguration(
     folder: WorkspaceFolder | undefined,
     debugConfig: DebugConfiguration,
@@ -29,10 +31,10 @@ export class HhvmDebugConfigurationProvider implements DebugConfigurationProvide
       }
 
       debugConfig.localWorkspaceRoot = folder.uri.fsPath;
-      debugConfig.remoteEnabled = config.remoteEnabled;
-      debugConfig.remoteType = config.remoteType;
-      debugConfig.remoteWorkspacePath = config.remoteWorkspacePath;
-      debugConfig.dockerContainerName = config.dockerContainerName;
+      debugConfig.remoteEnabled = this.config.remoteEnabled;
+      debugConfig.remoteType = this.config.remoteType;
+      debugConfig.remoteWorkspacePath = this.config.remoteWorkspacePath;
+      debugConfig.dockerContainerName = this.config.dockerContainerName;
     }
 
     return debugConfig;
