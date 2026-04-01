@@ -1,0 +1,34 @@
+# Verifies that the bundled TextMate grammar can be used by GitHub's Linguist highlighter.
+name: Linguist Grammar check
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  paths: ["syntaxes/hack.json", ".github/workflows/linguist.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PCRE development headers
+        run: sudo apt update && sudo apt install -y libpcre3-dev
+      - name: Checkout linguist repo
+        uses: actions/checkout@v6
+        with:
+          repository: github-linguist/linguist
+          path: linguist
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: "linguist/tools/grammars/go.mod"
+      - name: Checkout vscode-hack
+        uses: actions/checkout@v6
+        with:
+          path: vscode-hack
+      - name: Check Hack grammar
+        run: cd linguist && go run ./tools/grammars/cmd/grammar-compiler add ../vscode-hack
