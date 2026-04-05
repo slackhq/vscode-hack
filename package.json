@@ -323,7 +323,7 @@
     "@types/node": "^24.1.0",
     "@types/qunit": "^2.19.13",
     "@types/sinon": "^21.0.1",
-    "@types/vscode": "^1.109.0",
+    "@types/vscode": "^1.110.0",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
     "esbuild": "^0.28.0",
