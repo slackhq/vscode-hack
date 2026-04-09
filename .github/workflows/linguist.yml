@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - master
+    paths: ["syntaxes/hack.json", ".github/workflows/linguist.yml"]
   pull_request:
     branches:
       - master
-  paths: ["syntaxes/hack.json", ".github/workflows/linguist.yml"]
+    paths: ["syntaxes/hack.json", ".github/workflows/linguist.yml"]
 
 permissions:
   contents: read
