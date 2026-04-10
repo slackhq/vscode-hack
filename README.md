@@ -4,20 +4,6 @@ This extension adds rich Hack language & HHVM support to Visual Studio Code. Vis
 
 It is published in the Visual Studio Marketplace [here](https://marketplace.visualstudio.com/items?itemName=pranayagarwal.vscode-hack). To install, search for "Hack" in the VS Code extensions tab or run the following command (⌘+P): `ext install vscode-hack`.
 
-## Latest releases
-
-## v2.9.0
-
-- New `launchUrl` option in debugger attach config automatically invokes a web request once the debugger is attached, and detaches when the request is complete.
-
-## v2.8.0
-
-- If the IDE session is connected to a remote typechecker of type `docker`, scripts run via the launch debug target now automatically start in the Docker container instead of the host machine. Stopping on breakpoints isn’t yet supported in this mode.
-
-## v2.7.0
-
-- Lots of syntax highlighting updates. Thanks [tspence](https://github.com/tspence)!
-
 See the full list of releases and features added on the [Github releases page](https://github.com/slackhq/vscode-hack/releases) as well as the project [changelog](https://github.com/slackhq/vscode-hack/blob/master/CHANGELOG.md).
 
 ## Features
