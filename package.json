@@ -3,7 +3,7 @@
   "version": "3.0.4",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.108.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -320,10 +320,10 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.1.0",
+    "@types/node": "^22.13.14",
     "@types/qunit": "^2.19.13",
     "@types/sinon": "^21.0.1",
-    "@types/vscode": "^1.109.0",
+    "@types/vscode": "^1.108.0",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
     "esbuild": "^0.28.0",
