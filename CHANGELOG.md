@@ -3,6 +3,20 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.0.5](https://github.com/slackhq/vscode-hack/compare/v3.0.4...v3.0.5) (2026-04-14)
+
+
+### Bug Fixes
+
+* highlight `upcast` as a keyword in grammar ([#228](https://github.com/slackhq/vscode-hack/issues/228)) ([e443ed6](https://github.com/slackhq/vscode-hack/commit/e443ed66ad5f286158373db1172e57b8c88a6e2e))
+* highlight `where` as a keyword and add grammar snapshot tests ([#217](https://github.com/slackhq/vscode-hack/issues/217)) ([c8db747](https://github.com/slackhq/vscode-hack/commit/c8db747f135f2efaa929dfc5023181454da7dfe8)), closes [#139](https://github.com/slackhq/vscode-hack/issues/139)
+* highlight indented heredoc strings correctly ([#221](https://github.com/slackhq/vscode-hack/issues/221)) ([2076eaf](https://github.com/slackhq/vscode-hack/commit/2076eaf73b8540401e29714d84c51ad5e053a61a))
+* highlight parameters after inline shape default values ([#220](https://github.com/slackhq/vscode-hack/issues/220)) ([fa4ef0f](https://github.com/slackhq/vscode-hack/commit/fa4ef0ffb9df633274cfdcea2354538428a28456))
+* highlight type parameters in constant declarations ([#218](https://github.com/slackhq/vscode-hack/issues/218)) ([40114cd](https://github.com/slackhq/vscode-hack/commit/40114cde510e1748ed60f5453747e72e460eaf89))
+* log hh_client start errors ([#214](https://github.com/slackhq/vscode-hack/issues/214)) ([bddaaad](https://github.com/slackhq/vscode-hack/commit/bddaaad5231d22b7d4db57dcc5369ace244cd65c))
+* nest paths filter under push and pull_request triggers ([#229](https://github.com/slackhq/vscode-hack/issues/229)) ([4bd4c3f](https://github.com/slackhq/vscode-hack/commit/4bd4c3fe268391c8de1e87174833bec3f00a1242))
+* relax minimum supported VSCode version ([#236](https://github.com/slackhq/vscode-hack/issues/236)) ([1573170](https://github.com/slackhq/vscode-hack/commit/15731708306fe196db0ae4c2880340ce1f45ab07))
+
 ## [3.0.4](https://github.com/slackhq/vscode-hack/compare/v3.0.3...v3.0.4) (2026-03-30)
 
 
