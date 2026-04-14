@@ -12,3 +12,9 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore: "
+    # Ignore dependabot PRs for VSCode and Node bumps,
+    # since we want to control what version of VSCode we support,
+    # and the Node version is tied to the VSCode version.
+    ignore:
+      - dependency-name: "@types/node"
+      - dependency-name: "@types/vscode"
