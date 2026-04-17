@@ -325,7 +325,7 @@
     "@types/sinon": "^21.0.1",
     "@types/vscode": "^1.108.0",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "^3.7.1",
+    "@vscode/vsce": "^3.9.0",
     "esbuild": "^0.28.0",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
