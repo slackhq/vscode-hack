@@ -321,7 +321,7 @@
     "@commitlint/config-conventional": "^20.5.3",
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.13.14",
-    "@types/qunit": "^2.19.13",
+    "@types/qunit": "^2.19.14",
     "@types/sinon": "^21.0.1",
     "@types/vscode": "^1.108.0",
     "@vscode/test-electron": "^2.5.2",
