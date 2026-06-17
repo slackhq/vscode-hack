@@ -333,7 +333,7 @@
     "esm": "^3.2.25",
     "glob": "^13.0.6",
     "license-checker": "^25.0.1",
-    "prettier": "^3.8.3",
+    "prettier": "^3.8.4",
     "qunit": "^2.26.0",
     "sinon": "^22.0.0",
     "typescript": "^6.0.3",
