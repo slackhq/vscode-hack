@@ -3,6 +3,18 @@
 See the full list of recent releases and features added on the
 [Github releases page](https://github.com/PranayAgarwal/vscode-hack/releases).
 
+## [3.1.0](https://github.com/slackhq/vscode-hack/compare/v3.0.5...v3.1.0) (2026-06-17)
+
+
+### Features
+
+* add `delay` keyword to syntax highlighting ([#272](https://github.com/slackhq/vscode-hack/issues/272)) ([f92d6a4](https://github.com/slackhq/vscode-hack/commit/f92d6a49ce03a4ed16d342e6bd9e8be65af0b623))
+
+
+### Bug Fixes
+
+* ignore `hh_client` output during extension init ([#274](https://github.com/slackhq/vscode-hack/issues/274)) ([8ea97c0](https://github.com/slackhq/vscode-hack/commit/8ea97c0edf5e7d4f0eec04e6deca97015e438cfd))
+
 ## [3.0.5](https://github.com/slackhq/vscode-hack/compare/v3.0.4...v3.0.5) (2026-04-14)
 
 
