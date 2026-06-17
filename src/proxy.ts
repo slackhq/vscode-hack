@@ -19,11 +19,14 @@ export async function version(
   }
 }
 
+/** Run `hh_client` to start `hh_server` if needed. */
 export async function start(
   config: HackConfig,
   log: vscode.LogOutputChannel,
 ): Promise<string> {
-  return run(config, log, []);
+  // Ignore errors to avoid exceeding `maxBuffer` in case of many preexisting errors.
+  // We only run this command to ensure `hh_server` starts and don't care about the output.
+  return run(config, log, ["--max-errors", "0"]);
 }
 
 async function run(
