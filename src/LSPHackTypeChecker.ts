@@ -46,6 +46,8 @@ export class LSPHackTypeChecker {
       }),
     );
 
+    // `hh_client --lsp` fails to spawn `hh_server` if not already running,
+    // so do an initial `hh_client` call to start the server if needed.
     await vscode.window.withProgress(
       {
         location: vscode.ProgressLocation.Window,
