@@ -20,7 +20,7 @@ jobs:
       - name: Install PCRE development headers
         run: sudo apt update && sudo apt install -y libpcre3-dev
       - name: Checkout linguist repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: github-linguist/linguist
           path: linguist
@@ -28,7 +28,7 @@ jobs:
         with:
           go-version-file: "linguist/tools/grammars/go.mod"
       - name: Checkout vscode-hack
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: vscode-hack
       - name: Check Hack grammar
