@@ -3,7 +3,7 @@
   "version": "3.1.0",
   "publisher": "pranayagarwal",
   "engines": {
-    "vscode": "^1.108.0"
+    "vscode": "^1.105.0"
   },
   "license": "MIT",
   "displayName": "Hack",
@@ -323,7 +323,7 @@
     "@types/node": "^22.13.14",
     "@types/qunit": "^2.19.14",
     "@types/sinon": "^21.0.1",
-    "@types/vscode": "^1.108.0",
+    "@types/vscode": "^1.105.0",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.9.1",
     "esbuild": "^0.28.1",
