@@ -24,7 +24,7 @@ jobs:
         with:
           repository: github-linguist/linguist
           path: linguist
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version-file: "linguist/tools/grammars/go.mod"
       - name: Checkout vscode-hack
