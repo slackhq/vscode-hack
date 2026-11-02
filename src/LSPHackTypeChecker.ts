@@ -17,6 +17,7 @@ import * as hack from "./types/hack";
 import * as utils from "./Utils";
 import { ShowStatusRequest } from "./types/lsp";
 import * as hh_client from "./proxy";
+import * as formatter from "./formatter";
 import { HackLanguageServerErrorHandler } from "./HackLanguageServerErrorHandler";
 import { HackLanguageServerStatus } from "./HackLanguageServerStatus";
 
@@ -78,6 +79,21 @@ export class LSPHackTypeChecker {
         handleDiagnostics: (uri, diagnostics, next) => {
           this.handleDiagnostics(uri, diagnostics, next);
         },
+        // Use the configured formatter executable instead of the LSP formatter
+        // if set, and disable range/on-type formatting so the two don't mix.
+        ...(this.config.formatterPath
+          ? {
+              provideDocumentFormattingEdits: (document, _options, token) =>
+                formatter.formatDocument(
+                  this.config,
+                  document,
+                  this.log,
+                  token,
+                ),
+              provideDocumentRangeFormattingEdits: () => [],
+              provideOnTypeFormattingEdits: () => [],
+            }
+          : {}),
       },
       // Hack returns errors if commands fail due to syntax errors. Don't
       // automatically switch to the Output pane in this case.

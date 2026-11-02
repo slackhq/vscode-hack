@@ -227,6 +227,20 @@
           "default": [],
           "description": "Optional list of arguments passed to hhast-lint executable"
         },
+        "hack.formatterPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to a formatter executable to use for document formatting instead of the Hack language server's builtin formatter. The document is passed on stdin and the formatted result is read from stdout. Always runs locally. Leave empty to use the language server.",
+          "markdownDescription": "Path to a formatter executable to use for document formatting instead of the Hack language server's builtin formatter. The document is passed on stdin and the formatted result is read from stdout. Supports `${workspaceFolder}`. Always runs locally, even if `hack.remote.enabled` is set. Range and on-type formatting are disabled while this is set. Leave empty to use the language server."
+        },
+        "hack.formatterArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Optional list of arguments passed to the hack.formatterPath executable"
+        },
         "hack.hhastLintMode": {
           "type": "string",
           "enum": [

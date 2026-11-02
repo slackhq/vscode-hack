@@ -37,6 +37,8 @@ This extension adds the following Visual Studio Code settings. These can be set 
 - `hack.hhastPath`: Use an alternate `hhast-lint` path. Can be abolute or relative to workspace root (default: `vendor/bin/hhast-lint`).
 - `hack.hhastArgs`: Optional list of arguments passed to hhast-lint executable.
 - `hack.hhastLintMode`: Whether to lint the entire project (`whole-project`) or just the open files (`open-files`).
+- `hack.formatterPath`: Path to a formatter executable to use for document formatting instead of the Hack language server's builtin formatter. The document is passed on stdin and the formatted result is read from stdout. Supports `${workspaceFolder}`. Always runs locally, even when remote development is enabled. Range and on-type formatting are disabled while this is set (default: empty, i.e. use the language server).
+- `hack.formatterArgs`: Optional list of arguments passed to the `hack.formatterPath` executable.
 
 ### Remote Development
 
