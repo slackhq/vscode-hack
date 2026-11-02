@@ -32,4 +32,28 @@ QUnit.module("HackConfig", (hooks) => {
 
     assert.strictEqual(config.clientPath, "hh_client");
   });
+
+  QUnit.test("defaults to no custom formatter", (assert) => {
+    const wsConfig = { get: sinon.stub() };
+    wsConfig.get.withArgs("formatterArgs", []).returns([]);
+
+    const config = new HackConfig(wsConfig as any, "/home/test/path");
+
+    assert.strictEqual(config.formatterPath, undefined);
+    assert.deepEqual(config.formatterArgs, []);
+  });
+
+  QUnit.test(
+    "replaces workspace path placeholder in formatter path",
+    (assert) => {
+      const wsConfig = { get: sinon.stub() };
+      wsConfig.get
+        .withArgs("formatterPath")
+        .returns("${workspaceFolder}/bin/hackfmt");
+
+      const config = new HackConfig(wsConfig as any, "/home/test/path");
+
+      assert.strictEqual(config.formatterPath, "/home/test/path/bin/hackfmt");
+    },
+  );
 });

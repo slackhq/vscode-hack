@@ -12,6 +12,8 @@ export class HackConfig {
   readonly hhastLintMode: "whole-project" | "open-files";
   readonly hhastPath: string;
   readonly hhastArgs: string[];
+  readonly formatterPath: string | undefined;
+  readonly formatterArgs: string[];
   readonly localWorkspacePath: string;
   readonly remoteEnabled: boolean;
   readonly remoteType: "ssh" | "docker" | undefined;
@@ -40,6 +42,12 @@ export class HackConfig {
     this.hhastPath =
       hackConfig.get<string>("hhastPath") || "/vendor/bin/hhast-lint";
     this.hhastArgs = hackConfig.get<string[]>("hhastArgs", []);
+
+    const formatterPath = hackConfig.get<string>("formatterPath");
+    this.formatterPath = formatterPath
+      ? formatterPath.replace("${workspaceFolder}", workspaceFolderPath)
+      : undefined;
+    this.formatterArgs = hackConfig.get<string[]>("formatterArgs", []);
 
     this.remoteEnabled = hackConfig.get<boolean>("remote.enabled", false);
     this.remoteType = hackConfig.get("remote.type", undefined);
